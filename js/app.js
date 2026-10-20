@@ -1055,12 +1055,24 @@
    */
   function renderWriteQuestion(q, container) {
     currentSession.userTextAnswer = '';
+    currentSession.usedScaffoldHint = false;
+    currentSession.revealedAnswer = false;
 
-    let html = '<div style="display:flex;flex-direction:column;gap:1rem;width:100%;">';
+    let html = '<div style="display:flex;flex-direction:column;gap:1rem;width:100%;position:relative;">';
 
-    // Small hints accordion or pill
+    // Top action bar with Corner Buttons: [💡 Pista (-10% XP)] [👁️ Revelar Respuesta (Incorrecta)]
+    html += '<div style="display:flex;justify-content:flex-end;gap:0.5rem;flex-wrap:wrap;margin-bottom:-0.25rem;">';
+    html += '<button id="btn-request-scaffold" class="option-btn" type="button" style="margin:0;padding:6px 14px;font-size:0.8rem;background:rgba(28,176,246,0.15);color:#1CB0F6;border:1px solid #1CB0F6;border-radius:20px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:4px;">';
+    html += '<span>💡 Pedir Pista (-10% XP)</span>';
+    html += '</button>';
+    html += '<button id="btn-reveal-answer" class="option-btn" type="button" style="margin:0;padding:6px 14px;font-size:0.8rem;background:rgba(255,75,75,0.15);color:#FF7B72;border:1px solid #FF7B72;border-radius:20px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:4px;">';
+    html += '<span>👁️ Revelar Respuesta</span>';
+    html += '</button>';
+    html += '</div>';
+
+    // Conceptual hints box
     if (q.hints && q.hints.length > 0) {
-      html += '<div style="background:rgba(28,176,246,0.12);border:1px solid #1CB0F6;border-radius:12px;padding:0.75rem 1rem;">';
+      html += '<div id="hints-concept-box" style="background:rgba(28,176,246,0.1);border:1px solid rgba(28,176,246,0.3);border-radius:12px;padding:0.75rem 1rem;">';
       html += '<div style="display:flex;align-items:center;gap:0.5rem;font-weight:bold;color:#1CB0F6;font-size:0.9rem;margin-bottom:0.25rem;">';
       html += '<span>💡 Pistas clave:</span>';
       html += '</div>';
@@ -1075,13 +1087,16 @@
     // Input area
     const isCode = (q.type === 'write-code');
     html += '<div>';
-    html += '<label style="display:block;font-size:0.85rem;color:#A0B4BC;margin-bottom:0.4rem;font-weight:600;">Escribe tu respuesta aquí:</label>';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">';
+    html += '<label style="font-size:0.85rem;color:#A0B4BC;font-weight:600;">Escribe tu respuesta aquí:</label>';
+    html += '<span id="scaffold-notice" style="font-size:0.75rem;color:#FFC800;display:none;">⚠️ Pista activa (-10% penalización)</span>';
+    html += '</div>';
     if (isCode) {
       html += '<textarea id="write-answer-input" placeholder="' + escapeHtml(q.placeholder || 'Escribe tu código o expresión en Python...') + '" ' +
-              'style="width:100%;min-height:90px;font-family:monospace;background:#0D1117;color:#58CC02;border:2px solid #30363D;border-radius:12px;padding:12px 14px;font-size:1rem;resize:vertical;box-sizing:border-box;outline:none;transition:border-color 0.2s;"></textarea>';
+              'style="width:100%;min-height:95px;font-family:monospace;background:#0D1117;color:#58CC02;border:2px solid #30363D;border-radius:12px;padding:12px 14px;font-size:1rem;resize:vertical;box-sizing:border-box;outline:none;transition:all 0.2s;"></textarea>';
     } else {
       html += '<input type="text" id="write-answer-input" placeholder="' + escapeHtml(q.placeholder || 'Escribe tu respuesta...') + '" ' +
-              'style="width:100%;background:#0D1117;color:#FFFFFF;border:2px solid #30363D;border-radius:12px;padding:12px 16px;font-size:1.05rem;box-sizing:border-box;outline:none;transition:border-color 0.2s;">';
+              'style="width:100%;background:#0D1117;color:#FFFFFF;border:2px solid #30363D;border-radius:12px;padding:12px 16px;font-size:1.05rem;box-sizing:border-box;outline:none;transition:all 0.2s;">';
     }
     html += '</div>';
     html += '</div>';
@@ -1090,6 +1105,9 @@
 
     const inputEl = document.getElementById('write-answer-input');
     const checkBtn = el('check-btn');
+    const btnScaffold = document.getElementById('btn-request-scaffold');
+    const btnReveal = document.getElementById('btn-reveal-answer');
+    const scaffoldNotice = document.getElementById('scaffold-notice');
 
     if (inputEl) {
       inputEl.focus();
@@ -1107,6 +1125,51 @@
             checkAnswer();
           }
         }
+      });
+    }
+
+    // Button: Pedir Pista (Rellena plantilla / código incompleto y penaliza 10%)
+    if (btnScaffold) {
+      btnScaffold.addEventListener('click', function () {
+        if (!currentSession.usedScaffoldHint) {
+          currentSession.usedScaffoldHint = true;
+          btnScaffold.style.opacity = '0.6';
+          btnScaffold.disabled = true;
+          if (scaffoldNotice) scaffoldNotice.style.display = 'inline';
+
+          // Determine partial scaffold string to fill into textarea
+          let hintCode = '';
+          const target = (Array.isArray(q.acceptedAnswers) && q.acceptedAnswers[0]) || (typeof q.correct === 'string' ? q.correct : '');
+          if (target.length > 8) {
+            // Give beginning and ending structure with dots or blanks
+            const len = target.length;
+            const startChunk = target.substring(0, Math.max(3, Math.floor(len * 0.35)));
+            const endChunk = target.substring(Math.floor(len * 0.8));
+            hintCode = startChunk + '...' + endChunk;
+          } else {
+            hintCode = target.substring(0, Math.max(2, Math.floor(target.length / 2))) + '...';
+          }
+
+          if (inputEl) {
+            inputEl.value = hintCode;
+            currentSession.userTextAnswer = hintCode;
+            inputEl.focus();
+            if (checkBtn) checkBtn.disabled = false;
+          }
+        }
+      });
+    }
+
+    // Button: Revelar Respuesta (Auto-completa, marca como incorrecta y califica)
+    if (btnReveal) {
+      btnReveal.addEventListener('click', function () {
+        const target = (Array.isArray(q.acceptedAnswers) && q.acceptedAnswers[0]) || (typeof q.correct === 'string' ? q.correct : '');
+        currentSession.revealedAnswer = true;
+        if (inputEl) {
+          inputEl.value = target;
+          currentSession.userTextAnswer = target;
+        }
+        checkAnswer();
       });
     }
   }
@@ -1300,9 +1363,14 @@
         accepted = [q.options[q.correct]];
       }
 
-      isCorrect = accepted.some(function (ans) {
-        return normalize(ans) === userNorm;
-      });
+      // If user chose to reveal answer, it is always counted as incorrect
+      if (currentSession.revealedAnswer) {
+        isCorrect = false;
+      } else {
+        isCorrect = accepted.some(function (ans) {
+          return normalize(ans) === userNorm;
+        });
+      }
 
       // Highlight input border
       const inputEl = document.getElementById('write-answer-input');
@@ -1334,8 +1402,11 @@
     // Record activity (for streak)
     recordActivity();
 
-    // Calculate XP
-    const xpAmount = XP_PER_DIFFICULTY[q.difficulty] || 10;
+    // Calculate XP (if used scaffold hint, apply -10% penalty)
+    let xpAmount = XP_PER_DIFFICULTY[q.difficulty] || 10;
+    if (currentSession.usedScaffoldHint) {
+      xpAmount = Math.max(1, Math.round(xpAmount * 0.9));
+    }
 
     if (isCorrect) {
       currentSession.correctCount++;

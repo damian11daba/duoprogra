@@ -1,8 +1,6 @@
 // ============================================================
-// DuoProgra - Banco de Preguntas Parte 2 (Actualizado)
+// DuoProgra - Banco de Preguntas Parte 2
 // Módulos: Threading, Networking, Serialización, GUI, Recursión
-// Incluye secciones de Desarrollo Práctica y Nivel Prueba PUC
-// + Simulacros de Prueba: I1, I2, Examen Final
 // ============================================================
 
 window.DUOPROGRA_PARTE2 = [
@@ -265,12 +263,13 @@ window.DUOPROGRA_PARTE2 = [
             "id": "q-th-dev-p1",
             "type": "write-code",
             "difficulty": 2,
-            "question": "Escribe el comando para esperar a que un hilo 't1' termine antes de que el programa continúe:",
+            "question": "Escribe el comando para esperar a que un hilo 't1' termine antes de continuar:",
             "code": null,
             "placeholder": "t1._____()",
             "hints": [
               "El método se llama join."
             ],
+            "scaffoldCode": "t1.join()",
             "acceptedAnswers": [
               "t1.join()",
               "t1.join() "
@@ -291,14 +290,15 @@ window.DUOPROGRA_PARTE2 = [
             "code": "def depositar(self, monto):\n    # Adquiere el cerrojo usando context manager\n        self.saldo += monto",
             "placeholder": "with ...:",
             "hints": [
-              "Usa la palabra reservada 'with'.",
+              "Usa la palabra 'with'.",
               "No olvides los dos puntos al final."
             ],
+            "scaffoldCode": "with self.lock:",
             "acceptedAnswers": [
               "with self.lock:",
               "with self.lock :"
             ],
-            "explanation": "'with self.lock:' adquiere el cerrojo al entrar al bloque y garantiza su liberación incluso si ocurre una excepción dentro de la sección crítica."
+            "explanation": "'with self.lock:' adquiere el cerrojo al entrar y garantiza su liberación incluso ante excepciones en la sección crítica."
           }
         ]
       }
@@ -522,8 +522,9 @@ window.DUOPROGRA_PARTE2 = [
             "code": null,
             "placeholder": "sock._____",
             "hints": [
-              "El método de socket para enviar bytes es send() o sendall()."
+              "El método para enviar bytes es send() o sendall()."
             ],
+            "scaffoldCode": "sock.send(mensaje_bytes)",
             "acceptedAnswers": [
               "sock.send(mensaje_bytes)",
               "sock.sendall(mensaje_bytes)"
@@ -547,12 +548,13 @@ window.DUOPROGRA_PARTE2 = [
               "bind recibe una única tupla con (host, port).",
               "servidor.bind(('127.0.0.1', 8000))"
             ],
+            "scaffoldCode": "servidor.bind(('127.0.0.1', 8000))",
             "acceptedAnswers": [
               "servidor.bind(('127.0.0.1', 8000))",
               "servidor.bind((\"127.0.0.1\", 8000))",
               "servidor.bind(('localhost', 8000))"
             ],
-            "explanation": "En sockets de Python, bind() exige obligatoriamente una TUPLA de dos elementos (host, port) como argumento único: servidor.bind(('127.0.0.1', 8000))."
+            "explanation": "bind() exige obligatoriamente una TUPLA de dos elementos (host, port) como argumento único: servidor.bind(('127.0.0.1', 8000))."
           }
         ]
       }
@@ -758,6 +760,7 @@ window.DUOPROGRA_PARTE2 = [
             "hints": [
               "La función para serializar a string es dumps (dump string)."
             ],
+            "scaffoldCode": "json.dumps(datos)",
             "acceptedAnswers": [
               "json.dumps(datos)",
               "json.dumps(datos) "
@@ -780,13 +783,14 @@ window.DUOPROGRA_PARTE2 = [
             "hints": [
               "Usa el método entero.to_bytes(4, byteorder='big')."
             ],
+            "scaffoldCode": "largo_mensaje.to_bytes(4, byteorder='big')",
             "acceptedAnswers": [
               "largo_mensaje.to_bytes(4, byteorder='big')",
               "largo_mensaje.to_bytes(4, 'big')",
               "largo_mensaje.to_bytes(4, byteorder=\"big\")",
               "largo_mensaje.to_bytes(4, \"big\")"
             ],
-            "explanation": "En las tareas y pruebas de IIC2233 es estándar anteponer 4 bytes de longitud usando 'largo.to_bytes(4, byteorder=\"big\")' para que el receptor sepa cuántos bytes esperar."
+            "explanation": "En las pruebas de IIC2233 es estándar anteponer 4 bytes de longitud usando 'largo.to_bytes(4, byteorder=\"big\")'."
           }
         ]
       }
@@ -990,11 +994,12 @@ window.DUOPROGRA_PARTE2 = [
             "hints": [
               "Sintaxis: boton.clicked.connect(metodo sin parentesis)."
             ],
+            "scaffoldCode": "self.boton.clicked.connect(self.iniciar_juego)",
             "acceptedAnswers": [
               "self.boton.clicked.connect(self.iniciar_juego)",
               "self.boton.clicked.connect(self.iniciar_juego) "
             ],
-            "explanation": "En PyQt la conexión entre señales y slots se realiza con señal.connect(callback), pasando la referencia a la función sin ejecutarla (sin paréntesis)."
+            "explanation": "En PyQt la conexión entre señales y slots se realiza con señal.connect(callback), pasando la función sin paréntesis."
           }
         ]
       },
@@ -1013,11 +1018,12 @@ window.DUOPROGRA_PARTE2 = [
               "Usa pyqtSignal(dict).",
               "Debe ser asignada a actualizar_tablero."
             ],
+            "scaffoldCode": "actualizar_tablero = pyqtSignal(dict)",
             "acceptedAnswers": [
               "actualizar_tablero = pyqtSignal(dict)",
               "actualizar_tablero = pyqtSignal(dict) "
             ],
-            "explanation": "Las señales personalizadas de PyQt deben definirse como atributos de clase mediante pyqtSignal(tipo_de_dato) para que el runtime de Qt las registre en el sistema de meta-objetos."
+            "explanation": "Las señales personalizadas de PyQt deben definirse como atributos de clase mediante pyqtSignal(tipo_de_dato)."
           }
         ]
       }
@@ -1221,6 +1227,7 @@ window.DUOPROGRA_PARTE2 = [
             "hints": [
               "Multiplica x por la llamada a potencia con n - 1."
             ],
+            "scaffoldCode": "x * potencia(x, n - 1)",
             "acceptedAnswers": [
               "x * potencia(x, n - 1)",
               "x * potencia(x, n-1)",
@@ -1244,12 +1251,13 @@ window.DUOPROGRA_PARTE2 = [
             "hints": [
               "Usa 'nodo is None' o 'not nodo'."
             ],
+            "scaffoldCode": "nodo is None",
             "acceptedAnswers": [
               "nodo is None",
               "not nodo",
               "nodo == None"
             ],
-            "explanation": "En las preguntas de árboles de IIC2233, el caso base fundamental es 'if nodo is None:', retornando el valor neutro de búsqueda (False o None) al alcanzar ramas vacías."
+            "explanation": "El caso base fundamental en árboles es 'if nodo is None:', retornando False o None al alcanzar ramas vacías."
           }
         ]
       }
