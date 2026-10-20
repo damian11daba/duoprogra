@@ -100,6 +100,12 @@
   /** Track consecutive perfect lessons (no lives lost) for achievement */
   let consecutivePerfectLessons = 0;
 
+  /** Secret infinite lives cheat mode */
+  let infiniteLivesSecret = false;
+  try {
+    infiniteLivesSecret = localStorage.getItem('duoprogra_secret_godmode') === 'true';
+  } catch (e) {}
+
   /** Last results data for the results view */
   let lastResultsData = null;
 
@@ -717,8 +723,10 @@
     if (navStreak) navStreak.textContent = '🔥 ' + state.streak;
 
     if (navLives) {
-      // During a lesson session, show session lives; otherwise show max
-      if (currentSession && currentSession.type === 'lesson') {
+      if (infiniteLivesSecret) {
+        navLives.innerHTML = '❤️ ♾️';
+        navLives.title = 'Modo Secreto Activado';
+      } else if (currentSession && currentSession.type === 'lesson') {
         const hearts = '❤️'.repeat(Math.max(0, currentSession.lives));
         const empties = '🖤'.repeat(Math.max(0, state.maxLives - currentSession.lives));
         navLives.textContent = hearts + empties;
@@ -1240,10 +1248,10 @@
       showXpPopup(xpAmount);
       showFeedback(true, q.explanation);
     } else {
-      if (currentSession.type !== 'practice') {
+      if (currentSession.type !== 'practice' && !infiniteLivesSecret) {
         currentSession.lives--;
       }
-      showFeedback(false, q.explanation, currentSession.lives === 0 && currentSession.type !== 'practice');
+      showFeedback(false, q.explanation, currentSession.lives === 0 && currentSession.type !== 'practice' && !infiniteLivesSecret);
     }
 
     // Record answer
@@ -1271,8 +1279,12 @@
 
     // Update lives display
     const lessonLives = el('lesson-lives');
-    if (lessonLives && currentSession.type !== 'practice') {
-      lessonLives.innerHTML = '❤️'.repeat(Math.max(0, currentSession.lives)) + '🖤'.repeat(Math.max(0, state.maxLives - currentSession.lives));
+    if (lessonLives) {
+      if (infiniteLivesSecret) {
+        lessonLives.innerHTML = '❤️ ♾️ <span style="font-size:0.8rem;color:#FFC800;font-weight:bold;">MODO DIOS</span>';
+      } else if (currentSession.type !== 'practice') {
+        lessonLives.innerHTML = '❤️'.repeat(Math.max(0, currentSession.lives)) + '🖤'.repeat(Math.max(0, state.maxLives - currentSession.lives));
+      }
     }
   }
 
@@ -2469,6 +2481,64 @@
       });
     }
 
+    // ------------------------------------------------------------------------
+    // Global keyboard navigation & Secret Cheats
+    // ------------------------------------------------------------------------
+    let secretKeyBuffer = '';
+    function handleSecretCheatKey(e) {
+      if (!e.key || e.key.length > 1) return;
+      secretKeyBuffer += e.key.toLowerCase();
+      if (secretKeyBuffer.length > 20) {
+        secretKeyBuffer = secretKeyBuffer.slice(-20);
+      }
+      if (secretKeyBuffer.endsWith('damian') || secretKeyBuffer.endsWith('iic2233')) {
+        toggleSecretGodMode();
+        secretKeyBuffer = '';
+      }
+    }
+
+    function toggleSecretGodMode() {
+      infiniteLivesSecret = !infiniteLivesSecret;
+      try {
+        localStorage.setItem('duoprogra_secret_godmode', infiniteLivesSecret ? 'true' : 'false');
+      } catch (err) {}
+      updateNav();
+      const lessonLives = el('lesson-lives');
+      if (lessonLives) {
+        if (infiniteLivesSecret) {
+          lessonLives.innerHTML = '❤️ ♾️ <span style="font-size:0.8rem;color:#FFC800;font-weight:bold;">MODO DIOS</span>';
+        } else if (currentSession && currentSession.type !== 'practice') {
+          lessonLives.innerHTML = '❤️'.repeat(Math.max(0, currentSession.lives)) + '🖤'.repeat(Math.max(0, state.maxLives - currentSession.lives));
+        }
+      }
+      showModal({
+        title: infiniteLivesSecret ? '⚡ ¡MODO DIOS ACTIVADO! ⚡' : '🛡️ Modo Dios Desactivado',
+        body: infiniteLivesSecret
+          ? '<p style="font-size:1.1rem;color:#58CC02;">Tienes <b>VIDAS INFINITAS</b>. Puedes equivocarte todas las veces que quieras en las lecciones sin perder vidas ni fallar.</p>'
+          : '<p style="color:#A0B4BC;">El modo vidas infinitas ha sido desactivado. Se restauró el sistema normal de 5 vidas.</p>',
+        confirmText: 'Entendido 😉'
+      });
+    }
+
+    // Secret: 5 fast clicks on the owl logo also toggles it!
+    const logoEl = document.querySelector('.nav-logo');
+    if (logoEl) {
+      let logoClicks = 0;
+      let logoClickTimer = null;
+      logoEl.style.cursor = 'pointer';
+      logoEl.addEventListener('click', function () {
+        logoClicks++;
+        clearTimeout(logoClickTimer);
+        logoClickTimer = setTimeout(function () {
+          logoClicks = 0;
+        }, 1200);
+        if (logoClicks >= 5) {
+          logoClicks = 0;
+          toggleSecretGodMode();
+        }
+      });
+    }
+
     // Keyboard shortcuts
     document.addEventListener('keydown', function (e) {
       // Enter to check answer or continue
@@ -2509,6 +2579,9 @@
       if (e.key === 'Escape') {
         hideModal();
       }
+
+      // Secret Konami / Key Cheat Detection
+      handleSecretCheatKey(e);
 
       // Arrow keys for simulacro navigation
       if (currentSession && currentSession.type === 'simulacro') {
