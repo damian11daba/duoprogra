@@ -1248,12 +1248,12 @@
       state.xp += xpAmount;
       currentSession.xpEarned += xpAmount;
       showXpPopup(xpAmount);
-      showFeedback(true, q.explanation);
+      showFeedback(true, q, currentSession.selectedOption, false);
     } else {
       if (currentSession.type !== 'practice' && !infiniteLivesSecret) {
         currentSession.lives--;
       }
-      showFeedback(false, q.explanation, currentSession.lives === 0 && currentSession.type !== 'practice' && !infiniteLivesSecret);
+      showFeedback(false, q, currentSession.selectedOption, currentSession.lives === 0 && currentSession.type !== 'practice' && !infiniteLivesSecret);
     }
 
     // Record answer
@@ -1291,9 +1291,9 @@
   }
 
   /**
-   * Show the feedback overlay after checking an answer.
+   * Show the feedback overlay after checking an answer with rich, detailed pedagogical explanations.
    */
-  function showFeedback(correct, explanation, lessonWillEnd) {
+  function showFeedback(correct, questionObj, userSelectedIndex, lessonWillEnd) {
     const overlay = el('feedback-overlay');
     const icon = el('feedback-icon');
     const title = el('feedback-title');
@@ -1306,16 +1306,16 @@
 
     if (correct) {
       overlay.classList.add('feedback-overlay--correct');
-      if (icon) icon.textContent = '✅';
-      if (title) title.textContent = '¡Correcto!';
+      if (icon) icon.textContent = '🎉';
+      if (title) title.textContent = '¡Excelente! Respuesta Correcta';
     } else {
       overlay.classList.add('feedback-overlay--wrong');
-      if (icon) icon.textContent = '❌';
+      if (icon) icon.textContent = '💡';
       if (title) {
         if (lessonWillEnd) {
           title.textContent = '¡Incorrecto! Se acabaron las vidas.';
         } else {
-          title.textContent = '¡Incorrecto!';
+          title.textContent = '¡No del todo! Aprendamos juntos:';
         }
       }
       // Shake animation on question
@@ -1327,7 +1327,36 @@
     }
 
     if (explanationEl) {
-      explanationEl.textContent = explanation || '';
+      let richHtml = '';
+
+      if (questionObj) {
+        if (!correct && questionObj.type !== 'order-code' && Array.isArray(questionObj.options)) {
+          const correctText = questionObj.options[questionObj.correct];
+          const userText = userSelectedIndex !== null && userSelectedIndex !== undefined ? questionObj.options[userSelectedIndex] : null;
+
+          richHtml += '<div style="margin-bottom:0.75rem;padding:0.75rem 1rem;background:rgba(0,0,0,0.25);border-radius:10px;text-align:left;line-height:1.5;">';
+          if (userText) {
+            richHtml += '<div style="color:#FFA6A6;margin-bottom:0.35rem;">❌ <b>Tu respuesta:</b> <span style="font-family:monospace;background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;">' + escapeHtml(userText) + '</span></div>';
+          }
+          richHtml += '<div style="color:#A6FFA6;">✅ <b>Respuesta correcta:</b> <span style="font-family:monospace;background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:4px;font-weight:bold;">' + escapeHtml(correctText) + '</span></div>';
+          richHtml += '</div>';
+        } else if (correct && questionObj.type !== 'order-code' && Array.isArray(questionObj.options)) {
+          const correctText = questionObj.options[questionObj.correct];
+          richHtml += '<div style="margin-bottom:0.6rem;padding:0.5rem 0.85rem;background:rgba(0,0,0,0.2);border-radius:8px;text-align:left;">';
+          richHtml += '<div style="color:#E6EDF3;">🎯 <b>Acertaste:</b> <span style="font-family:monospace;background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:4px;font-weight:bold;">' + escapeHtml(correctText) + '</span></div>';
+          richHtml += '</div>';
+        }
+
+        // Detailed concept breakdown
+        richHtml += '<div style="text-align:left;line-height:1.6;font-size:0.95rem;background:rgba(255,255,255,0.08);padding:0.85rem 1rem;border-radius:10px;border-left:4px solid ' + (correct ? '#58CC02' : '#FFD700') + ';">';
+        richHtml += '<div style="font-weight:bold;margin-bottom:0.35rem;color:' + (correct ? '#FFFFFF' : '#FFEDB3') + ';">📖 Fundamento Teórico & Por qué es correcta:</div>';
+        richHtml += '<div style="color:#FFFFFF;">' + escapeHtml(questionObj.explanation || 'Respuesta verificada según los estándares de Python e IIC2233.') + '</div>';
+        richHtml += '</div>';
+      } else {
+        richHtml = escapeHtml(questionObj || '');
+      }
+
+      explanationEl.innerHTML = richHtml;
     }
 
     if (continueBtn) {
@@ -2484,20 +2513,23 @@
     }
 
     // ------------------------------------------------------------------------
-    // Global keyboard navigation & Secret Cheats
+    // Secret Cheat: Type 'damian' to toggle God Mode
     // ------------------------------------------------------------------------
     let secretKeyBuffer = '';
-    function handleSecretCheatKey(e) {
-      if (!e.key || e.key.length > 1) return;
+    window.addEventListener('keydown', function (e) {
+      if (!e.key || e.key.length !== 1) return;
+      // Do not capture if typing in an input or textarea
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+
       secretKeyBuffer += e.key.toLowerCase();
-      if (secretKeyBuffer.length > 20) {
-        secretKeyBuffer = secretKeyBuffer.slice(-20);
+      if (secretKeyBuffer.length > 15) {
+        secretKeyBuffer = secretKeyBuffer.slice(-15);
       }
-      if (secretKeyBuffer.endsWith('damian') || secretKeyBuffer.endsWith('iic2233')) {
+      if (secretKeyBuffer.endsWith('damian')) {
         toggleSecretGodMode();
         secretKeyBuffer = '';
       }
-    }
+    }, true);
 
     function toggleSecretGodMode() {
       infiniteLivesSecret = !infiniteLivesSecret;
@@ -2522,36 +2554,17 @@
           lessonLives.innerHTML = '❤️'.repeat(Math.max(0, currentSession.lives)) + '🖤'.repeat(Math.max(0, state.maxLives - currentSession.lives));
         }
       }
-      showModal({
-        title: infiniteLivesSecret ? '⚡ ¡MODO DIOS ACTIVADO! ⚡' : '🛡️ Modo Dios Desactivado',
-        body: infiniteLivesSecret
+
+      showModal(
+        infiniteLivesSecret ? '⚡ ¡MODO DIOS ACTIVADO! ⚡' : '🛡️ Modo Dios Desactivado',
+        infiniteLivesSecret
           ? '<p style="font-size:1.05rem;color:#58CC02;margin-bottom:0.75rem;">¡Bienvenido, <b>Damián</b>! Tienes poderes totales de administrador:</p>' +
             '<ul style="text-align:left;color:#E6EDF3;margin:0.5rem 0 1rem 1.5rem;line-height:1.6;">' +
             '<li>❤️ <b>Vidas Infinitas:</b> Nunca perderás vidas en ninguna lección.</li>' +
-            '<li>🔓 <b>Acceso Total Desbloqueado:</b> Todos los 11 módulos y todas sus lecciones están abiertos inmediatamente sin requisitos previos.</li>' +
+            '<li>🔓 <b>Acceso Total Desbloqueado:</b> Todos los 11 módulos y lecciones están abiertos inmediatamente sin candados.</li>' +
             '</ul>'
-          : '<p style="color:#A0B4BC;">El modo Dios ha sido desactivado. Se restauró el sistema normal de 5 vidas y candados de progreso.</p>',
-        confirmText: 'A programar 🚀'
-      });
-    }
-
-    // Secret: 5 fast clicks on the owl logo also toggles it!
-    const logoEl = document.querySelector('.nav-logo');
-    if (logoEl) {
-      let logoClicks = 0;
-      let logoClickTimer = null;
-      logoEl.style.cursor = 'pointer';
-      logoEl.addEventListener('click', function () {
-        logoClicks++;
-        clearTimeout(logoClickTimer);
-        logoClickTimer = setTimeout(function () {
-          logoClicks = 0;
-        }, 1200);
-        if (logoClicks >= 5) {
-          logoClicks = 0;
-          toggleSecretGodMode();
-        }
-      });
+          : '<p style="color:#A0B4BC;">El modo Dios ha sido desactivado. Se restauró el sistema normal de 5 vidas y candados de progreso.</p>'
+      );
     }
 
     // Keyboard shortcuts
@@ -2594,9 +2607,6 @@
       if (e.key === 'Escape') {
         hideModal();
       }
-
-      // Secret Konami / Key Cheat Detection
-      handleSecretCheatKey(e);
 
       // Arrow keys for simulacro navigation
       if (currentSession && currentSession.type === 'simulacro') {
