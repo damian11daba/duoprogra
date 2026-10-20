@@ -394,9 +394,10 @@
 
   /**
    * Check if a module is locked (requires previous module to have at least 1 completed lesson).
-   * The first module is always unlocked.
+   * The first module is always unlocked. If infiniteLivesSecret (Modo Dios) is active, all modules are unlocked!
    */
   function isModuleLocked(moduleIndex) {
+    if (infiniteLivesSecret) return false;
     if (moduleIndex === 0) return false;
     const prevModule = MODULES[moduleIndex - 1];
     if (!prevModule || !prevModule.lessons) return false;
@@ -408,9 +409,10 @@
 
   /**
    * Check if a lesson is locked (requires previous lesson in the same module to be completed).
-   * The first lesson is unlocked if the module is unlocked.
+   * The first lesson is unlocked if the module is unlocked. If Modo Dios is active, all lessons are unlocked!
    */
   function isLessonLocked(moduleId, lessonIndex) {
+    if (infiniteLivesSecret) return false;
     const mod = findModule(moduleId);
     if (!mod || !mod.lessons) return true;
     if (lessonIndex === 0) return false;
@@ -2503,6 +2505,15 @@
         localStorage.setItem('duoprogra_secret_godmode', infiniteLivesSecret ? 'true' : 'false');
       } catch (err) {}
       updateNav();
+
+      // Refresh current view if we are on home or module view to update locks
+      const hash = window.location.hash || '#home';
+      if (hash === '#home' || hash === '#/' || hash === '') {
+        renderHome();
+      } else if (hash.indexOf('#module/') === 0) {
+        renderModule(hash.split('/')[1]);
+      }
+
       const lessonLives = el('lesson-lives');
       if (lessonLives) {
         if (infiniteLivesSecret) {
@@ -2514,9 +2525,13 @@
       showModal({
         title: infiniteLivesSecret ? '⚡ ¡MODO DIOS ACTIVADO! ⚡' : '🛡️ Modo Dios Desactivado',
         body: infiniteLivesSecret
-          ? '<p style="font-size:1.1rem;color:#58CC02;">Tienes <b>VIDAS INFINITAS</b>. Puedes equivocarte todas las veces que quieras en las lecciones sin perder vidas ni fallar.</p>'
-          : '<p style="color:#A0B4BC;">El modo vidas infinitas ha sido desactivado. Se restauró el sistema normal de 5 vidas.</p>',
-        confirmText: 'Entendido 😉'
+          ? '<p style="font-size:1.05rem;color:#58CC02;margin-bottom:0.75rem;">¡Bienvenido, <b>Damián</b>! Tienes poderes totales de administrador:</p>' +
+            '<ul style="text-align:left;color:#E6EDF3;margin:0.5rem 0 1rem 1.5rem;line-height:1.6;">' +
+            '<li>❤️ <b>Vidas Infinitas:</b> Nunca perderás vidas en ninguna lección.</li>' +
+            '<li>🔓 <b>Acceso Total Desbloqueado:</b> Todos los 11 módulos y todas sus lecciones están abiertos inmediatamente sin requisitos previos.</li>' +
+            '</ul>'
+          : '<p style="color:#A0B4BC;">El modo Dios ha sido desactivado. Se restauró el sistema normal de 5 vidas y candados de progreso.</p>',
+        confirmText: 'A programar 🚀'
       });
     }
 
