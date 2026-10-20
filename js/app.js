@@ -688,23 +688,50 @@
       '<span class="token-string">$&</span>'
     );
 
-    // Keywords
+    // Keywords (only replace outside already generated HTML tags)
     result = result.replace(
-      /\b(def|class|if|elif|else|for|while|return|import|from|try|except|finally|raise|with|as|yield|lambda|pass|break|continue|and|or|not|in|is|True|False|None|self|super|print)\b/g,
-      '<span class="token-keyword">$1</span>'
+      /(<[^>]*>)|(\b(def|class|if|elif|else|for|while|return|import|from|try|except|finally|raise|with|as|yield|lambda|pass|break|continue|and|or|not|in|is|True|False|None|self|super|print)\b)/g,
+      function (match, tag, keyword) {
+        if (tag) return tag;
+        return '<span class="token-keyword">' + keyword + '</span>';
+      }
     );
 
     // Numbers
-    result = result.replace(/\b(\d+\.?\d*)\b/g, '<span class="token-number">$1</span>');
+    result = result.replace(
+      /(<[^>]*>)|(\b\d+\.?\d*\b)/g,
+      function (match, tag, number) {
+        if (tag) return tag;
+        return '<span class="token-number">' + number + '</span>';
+      }
+    );
 
     // Decorators
-    result = result.replace(/@(\w+)/g, '<span class="token-decorator">@$1</span>');
+    result = result.replace(
+      /(<[^>]*>)|(@\w+)/g,
+      function (match, tag, decorator) {
+        if (tag) return tag;
+        return '<span class="token-decorator">' + decorator + '</span>';
+      }
+    );
 
     // Class names (capitalized words)
-    result = result.replace(/\b([A-Z]\w+)\b/g, '<span class="token-class">$1</span>');
+    result = result.replace(
+      /(<[^>]*>)|(\b[A-Z]\w+\b)/g,
+      function (match, tag, cls) {
+        if (tag) return tag;
+        return '<span class="token-class">' + cls + '</span>';
+      }
+    );
 
     // Function calls
-    result = result.replace(/\b(\w+)(?=\()/g, '<span class="token-function">$1</span>');
+    result = result.replace(
+      /(<[^>]*>)|(\b\w+(?=\())/g,
+      function (match, tag, fn) {
+        if (tag) return tag;
+        return '<span class="token-function">' + fn + '</span>';
+      }
+    );
 
     return result;
   }
@@ -1012,7 +1039,7 @@
     const questionCode = el('question-code');
     if (questionCode) {
       if (q.code) {
-        questionCode.innerHTML = '<pre class="code-block"><code>' + highlightCode(q.code) + '</code></pre>';
+        questionCode.innerHTML = '<code>' + highlightCode(q.code) + '</code>';
         questionCode.classList.remove('hidden');
       } else {
         questionCode.innerHTML = '';
@@ -1768,7 +1795,7 @@
     const questionCode = el('sim-question-code');
     if (questionCode) {
       if (q.code) {
-        questionCode.innerHTML = '<pre class="code-block"><code>' + highlightCode(q.code) + '</code></pre>';
+        questionCode.innerHTML = '<code>' + highlightCode(q.code) + '</code>';
         questionCode.classList.remove('hidden');
       } else {
         questionCode.innerHTML = '';
