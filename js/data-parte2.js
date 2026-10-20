@@ -1,7 +1,7 @@
 // ============================================================
-// DuoProgra - Banco de Preguntas Parte 2
-// Basado en IIC2233 Programación Avanzada en Python (PUC Chile)
+// DuoProgra - Banco de Preguntas Parte 2 (Actualizado)
 // Módulos: Threading, Networking, Serialización, GUI, Recursión
+// Incluye secciones de Desarrollo Práctica y Nivel Prueba PUC
 // + Simulacros de Prueba: I1, I2, Examen Final
 // ============================================================
 
@@ -256,6 +256,51 @@ window.DUOPROGRA_PARTE2 = [
             "explanation": "Verdadero. get() espera hasta que haya un elemento disponible en la cola, a menos que se configure 'block=False' o un 'timeout'."
           }
         ]
+      },
+      {
+        "id": "thread-dev-practica",
+        "name": "✍️ Desarrollo: Práctica de Hilos y Concurrencia",
+        "questions": [
+          {
+            "id": "q-th-dev-p1",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Escribe el comando para esperar a que un hilo 't1' termine antes de que el programa continúe:",
+            "code": null,
+            "placeholder": "t1._____()",
+            "hints": [
+              "El método se llama join."
+            ],
+            "acceptedAnswers": [
+              "t1.join()",
+              "t1.join() "
+            ],
+            "explanation": "t1.join() bloquea el hilo que lo invoca hasta que t1 termine completamente su trabajo."
+          }
+        ]
+      },
+      {
+        "id": "thread-dev-puc",
+        "name": "🎓 Desarrollo Nivel Prueba PUC: Sincronización Segura con Locks",
+        "questions": [
+          {
+            "id": "q-th-dev-puc1",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[IIC2233 I2] Escribe la sentencia de gestor de contexto para adquirir el lock 'self.lock' de forma thread-safe:",
+            "code": "def depositar(self, monto):\n    # Adquiere el cerrojo usando context manager\n        self.saldo += monto",
+            "placeholder": "with ...:",
+            "hints": [
+              "Usa la palabra reservada 'with'.",
+              "No olvides los dos puntos al final."
+            ],
+            "acceptedAnswers": [
+              "with self.lock:",
+              "with self.lock :"
+            ],
+            "explanation": "'with self.lock:' adquiere el cerrojo al entrar al bloque y garantiza su liberación incluso si ocurre una excepción dentro de la sección crítica."
+          }
+        ]
       }
     ]
   },
@@ -464,6 +509,52 @@ window.DUOPROGRA_PARTE2 = [
             "explanation": "Verdadero. s.close() cierra la conexión y libera los descriptores de archivo asociados en el sistema operativo."
           }
         ]
+      },
+      {
+        "id": "net-dev-practica",
+        "name": "✍️ Desarrollo: Práctica de Sockets y Comunicación",
+        "questions": [
+          {
+            "id": "q-net-dev-p1",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Escribe la instrucción para enviar la variable 'mensaje_bytes' a través del socket 'sock':",
+            "code": null,
+            "placeholder": "sock._____",
+            "hints": [
+              "El método de socket para enviar bytes es send() o sendall()."
+            ],
+            "acceptedAnswers": [
+              "sock.send(mensaje_bytes)",
+              "sock.sendall(mensaje_bytes)"
+            ],
+            "explanation": "sock.send() o sock.sendall() transmiten secuencias de bytes a través de la conexión establecida."
+          }
+        ]
+      },
+      {
+        "id": "net-dev-puc",
+        "name": "🎓 Desarrollo Nivel Prueba PUC: Arquitectura de Red y Protocolos",
+        "questions": [
+          {
+            "id": "q-net-dev-puc1",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[IIC2233 I2/Examen] Escribe la línea con bind() para enlazar el socket 'servidor' a la IP '127.0.0.1' y puerto 8000:",
+            "code": null,
+            "placeholder": "servidor.bind(...)",
+            "hints": [
+              "bind recibe una única tupla con (host, port).",
+              "servidor.bind(('127.0.0.1', 8000))"
+            ],
+            "acceptedAnswers": [
+              "servidor.bind(('127.0.0.1', 8000))",
+              "servidor.bind((\"127.0.0.1\", 8000))",
+              "servidor.bind(('localhost', 8000))"
+            ],
+            "explanation": "En sockets de Python, bind() exige obligatoriamente una TUPLA de dos elementos (host, port) como argumento único: servidor.bind(('127.0.0.1', 8000))."
+          }
+        ]
       }
     ]
   },
@@ -652,6 +743,52 @@ window.DUOPROGRA_PARTE2 = [
             "explanation": "El método de clase int.from_bytes(bytes, byteorder) reconstruye el número entero a partir de su representación binaria."
           }
         ]
+      },
+      {
+        "id": "ser-dev-practica",
+        "name": "✍️ Desarrollo: Práctica de Serialización",
+        "questions": [
+          {
+            "id": "q-ser-dev-p1",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Escribe la función para transformar el diccionario 'datos' en una cadena de texto JSON:",
+            "code": "import json\ndatos = {'nivel': 5}\n# Asigna a json_str el string serializado\njson_str = _____",
+            "placeholder": "json.dumps(...)",
+            "hints": [
+              "La función para serializar a string es dumps (dump string)."
+            ],
+            "acceptedAnswers": [
+              "json.dumps(datos)",
+              "json.dumps(datos) "
+            ],
+            "explanation": "json.dumps(datos) serializa objetos en memoria a un string con formato JSON."
+          }
+        ]
+      },
+      {
+        "id": "ser-dev-puc",
+        "name": "🎓 Desarrollo Nivel Prueba PUC: Codificación de Largo y Bytes",
+        "questions": [
+          {
+            "id": "q-ser-dev-puc1",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[IIC2233 I2] Convierte el entero 'largo_mensaje' a exactamente 4 bytes en orden big-endian:",
+            "code": "largo_mensaje = len(mensaje_bytes)\n# Obtén los 4 bytes en formato big-endian\nbytes_largo = _____",
+            "placeholder": "largo_mensaje.to_bytes(...)",
+            "hints": [
+              "Usa el método entero.to_bytes(4, byteorder='big')."
+            ],
+            "acceptedAnswers": [
+              "largo_mensaje.to_bytes(4, byteorder='big')",
+              "largo_mensaje.to_bytes(4, 'big')",
+              "largo_mensaje.to_bytes(4, byteorder=\"big\")",
+              "largo_mensaje.to_bytes(4, \"big\")"
+            ],
+            "explanation": "En las tareas y pruebas de IIC2233 es estándar anteponer 4 bytes de longitud usando 'largo.to_bytes(4, byteorder=\"big\")' para que el receptor sepa cuántos bytes esperar."
+          }
+        ]
       }
     ]
   },
@@ -838,6 +975,51 @@ window.DUOPROGRA_PARTE2 = [
             "explanation": "Verdadero. Separar responsabilidades permite probar la lógica sin abrir ventanas y cambiar la interfaz sin tocar las reglas del sistema."
           }
         ]
+      },
+      {
+        "id": "gui-dev-practica",
+        "name": "✍️ Desarrollo: Práctica de Señales y Widgets en PyQt",
+        "questions": [
+          {
+            "id": "q-gui-dev-p1",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Escribe la línea para conectar la señal 'clicked' del botón 'self.boton' con el método 'self.iniciar_juego':",
+            "code": null,
+            "placeholder": "self.boton.clicked.connect(...)",
+            "hints": [
+              "Sintaxis: boton.clicked.connect(metodo sin parentesis)."
+            ],
+            "acceptedAnswers": [
+              "self.boton.clicked.connect(self.iniciar_juego)",
+              "self.boton.clicked.connect(self.iniciar_juego) "
+            ],
+            "explanation": "En PyQt la conexión entre señales y slots se realiza con señal.connect(callback), pasando la referencia a la función sin ejecutarla (sin paréntesis)."
+          }
+        ]
+      },
+      {
+        "id": "gui-dev-puc",
+        "name": "🎓 Desarrollo Nivel Prueba PUC: Señales Personalizadas y Concurrencia",
+        "questions": [
+          {
+            "id": "q-gui-dev-puc1",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[IIC2233 Examen] Define como atributo de clase una señal personalizada 'actualizar_tablero' que emite un diccionario (dict):",
+            "code": "from PyQt5.QtCore import QObject, pyqtSignal\n\nclass BackendJuego(QObject):\n    # Declara la señal pyqtSignal aquí\n    _____",
+            "placeholder": "actualizar_tablero = pyqtSignal(...)",
+            "hints": [
+              "Usa pyqtSignal(dict).",
+              "Debe ser asignada a actualizar_tablero."
+            ],
+            "acceptedAnswers": [
+              "actualizar_tablero = pyqtSignal(dict)",
+              "actualizar_tablero = pyqtSignal(dict) "
+            ],
+            "explanation": "Las señales personalizadas de PyQt deben definirse como atributos de clase mediante pyqtSignal(tipo_de_dato) para que el runtime de Qt las registre en el sistema de meta-objetos."
+          }
+        ]
       }
     ]
   },
@@ -1022,6 +1204,52 @@ window.DUOPROGRA_PARTE2 = [
             ],
             "correct": 0,
             "explanation": "Verdadero. La poda ahorra tiempo computacional evitando explorar estados que sabemos de antemano que violan las restricciones."
+          }
+        ]
+      },
+      {
+        "id": "rec-dev-practica",
+        "name": "✍️ Desarrollo: Práctica de Algoritmos Recursivos",
+        "questions": [
+          {
+            "id": "q-rec-dev-p1",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Escribe la llamada recursiva para calcular la potencia x^n sabiendo que x^n = x * x^(n-1):",
+            "code": "def potencia(x, n):\n    if n == 0:\n        return 1\n    return _____",
+            "placeholder": "x * potencia(...)",
+            "hints": [
+              "Multiplica x por la llamada a potencia con n - 1."
+            ],
+            "acceptedAnswers": [
+              "x * potencia(x, n - 1)",
+              "x * potencia(x, n-1)",
+              "x*potencia(x, n-1)"
+            ],
+            "explanation": "El caso recursivo reduce el exponente acercándose al caso base n==0: x * potencia(x, n - 1)."
+          }
+        ]
+      },
+      {
+        "id": "rec-dev-puc",
+        "name": "🎓 Desarrollo Nivel Prueba PUC: Backtracking y Recursión Estructural",
+        "questions": [
+          {
+            "id": "q-rec-dev-puc1",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[IIC2233 Examen] En un recorrido recursivo de un Árbol Binario, completa la condición de caso base cuando el nodo es None:",
+            "code": "def buscar_nodo(nodo, valor):\n    # Caso base si el nodo no existe\n    if _____:\n        return False\n    if nodo.val == valor:\n        return True\n    return buscar_nodo(nodo.izq, valor) or buscar_nodo(nodo.der, valor)",
+            "placeholder": "nodo is None",
+            "hints": [
+              "Usa 'nodo is None' o 'not nodo'."
+            ],
+            "acceptedAnswers": [
+              "nodo is None",
+              "not nodo",
+              "nodo == None"
+            ],
+            "explanation": "En las preguntas de árboles de IIC2233, el caso base fundamental es 'if nodo is None:', retornando el valor neutro de búsqueda (False o None) al alcanzar ramas vacías."
           }
         ]
       }

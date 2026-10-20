@@ -96,8 +96,108 @@ window.DUOPROGRA_PARTE1 = [
             ],
             correct: 0,
             explanation: '"self" es una referencia a la instancia actual del objeto. Se pasa automáticamente como primer argumento cuando se llama a un método de instancia.'
-          }
-        ]
+          },
+      {
+      "id": "oop-basico-dev-practica",
+      "name": "✍️ Desarrollo: Práctica de OOP",
+      "questions": [
+            {
+                  "id": "q-oop-dev-p1",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "Escribe la línea de código para definir el constructor de una clase Persona que recibe 'nombre' y 'edad':",
+                  "code": "class Persona:\n    # Escribe la firma del constructor aquí\n        self.nombre = nombre\n        self.edad = edad",
+                  "placeholder": "def __init__(self, ...):",
+                  "hints": [
+                        "El método se llama __init__ con doble guión bajo.",
+                        "Recuerda incluir siempre 'self' como primer parámetro.",
+                        "No olvides los dos puntos al final."
+                  ],
+                  "acceptedAnswers": [
+                        "def __init__(self, nombre, edad):",
+                        "def __init__(self, nombre, edad) :"
+                  ],
+                  "explanation": "En Python, los constructores se definen con 'def __init__(self, ...)'. 'self' es obligatorio para referenciar la instancia que se está creando."
+            },
+            {
+                  "id": "q-oop-dev-p2",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "Escribe la instrucción exacta para crear una instancia de la clase 'Auto' con marca 'Toyota' y asignarla a la variable 'mi_auto':",
+                  "code": null,
+                  "placeholder": "mi_auto = ...",
+                  "hints": [
+                        "Se llama a la clase como una función: Clase(argumentos).",
+                        "El string debe ser 'Toyota'."
+                  ],
+                  "acceptedAnswers": [
+                        "mi_auto = Auto('Toyota')",
+                        "mi_auto = Auto(\"Toyota\")",
+                        "mi_auto=Auto('Toyota')",
+                        "mi_auto=Auto(\"Toyota\")"
+                  ],
+                  "explanation": "Para instanciar una clase en Python se utiliza el nombre de la clase seguido de paréntesis con los argumentos necesarios: mi_auto = Auto('Toyota')."
+            },
+            {
+                  "id": "q-oop-dev-p3",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "Escribe el decorador que se coloca sobre un método para convertirlo en un getter de una propiedad:",
+                  "code": "class Circulo:\n    # ¿Qué decorador va aquí?\n    def radio(self):\n        return self._radio",
+                  "placeholder": "@...",
+                  "hints": [
+                        "Empieza con arroba (@).",
+                        "Es una palabra reservada built-in de Python para propiedades."
+                  ],
+                  "acceptedAnswers": [
+                        "@property"
+                  ],
+                  "explanation": "El decorador built-in '@property' permite acceder a un método como si fuera un atributo regular (getter), facilitando el encapsulamiento."
+            }
+      ]
+},
+      {
+      "id": "oop-basico-dev-puc",
+      "name": "🎓 Desarrollo Nivel Prueba PUC: Modelación OOP",
+      "questions": [
+            {
+                  "id": "q-oop-dev-puc1",
+                  "type": "write-code",
+                  "difficulty": 3,
+                  "question": "[IIC2233 P1] Completa la línea del setter para que valide que el saldo sea no negativo antes de asignarlo a self._saldo:",
+                  "code": "class CuentaBancaria:\n    def __init__(self, titular, saldo):\n        self.titular = titular\n        self.saldo = saldo\n\n    @property\n    def saldo(self):\n        return self._saldo\n\n    @saldo.setter\n    def saldo(self, valor):\n        # Asigna el máximo entre 0 y valor a self._saldo\n        _____",
+                  "placeholder": "self._saldo = ...",
+                  "hints": [
+                        "Usa la función max(0, valor) o una expresión ternaria.",
+                        "Recuerda asignar a self._saldo (con guión bajo)."
+                  ],
+                  "acceptedAnswers": [
+                        "self._saldo = max(0, valor)",
+                        "self._saldo = valor if valor >= 0 else 0",
+                        "self._saldo = valor if valor > 0 else 0"
+                  ],
+                  "explanation": "En las pruebas de IIC2233 se exige encapsulamiento estricto: el setter debe proteger el atributo interno (self._saldo) aplicando las reglas de negocio, como impedir saldos negativos mediante max(0, valor)."
+            },
+            {
+                  "id": "q-oop-dev-puc2",
+                  "type": "write-code",
+                  "difficulty": 3,
+                  "question": "[IIC2233 P2] Implementa la condición para que dos instancias de 'Alumno' sean iguales si y solo si tienen el mismo 'rut':",
+                  "code": "class Alumno:\n    def __init__(self, rut, nombre):\n        self.rut = rut\n        self.nombre = nombre\n\n    def __eq__(self, other):\n        if isinstance(other, Alumno):\n            # Escribe la expresión que retorna True si los ruts coinciden\n            return _____\n        return False",
+                  "placeholder": "self.rut == ...",
+                  "hints": [
+                        "Compara el atributo rut de self con el rut de other.",
+                        "Usa el operador de igualdad '=='."
+                  ],
+                  "acceptedAnswers": [
+                        "self.rut == other.rut",
+                        "other.rut == self.rut"
+                  ],
+                  "explanation": "El método especial __eq__ implementa el operador '=='. Siempre se verifica primero que other sea de la clase adecuada con isinstance, y luego se comparan sus identificadores únicos (self.rut == other.rut)."
+            }
+      ]
+}
+    ]
       },
       // ---- Lesson 2: Atributos y Métodos ----
       {
@@ -340,8 +440,88 @@ window.DUOPROGRA_PARTE1 = [
             options: ['isinstance()', 'type()', 'is_instance()', 'classof()'],
             correct: 0,
             explanation: 'isinstance(obj, Clase) verifica si obj es instancia de Clase o de alguna subclase de Clase. type() retorna el tipo exacto sin considerar herencia.'
-          }
-        ]
+          },
+      {
+      "id": "oop-avanzado-dev-practica",
+      "name": "✍️ Desarrollo: Práctica de Herencia y Polimorfismo",
+      "questions": [
+            {
+                  "id": "q-oop2-dev-p1",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "Escribe la llamada a super() para invocar el constructor de la clase base pasándole 'nombre':",
+                  "code": "class Empleado(Persona):\n    def __init__(self, nombre, sueldo):\n        # Escribe aquí la invocación a la clase base con super()\n        self.sueldo = sueldo",
+                  "placeholder": "super()...",
+                  "hints": [
+                        "Usa super().__init__(...).",
+                        "Pasa el parámetro 'nombre' dentro del paréntesis."
+                  ],
+                  "acceptedAnswers": [
+                        "super().__init__(nombre)",
+                        "super().__init__(nombre=nombre)"
+                  ],
+                  "explanation": "super().__init__(nombre) delega la inicialización del atributo heredado a la clase madre siguiendo el Method Resolution Order (MRO)."
+            },
+            {
+                  "id": "q-oop2-dev-p2",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "¿Qué método dunder debes sobreescribir para definir la representación legible en string de un objeto (usada por print)?",
+                  "code": null,
+                  "placeholder": "__...__",
+                  "hints": [
+                        "Tiene doble guión bajo al inicio y al final.",
+                        "Viene de la palabra 'string'."
+                  ],
+                  "acceptedAnswers": [
+                        "__str__",
+                        "def __str__(self):"
+                  ],
+                  "explanation": "__str__ es el método especial que Python invoca al hacer str(obj) o print(obj), y debe retornar obligatoriamente un objeto de tipo str."
+            }
+      ]
+},
+      {
+      "id": "oop-avanzado-dev-puc",
+      "name": "🎓 Desarrollo Nivel Prueba PUC: Herencia Múltiple y Clases Abstractas",
+      "questions": [
+            {
+                  "id": "q-oop2-dev-puc1",
+                  "type": "write-code",
+                  "difficulty": 3,
+                  "question": "[IIC2233 Examen] Declara la clase abstracta 'Entidad' que hereda de la clase base ABC:",
+                  "code": "from abc import ABC, abstractmethod\n\n# Escribe la declaración de la clase abstracta Entidad\n    @abstractmethod\n    def actuar(self):\n        pass",
+                  "placeholder": "class Entidad(...):",
+                  "hints": [
+                        "Hereda de ABC dentro de los paréntesis.",
+                        "No olvides los dos puntos al final."
+                  ],
+                  "acceptedAnswers": [
+                        "class Entidad(ABC):",
+                        "class Entidad(ABC) :"
+                  ],
+                  "explanation": "Para crear una clase abstracta en Python moderno se hereda directamente de 'ABC' del módulo 'abc'. Esto impide que la clase sea instanciada directamente si contiene métodos con @abstractmethod."
+            },
+            {
+                  "id": "q-oop2-dev-puc2",
+                  "type": "write-code",
+                  "difficulty": 3,
+                  "question": "[IIC2233 I1] Escribe la expresión para obtener la tupla de clases en el orden de resolución de métodos de la clase 'Guerrero':",
+                  "code": null,
+                  "placeholder": "Guerrero._____",
+                  "hints": [
+                        "Es un atributo dunder de clase con 3 letras entre guiones bajos.",
+                        "O bien el método .mro()"
+                  ],
+                  "acceptedAnswers": [
+                        "Guerrero.__mro__",
+                        "Guerrero.mro()"
+                  ],
+                  "explanation": "Guerrero.__mro__ (o Guerrero.mro()) retorna la tupla/lista de clases ordenadas según el algoritmo C3 Linearization que Python utiliza para resolver atributos y llamadas a super()."
+            }
+      ]
+}
+    ]
       },
       // ---- Lesson 2: Polimorfismo ----
       {
@@ -660,8 +840,72 @@ window.DUOPROGRA_PARTE1 = [
             options: ['[2, 3, 4]', '(2, 3, 4)', '2, 3, 4', 'Error'],
             correct: 0,
             explanation: 'El operador * en unpacking captura los elementos restantes como una lista. primero=1, medio=[2,3,4], ultimo=5. Nota: medio es una lista, no una tupla.'
-          }
-        ]
+          },
+      {
+      "id": "builtin-dev-practica",
+      "name": "✍️ Desarrollo: Práctica de Colecciones y Args/Kwargs",
+      "questions": [
+            {
+                  "id": "q-builtin-dev-p1",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "Escribe la definición de una namedtuple llamada 'Punto' con los campos 'x' e 'y':",
+                  "code": "from collections import namedtuple\n# Escribe aquí la asignación a la variable Punto\n",
+                  "placeholder": "Punto = namedtuple(...)",
+                  "hints": [
+                        "El primer argumento es el nombre del typename: 'Punto'.",
+                        "El segundo argumento puede ser una lista con los campos ['x', 'y'] o el string 'x y'."
+                  ],
+                  "acceptedAnswers": [
+                        "Punto = namedtuple('Punto', ['x', 'y'])",
+                        "Punto = namedtuple('Punto', ['x', 'y'])",
+                        "Punto = namedtuple('Punto', 'x y')",
+                        "Punto = namedtuple(\"Punto\", [\"x\", \"y\"])",
+                        "Punto = namedtuple(\"Punto\", \"x y\")"
+                  ],
+                  "explanation": "namedtuple('TypeName', ['field1', 'field2']) crea una subclase de tupla accesible por nombre de atributo además de índice."
+            },
+            {
+                  "id": "q-builtin-dev-p2",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "Escribe la función de fábrica que se le pasa a defaultdict para que los valores por defecto sean listas vacías:",
+                  "code": "from collections import defaultdict\nd = defaultdict(_____) ",
+                  "placeholder": "list",
+                  "hints": [
+                        "Pasa la clase/función constructora de listas, sin paréntesis."
+                  ],
+                  "acceptedAnswers": [
+                        "list"
+                  ],
+                  "explanation": "defaultdict(list) llama a list() cada vez que se accede a una clave inexistente, inicializándola con una lista vacía []."
+            }
+      ]
+},
+      {
+      "id": "builtin-dev-puc",
+      "name": "🎓 Desarrollo Nivel Prueba PUC: Manipulación Avanzada de Estructuras",
+      "questions": [
+            {
+                  "id": "q-builtin-dev-puc1",
+                  "type": "write-code",
+                  "difficulty": 3,
+                  "question": "[IIC2233 I1] Escribe la expresión de desempaquetado para pasar un diccionario 'parametros' como keyword arguments a la función procesar():",
+                  "code": "parametros = {'modo': 'rapido', 'intentos': 3}\n# Invoca procesar pasando el diccionario desempaquetado\n_____",
+                  "placeholder": "procesar(...) ",
+                  "hints": [
+                        "Usa el operador de doble asterisco (**).",
+                        "procesar(**parametros)"
+                  ],
+                  "acceptedAnswers": [
+                        "procesar(**parametros)",
+                        "procesar( **parametros )"
+                  ],
+                  "explanation": "El operador '**' desempaqueta un diccionario transformando sus pares clave-valor en argumentos por palabra clave (kwargs) para la función receptora."
+            }
+      ]
+}
+    ]
       },
       // ---- Lesson 2: Sets y Diccionarios ----
       {
@@ -919,8 +1163,52 @@ window.DUOPROGRA_PARTE1 = [
             ],
             correct: 0,
             explanation: 'Las listas ligadas permiten insertar y eliminar al inicio en O(1) simplemente cambiando punteros, sin necesidad de mover otros elementos como en un arreglo.'
-          }
-        ]
+          },
+      {
+      "id": "nodales-dev-practica",
+      "name": "✍️ Desarrollo: Práctica de Listas Ligadas y Nodos",
+      "questions": [
+            {
+                  "id": "q-nodal-dev-p1",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "Completa el avance del puntero para recorrer una lista ligada en un bucle while:",
+                  "code": "actual = self.head\nwhile actual is not None:\n    print(actual.valor)\n    # Avanza al siguiente nodo\n    _____",
+                  "placeholder": "actual = ...",
+                  "hints": [
+                        "Asigna a 'actual' su atributo 'siguiente'."
+                  ],
+                  "acceptedAnswers": [
+                        "actual = actual.siguiente",
+                        "actual = actual.next"
+                  ],
+                  "explanation": "Para avanzar en una estructura enlazada, se reasigna la variable del puntero al nodo referenciado por su atributo .siguiente hasta encontrar None."
+            }
+      ]
+},
+      {
+      "id": "nodales-dev-puc",
+      "name": "🎓 Desarrollo Nivel Prueba PUC: Pilas, Colas y Árboles",
+      "questions": [
+            {
+                  "id": "q-nodal-dev-puc1",
+                  "type": "write-code",
+                  "difficulty": 3,
+                  "question": "[IIC2233 I2] En una pila (LIFO) donde self.top es el nodo superior, implementa la línea para desapilar (pop) y actualizar el tope:",
+                  "code": "def pop(self):\n    if self.top is None:\n        raise IndexError('Pila vacía')\n    valor = self.top.valor\n    # Actualiza self.top al siguiente nodo\n    _____\n    return valor",
+                  "placeholder": "self.top = ...",
+                  "hints": [
+                        "El nuevo tope es el nodo siguiente al actual tope."
+                  ],
+                  "acceptedAnswers": [
+                        "self.top = self.top.siguiente",
+                        "self.top = self.top.next"
+                  ],
+                  "explanation": "Desapilar en O(1) consiste en guardar el valor del tope y mover el puntero self.top a self.top.siguiente."
+            }
+      ]
+}
+    ]
       },
       // ---- Lesson 2: Pilas (Stacks) ----
       {
@@ -1250,8 +1538,57 @@ window.DUOPROGRA_PARTE1 = [
             ],
             correct: 0,
             explanation: 'finally se ejecuta ANTES de que return entregue el valor. Primera llamada: imprime "Operación terminada", luego retorna 5.0. Segunda: imprime "Operación terminada", luego retorna el error.'
-          }
-        ]
+          },
+      {
+      "id": "excepciones-dev-practica",
+      "name": "✍️ Desarrollo: Práctica de Manejo de Errores",
+      "questions": [
+            {
+                  "id": "q-exc-dev-p1",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "Escribe la sentencia para levantar manualmente una excepción ValueError con el mensaje 'Valor inválido':",
+                  "code": null,
+                  "placeholder": "raise ...",
+                  "hints": [
+                        "Usa la keyword 'raise'.",
+                        "Instancia ValueError('Valor inválido')."
+                  ],
+                  "acceptedAnswers": [
+                        "raise ValueError('Valor inválido')",
+                        "raise ValueError(\"Valor inválido\")",
+                        "raise ValueError('Valor invalido')",
+                        "raise ValueError(\"Valor invalido\")"
+                  ],
+                  "explanation": "En Python, las excepciones se disparan utilizando la sentencia 'raise' seguida de una instancia de la clase de excepción."
+            }
+      ]
+},
+      {
+      "id": "excepciones-dev-puc",
+      "name": "🎓 Desarrollo Nivel Prueba PUC: Excepciones Custom y Bloques Robustos",
+      "questions": [
+            {
+                  "id": "q-exc-dev-puc1",
+                  "type": "write-code",
+                  "difficulty": 3,
+                  "question": "[IIC2233 I2] Define la clase de excepción personalizada 'SaldoInsuficienteError' que hereda de la clase base correspondiente:",
+                  "code": "# Define la clase en una sola línea\n_____",
+                  "placeholder": "class SaldoInsuficienteError(...): pass",
+                  "hints": [
+                        "Toda excepción personalizada debe heredar de 'Exception'.",
+                        "Puedes usar pass en el cuerpo."
+                  ],
+                  "acceptedAnswers": [
+                        "class SaldoInsuficienteError(Exception): pass",
+                        "class SaldoInsuficienteError(Exception):\n    pass",
+                        "class SaldoInsuficienteError(Exception):pass"
+                  ],
+                  "explanation": "En las interrogaciones de IIC2233 es obligatorio que las excepciones propias hereden de 'Exception' (o subclases estándar), nunca de 'BaseException'."
+            }
+      ]
+}
+    ]
       },
       // ---- Lesson 2: Tipos de Excepciones ----
       {
@@ -1497,8 +1834,54 @@ window.DUOPROGRA_PARTE1 = [
             options: ['iter()', 'next()', 'loop()', 'iterate()'],
             correct: 0,
             explanation: 'iter(obj) llama a obj.__iter__() y retorna un iterador. next(iterador) llama a iterador.__next__() para obtener el siguiente valor.'
-          }
-        ]
+          },
+      {
+      "id": "iter-dev-practica",
+      "name": "✍️ Desarrollo: Práctica de Generadores y yield",
+      "questions": [
+            {
+                  "id": "q-iter-dev-p1",
+                  "type": "write-code",
+                  "difficulty": 2,
+                  "question": "¿Qué palabra clave convierte a una función normal en una función generadora que pausa su ejecución y entrega un valor?",
+                  "code": null,
+                  "placeholder": "...",
+                  "hints": [
+                        "Tiene 5 letras y empieza con y."
+                  ],
+                  "acceptedAnswers": [
+                        "yield"
+                  ],
+                  "explanation": "'yield' produce un valor hacia el consumidor y suspende el estado de ejecución de la función hasta que se solicite el siguiente elemento con next()."
+            }
+      ]
+},
+      {
+      "id": "iter-dev-puc",
+      "name": "🎓 Desarrollo Nivel Prueba PUC: Protocolo de Iteración Personalizado",
+      "questions": [
+            {
+                  "id": "q-iter-dev-puc1",
+                  "type": "write-code",
+                  "difficulty": 3,
+                  "question": "[IIC2233 I1/Examen] ¿Qué excepción debe levantar el método __next__ cuando ya no quedan más elementos que iterar?",
+                  "code": "def __next__(self):\n    if self.indice >= len(self.datos):\n        # Levanta la excepción estándar del protocolo\n        _____",
+                  "placeholder": "raise ...",
+                  "hints": [
+                        "Es StopIteration sin argumentos obligatorios.",
+                        "Usa la sentencia raise."
+                  ],
+                  "acceptedAnswers": [
+                        "raise StopIteration",
+                        "raise StopIteration()",
+                        "raise StopIteration('Fin')",
+                        "raise StopIteration(\"Fin\")"
+                  ],
+                  "explanation": "El protocolo de iteración de Python especifica que __next__ debe señalar el fin de los datos levantando StopIteration, lo que permite a los bucles for terminar de forma limpia."
+            }
+      ]
+}
+    ]
       },
       // ---- Lesson 2: Generadores ----
       {

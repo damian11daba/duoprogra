@@ -1042,9 +1042,72 @@
     // Render based on question type
     if (q.type === 'order-code') {
       renderOrderCodeQuestion(q, optionsContainer);
+    } else if (q.type === 'write-code' || q.type === 'write-answer') {
+      renderWriteQuestion(q, optionsContainer);
     } else {
       // multiple-choice, true-false, code-output, fill-code
       renderStandardOptions(q, optionsContainer);
+    }
+  }
+
+  /**
+   * Render open write questions (write-code or write-answer) with hints and instant feedback.
+   */
+  function renderWriteQuestion(q, container) {
+    currentSession.userTextAnswer = '';
+
+    let html = '<div style="display:flex;flex-direction:column;gap:1rem;width:100%;">';
+
+    // Small hints accordion or pill
+    if (q.hints && q.hints.length > 0) {
+      html += '<div style="background:rgba(28,176,246,0.12);border:1px solid #1CB0F6;border-radius:12px;padding:0.75rem 1rem;">';
+      html += '<div style="display:flex;align-items:center;gap:0.5rem;font-weight:bold;color:#1CB0F6;font-size:0.9rem;margin-bottom:0.25rem;">';
+      html += '<span>💡 Pistas clave:</span>';
+      html += '</div>';
+      html += '<ul style="margin:0.25rem 0 0 1.25rem;padding:0;color:#E6EDF3;font-size:0.85rem;line-height:1.5;">';
+      q.hints.forEach(function (hint) {
+        html += '<li>' + escapeHtml(hint) + '</li>';
+      });
+      html += '</ul>';
+      html += '</div>';
+    }
+
+    // Input area
+    const isCode = (q.type === 'write-code');
+    html += '<div>';
+    html += '<label style="display:block;font-size:0.85rem;color:#A0B4BC;margin-bottom:0.4rem;font-weight:600;">Escribe tu respuesta aquí:</label>';
+    if (isCode) {
+      html += '<textarea id="write-answer-input" placeholder="' + escapeHtml(q.placeholder || 'Escribe tu código o expresión en Python...') + '" ' +
+              'style="width:100%;min-height:90px;font-family:monospace;background:#0D1117;color:#58CC02;border:2px solid #30363D;border-radius:12px;padding:12px 14px;font-size:1rem;resize:vertical;box-sizing:border-box;outline:none;transition:border-color 0.2s;"></textarea>';
+    } else {
+      html += '<input type="text" id="write-answer-input" placeholder="' + escapeHtml(q.placeholder || 'Escribe tu respuesta...') + '" ' +
+              'style="width:100%;background:#0D1117;color:#FFFFFF;border:2px solid #30363D;border-radius:12px;padding:12px 16px;font-size:1.05rem;box-sizing:border-box;outline:none;transition:border-color 0.2s;">';
+    }
+    html += '</div>';
+    html += '</div>';
+
+    container.innerHTML = html;
+
+    const inputEl = document.getElementById('write-answer-input');
+    const checkBtn = el('check-btn');
+
+    if (inputEl) {
+      inputEl.focus();
+      inputEl.addEventListener('input', function () {
+        const val = inputEl.value.trim();
+        currentSession.userTextAnswer = val;
+        if (checkBtn) {
+          checkBtn.disabled = (val.length === 0);
+        }
+      });
+
+      inputEl.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && (!isCode || e.ctrlKey)) {
+          if (checkBtn && !checkBtn.disabled) {
+            checkAnswer();
+          }
+        }
+      });
     }
   }
 
@@ -1217,6 +1280,37 @@
           });
         }
       }
+    } else if (q.type === 'write-code' || q.type === 'write-answer') {
+      const userText = (currentSession.userTextAnswer || '').trim();
+      const normalize = function (str) {
+        return (str || '').replace(/\s+/g, ' ').replace(/['"]/g, '"').trim().toLowerCase();
+      };
+
+      const userNorm = normalize(userText);
+
+      // Check if user's text matches correct answer or any valid accepted answer
+      let accepted = [];
+      if (Array.isArray(q.acceptedAnswers)) {
+        accepted = q.acceptedAnswers;
+      } else if (Array.isArray(q.correct)) {
+        accepted = q.correct;
+      } else if (typeof q.correct === 'string') {
+        accepted = [q.correct];
+      } else if (Array.isArray(q.options) && typeof q.correct === 'number') {
+        accepted = [q.options[q.correct]];
+      }
+
+      isCorrect = accepted.some(function (ans) {
+        return normalize(ans) === userNorm;
+      });
+
+      // Highlight input border
+      const inputEl = document.getElementById('write-answer-input');
+      if (inputEl) {
+        inputEl.disabled = true;
+        inputEl.style.borderColor = isCorrect ? '#58CC02' : '#FF4B4B';
+        inputEl.style.background = isCorrect ? 'rgba(88,204,2,0.1)' : 'rgba(255,75,75,0.1)';
+      }
     } else {
       // Standard: compare selectedOption to correct index
       isCorrect = (currentSession.selectedOption === q.correct);
@@ -1330,7 +1424,29 @@
       let richHtml = '';
 
       if (questionObj) {
-        if (!correct && questionObj.type !== 'order-code' && Array.isArray(questionObj.options)) {
+        if (!correct && (questionObj.type === 'write-code' || questionObj.type === 'write-answer')) {
+          const userText = currentSession.userTextAnswer || '';
+          let correctDisplay = '';
+          if (Array.isArray(q.acceptedAnswers)) {
+            correctDisplay = q.acceptedAnswers.join('  o  ');
+          } else if (Array.isArray(q.correct)) {
+            correctDisplay = q.correct.join('  o  ');
+          } else if (typeof q.correct === 'string') {
+            correctDisplay = q.correct;
+          } else if (Array.isArray(q.options) && typeof q.correct === 'number') {
+            correctDisplay = q.options[q.correct];
+          }
+
+          richHtml += '<div style="margin-bottom:0.75rem;padding:0.75rem 1rem;background:rgba(0,0,0,0.25);border-radius:10px;text-align:left;line-height:1.5;">';
+          richHtml += '<div style="color:#FFA6A6;margin-bottom:0.35rem;">❌ <b>Lo que escribiste:</b> <span style="font-family:monospace;background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;">' + (escapeHtml(userText) || '<i>(vacío)</i>') + '</span></div>';
+          richHtml += '<div style="color:#A6FFA6;">✅ <b>Respuesta esperada:</b> <span style="font-family:monospace;background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:4px;font-weight:bold;">' + escapeHtml(correctDisplay) + '</span></div>';
+          richHtml += '</div>';
+        } else if (correct && (questionObj.type === 'write-code' || questionObj.type === 'write-answer')) {
+          const userText = currentSession.userTextAnswer || '';
+          richHtml += '<div style="margin-bottom:0.6rem;padding:0.5rem 0.85rem;background:rgba(0,0,0,0.2);border-radius:8px;text-align:left;">';
+          richHtml += '<div style="color:#E6EDF3;">🎯 <b>Tu código/respuesta:</b> <span style="font-family:monospace;background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:4px;font-weight:bold;">' + escapeHtml(userText) + '</span></div>';
+          richHtml += '</div>';
+        } else if (!correct && questionObj.type !== 'order-code' && Array.isArray(questionObj.options)) {
           const correctText = questionObj.options[questionObj.correct];
           const userText = userSelectedIndex !== null && userSelectedIndex !== undefined ? questionObj.options[userSelectedIndex] : null;
 
