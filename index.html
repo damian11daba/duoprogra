@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DuoProgra 🦉 - Aprende Programación</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- ===== NAVIGATION BAR ===== -->
+    <nav id="navbar">
+        <span class="nav-logo">🦉 DuoProgra</span>
+        <div class="nav-right">
+            <span id="nav-xp" class="nav-stat">⭐ 0 XP</span>
+            <span id="nav-streak" class="nav-stat">🔥 0</span>
+            <span id="nav-lives" class="nav-stat">❤️ 5</span>
+            <button id="nav-home-btn" class="nav-btn" title="Inicio">🏠</button>
+            <button id="nav-profile-btn" class="nav-btn" title="Perfil">👤</button>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN APPLICATION CONTAINER ===== -->
+    <div id="app">
+
+        <!-- ===== VIEW 1: HOME ===== -->
+        <section id="view-home">
+            <!-- Greeting Area -->
+            <div class="home-greeting">
+                <div class="greeting-owl">🦉</div>
+                <h1 class="greeting-title">¡Hola, Programador!</h1>
+                <p class="greeting-subtitle">Sigue aprendiendo y mejora tus habilidades cada día</p>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="home-stats">
+                <div class="home-stat-item">
+                    <span class="home-stat-icon">⭐</span>
+                    <span id="home-xp" class="home-stat-value">0</span>
+                    <span class="home-stat-label">XP</span>
+                </div>
+                <div class="home-stat-item">
+                    <span class="home-stat-icon">🔥</span>
+                    <span id="home-streak" class="home-stat-value">0</span>
+                    <span class="home-stat-label">Racha</span>
+                </div>
+                <div class="home-stat-item">
+                    <span class="home-stat-icon">❤️</span>
+                    <span id="home-lives" class="home-stat-value">5</span>
+                    <span class="home-stat-label">Vidas</span>
+                </div>
+            </div>
+
+            <!-- Module Grid -->
+            <h2 class="section-title">📚 Módulos de Aprendizaje</h2>
+            <div id="module-grid" class="module-grid">
+                <!-- Module cards will be injected by JavaScript -->
+            </div>
+
+            <!-- Bottom Navigation Section -->
+            <div class="home-bottom-nav">
+                <button id="go-simulacros" class="home-nav-btn home-nav-btn--simulacro">
+                    <span class="home-nav-btn-icon">⏰</span>
+                    <span class="home-nav-btn-label">Simulacros</span>
+                    <span class="home-nav-btn-desc">Pon a prueba tus conocimientos</span>
+                </button>
+                <button id="go-practice" class="home-nav-btn home-nav-btn--practice">
+                    <span class="home-nav-btn-icon">🎯</span>
+                    <span class="home-nav-btn-label">Práctica</span>
+                    <span class="home-nav-btn-desc">Refuerza lo aprendido</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ===== VIEW 2: MODULE DETAIL ===== -->
+        <section id="view-module" class="hidden">
+            <button id="back-to-home" class="back-btn">← Volver</button>
+
+            <!-- Module Header -->
+            <div id="module-header" class="module-header">
+                <div class="module-header-icon"></div>
+                <h1 class="module-header-name"></h1>
+                <p class="module-header-desc"></p>
+                <div class="module-header-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <span class="module-header-progress-text"></span>
+                </div>
+            </div>
+
+            <!-- Lesson Path -->
+            <div id="lesson-path" class="lesson-path">
+                <!-- Lesson circles will be injected by JavaScript -->
+            </div>
+        </section>
+
+        <!-- ===== VIEW 3: ACTIVE QUIZ (LESSON) ===== -->
+        <section id="view-lesson" class="hidden">
+            <!-- Top Bar -->
+            <div class="lesson-top-bar">
+                <button id="close-lesson" class="close-btn">✕</button>
+                <div id="lesson-progress" class="lesson-progress-bar">
+                    <div id="lesson-progress-fill" class="lesson-progress-fill"></div>
+                </div>
+                <span id="lesson-lives" class="lesson-lives">❤️ 5</span>
+            </div>
+
+            <!-- Question Area -->
+            <div class="lesson-content">
+                <h2 id="question-text" class="question-text"></h2>
+                <pre id="question-code" class="code-block hidden"></pre>
+                <div id="options-container" class="options-container"></div>
+            </div>
+
+            <!-- Bottom Check Button -->
+            <div class="lesson-bottom">
+                <button id="check-btn" class="check-btn" disabled>Comprobar</button>
+            </div>
+
+            <!-- Feedback Overlay -->
+            <div id="feedback-overlay" class="feedback-overlay hidden">
+                <div class="feedback-content">
+                    <span id="feedback-icon" class="feedback-icon"></span>
+                    <p id="feedback-title" class="feedback-title"></p>
+                    <p id="feedback-explanation" class="feedback-explanation"></p>
+                    <button id="feedback-continue" class="feedback-continue-btn">Continuar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== VIEW 4: PRACTICE MODE ===== -->
+        <section id="view-practice" class="hidden">
+            <button class="back-btn" onclick="document.getElementById('nav-home-btn').click()">← Volver</button>
+
+            <div class="practice-header">
+                <h1 class="view-title">🎯 Modo Práctica</h1>
+                <p class="view-subtitle">Personaliza tu sesión de práctica</p>
+            </div>
+
+            <!-- Module Selector -->
+            <div class="practice-section">
+                <h3 class="practice-section-title">📚 Selecciona Módulos</h3>
+                <div id="practice-modules" class="practice-modules">
+                    <!-- Checkboxes injected by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Difficulty Selector -->
+            <div class="practice-section">
+                <h3 class="practice-section-title">⚡ Dificultad</h3>
+                <div class="practice-difficulty">
+                    <label class="practice-radio">
+                        <input type="radio" name="difficulty" value="facil">
+                        <span class="practice-radio-custom"></span>
+                        <span class="practice-radio-label">Fácil</span>
+                    </label>
+                    <label class="practice-radio">
+                        <input type="radio" name="difficulty" value="medio">
+                        <span class="practice-radio-custom"></span>
+                        <span class="practice-radio-label">Medio</span>
+                    </label>
+                    <label class="practice-radio">
+                        <input type="radio" name="difficulty" value="dificil">
+                        <span class="practice-radio-custom"></span>
+                        <span class="practice-radio-label">Difícil</span>
+                    </label>
+                    <label class="practice-radio">
+                        <input type="radio" name="difficulty" value="todos" checked>
+                        <span class="practice-radio-custom"></span>
+                        <span class="practice-radio-label">Todos</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Number of Questions Selector -->
+            <div class="practice-section">
+                <h3 class="practice-section-title">🔢 Número de Preguntas</h3>
+                <div class="practice-question-count">
+                    <label class="practice-count-option">
+                        <input type="radio" name="question-count" value="5">
+                        <span class="practice-count-btn">5</span>
+                    </label>
+                    <label class="practice-count-option">
+                        <input type="radio" name="question-count" value="10" checked>
+                        <span class="practice-count-btn">10</span>
+                    </label>
+                    <label class="practice-count-option">
+                        <input type="radio" name="question-count" value="15">
+                        <span class="practice-count-btn">15</span>
+                    </label>
+                    <label class="practice-count-option">
+                        <input type="radio" name="question-count" value="20">
+                        <span class="practice-count-btn">20</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Start Button -->
+            <div class="practice-start-area">
+                <button id="start-practice" class="start-practice-btn">🚀 Empezar Práctica</button>
+            </div>
+        </section>
+
+        <!-- ===== VIEW 5: SIMULACRO LIST ===== -->
+        <section id="view-simulacro-select" class="hidden">
+            <button class="back-btn" onclick="document.getElementById('nav-home-btn').click()">← Volver</button>
+
+            <div class="simulacro-header">
+                <h1 class="view-title">⏰ Simulacros de Prueba</h1>
+                <p class="view-subtitle">Evalúa tus conocimientos con pruebas cronometradas</p>
+            </div>
+
+            <div id="simulacro-grid" class="simulacro-grid">
+                <!-- Simulacro cards will be injected by JavaScript -->
+            </div>
+        </section>
+
+        <!-- ===== VIEW 6: ACTIVE EXAM (SIMULACRO) ===== -->
+        <section id="view-simulacro" class="hidden">
+            <!-- Top Bar -->
+            <div class="simulacro-top-bar">
+                <div id="timer-display" class="timer-display">⏱️ 00:00</div>
+                <span id="sim-question-counter" class="sim-question-counter">Pregunta 1 de 10</span>
+            </div>
+
+            <!-- Question Area -->
+            <div class="simulacro-content">
+                <h2 id="sim-question-text" class="question-text"></h2>
+                <pre id="sim-question-code" class="code-block hidden"></pre>
+                <div id="sim-options-container" class="options-container"></div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="simulacro-nav">
+                <button id="sim-prev" class="sim-nav-btn">← Anterior</button>
+                <button id="sim-next" class="sim-nav-btn sim-nav-btn--primary">Siguiente →</button>
+            </div>
+
+            <!-- Question Map -->
+            <div class="sim-question-map-wrapper">
+                <h4 class="sim-map-title">Mapa de Preguntas</h4>
+                <div id="sim-question-map" class="sim-question-map">
+                    <!-- Question dots will be injected by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="simulacro-submit-area">
+                <button id="sim-submit" class="sim-submit-btn">📝 Entregar Simulacro</button>
+            </div>
+        </section>
+
+        <!-- ===== VIEW 7: RESULTS ===== -->
+        <section id="view-results" class="hidden">
+            <!-- Score Circle -->
+            <div class="results-header">
+                <div id="results-score" class="results-score">
+                    <span class="results-score-number"></span>
+                    <span class="results-score-label">%</span>
+                </div>
+                <h2 class="results-title"></h2>
+                <div class="results-xp">
+                    <span class="results-xp-icon">⭐</span>
+                    <span id="results-xp-amount" class="results-xp-amount">+0 XP</span>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="results-stats-grid">
+                <div class="results-stat-card results-stat-card--correct">
+                    <span class="results-stat-emoji">✅</span>
+                    <span id="results-correct" class="results-stat-value">0</span>
+                    <span class="results-stat-label">Correctas</span>
+                </div>
+                <div class="results-stat-card results-stat-card--wrong">
+                    <span class="results-stat-emoji">❌</span>
+                    <span id="results-wrong" class="results-stat-value">0</span>
+                    <span class="results-stat-label">Incorrectas</span>
+                </div>
+                <div class="results-stat-card results-stat-card--accuracy">
+                    <span class="results-stat-emoji">🎯</span>
+                    <span id="results-accuracy" class="results-stat-value">0%</span>
+                    <span class="results-stat-label">Precisión</span>
+                </div>
+            </div>
+
+            <!-- Detailed Answer Review -->
+            <div class="results-review-section">
+                <h3 class="results-review-title">📋 Revisión Detallada</h3>
+                <div id="results-review" class="results-review">
+                    <!-- Expandable review items injected by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="results-actions">
+                <button id="results-home" class="results-action-btn results-action-btn--home">🏠 Volver al Inicio</button>
+                <button id="results-retry" class="results-action-btn results-action-btn--retry">🔄 Repetir</button>
+            </div>
+        </section>
+
+        <!-- ===== VIEW 8: PROFILE ===== -->
+        <section id="view-profile" class="hidden">
+            <!-- Avatar Area -->
+            <div class="profile-avatar-area">
+                <div class="profile-avatar">🦉</div>
+                <h1 class="profile-name">Programador</h1>
+                <p class="profile-tagline">Aprendiz de código</p>
+            </div>
+
+            <!-- Stats Cards Grid -->
+            <div id="profile-stats" class="profile-stats">
+                <div class="stats-card">
+                    <span class="stats-card-icon">⭐</span>
+                    <span id="profile-total-xp" class="stats-card-value">0</span>
+                    <span class="stats-card-label">Total XP</span>
+                </div>
+                <div class="stats-card">
+                    <span class="stats-card-icon">🔥</span>
+                    <span id="profile-streak" class="stats-card-value">0</span>
+                    <span class="stats-card-label">Racha</span>
+                </div>
+                <div class="stats-card">
+                    <span class="stats-card-icon">📖</span>
+                    <span id="profile-lessons" class="stats-card-value">0</span>
+                    <span class="stats-card-label">Lecciones</span>
+                </div>
+                <div class="stats-card">
+                    <span class="stats-card-icon">🎯</span>
+                    <span id="profile-accuracy" class="stats-card-value">0%</span>
+                    <span class="stats-card-label">Precisión</span>
+                </div>
+            </div>
+
+            <!-- Module Progress Bars -->
+            <div class="profile-section">
+                <h3 class="profile-section-title">📊 Progreso por Módulo</h3>
+                <div id="profile-modules" class="profile-modules">
+                    <!-- Module progress bars will be injected by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Achievements Grid -->
+            <div class="profile-section">
+                <h3 class="profile-section-title">🏆 Logros</h3>
+                <div id="profile-achievements" class="profile-achievements">
+                    <!-- Achievement cards will be injected by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+    </div><!-- end #app -->
+
+    <!-- ===== POPUPS / MODALS ===== -->
+
+    <!-- XP Popup -->
+    <div id="xp-popup" class="xp-popup hidden">+10 XP</div>
+
+    <!-- Generic Modal Overlay -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div id="modal-content" class="modal-content"></div>
+    </div>
+
+    <!-- Scripts (loaded at end of body) -->
+    <script src="js/data-parte1.js"></script>
+    <script src="js/data-parte2.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

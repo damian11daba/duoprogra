@@ -1,0 +1,22 @@
+# Sistema Operativo y Archivos Temporales
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores e IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Respaldos y Logs
+*.log
+*.tmp
+*.bak
+
+# Entornos virtuales / Node (si en el futuro se añade backend)
+node_modules/
+venv/
+.env
+__pycache__/
+*.pyc
