@@ -1607,6 +1607,106 @@ window.DUOPROGRA_PARTE2.simulacros = [
         ],
         "correct": 1,
         "explanation": "Falso. Los generadores son de un solo uso (iteradores de un solo pase). Una vez consumidos, quedan agotados y lanzan StopIteration."
+      }      ,
+      {
+        "id": "q-sim2-11",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "[I2 2026-1 / Control 3] Cual es el resultado del generador con .send()?",
+        "code": "def gen():\n    x = yield 'LISTO'\n    while True:\n        x = yield f'Val: {x * 2}'\n\ng = gen()\nprint(next(g))\nprint(g.send(5))\nprint(g.send(3))",
+        "options": ["LISTO\nVal: 10\nVal: 6", "LISTO\nVal: 5\nVal: 3", "None\nVal: 10\nVal: 6", "Error"],
+        "correct": 0,
+        "explanation": "next(g) avanza hasta el primer yield retornando 'LISTO'. send(5) reanuda, asigna x=5, yield produce 5*2=10. send(3) reanuda, x=3, yield produce 3*2=6."
+      },
+      {
+        "id": "q-sim2-12",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "[I2 2026-1 P4C] Programacion funcional pura (sin for). Que imprime:",
+        "code": "from functools import reduce\nnums = [1, 2, 3, 4, 5]\nres = reduce(lambda acc, x: acc + x, map(lambda x: x**2, filter(lambda x: x % 2 != 0, nums)), 0)\nprint(res)",
+        "options": ["35", "55", "9", "25"],
+        "correct": 0,
+        "explanation": "filter(impares) -> [1,3,5]. map(cuadrados) -> [1,9,25]. reduce(suma, inicial=0) = 0+1+9+25 = 35."
+      },
+      {
+        "id": "q-sim2-13",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "[I2 2026-1 Alt 3] Sincronizacion con threading.Event. Cual es el orden garantizado de impresion:",
+        "code": "import threading\ne = threading.Event()\ndef worker():\n    print('A')\n    e.wait()\n    print('B')\n\nt = threading.Thread(target=worker)\nt.start()\nprint('C')\ne.set()\nt.join()",
+        "options": ["A y C en cualquier orden, pero B siempre despues de C", "A, B, C estrictamente", "C, B, A estrictamente", "B siempre primero"],
+        "correct": 0,
+        "explanation": "El worker imprime A y se bloquea en e.wait(). El hilo principal imprime C luego llama e.set(). Solo entonces B puede imprimirse. Garantia: B siempre va despues de C."
+      },
+      {
+        "id": "q-sim2-14",
+        "type": "multiple-choice",
+        "difficulty": 2,
+        "question": "[I2 2026-1 Alt 5] Como se previene un Deadlock con dos cerrojos lock_a y lock_b en multiples hilos?",
+        "code": null,
+        "options": ["Orden global estricto: todos los hilos adquieren lock_a antes que lock_b", "Usar threading.Event en lugar de Lock", "Configurar hilos con daemon=True", "Hacer time.sleep(1) entre adquisiciones"],
+        "correct": 0,
+        "explanation": "El deadlock ocurre cuando hilo 1 tiene A y espera B, mientras hilo 2 tiene B y espera A. Imponer orden canonico (A siempre antes que B) rompe la espera circular."
+      },
+      {
+        "id": "q-sim2-15",
+        "type": "multiple-choice",
+        "difficulty": 2,
+        "question": "[Examen 2025-2 P17] En un servidor TCP Python, como detectas que un cliente se desconecto limpiamente?",
+        "code": null,
+        "options": ["socket.recv() retorna b'' (bytes vacios)", "socket.recv() retorna None", "Lanza siempre TimeoutError", "El socket se cierra automaticamente"],
+        "correct": 0,
+        "explanation": "En TCP, cuando el cliente cierra la conexion correctamente, recv() en el servidor retorna b'' (cero bytes). Una desconexion abrupta lanza ConnectionResetError."
+      },
+      {
+        "id": "q-sim2-16",
+        "type": "multiple-choice",
+        "difficulty": 2,
+        "question": "[Examen 2024-2 P8] Por que IIC2233 exige JSON en vez de pickle para serializar mensajes de red?",
+        "code": null,
+        "options": ["pickle permite inyeccion de codigo arbitrario al deserializar datos de fuentes no confiables", "pickle solo funciona en Linux", "JSON es mas rapido en CPU", "pickle no puede serializar enteros"],
+        "correct": 0,
+        "explanation": "pickle invoca __reduce__ al deserializar, permitiendo ejecutar codigo arbitrario. Un atacante puede forjar un payload malicioso. JSON es solo datos de texto, seguro e interoperable."
+      },
+      {
+        "id": "q-sim2-17",
+        "type": "multiple-choice",
+        "difficulty": 3,
+        "question": "[I2 2026-1 P1] En PyQt, por que una ventana NO debe referenciar directamente a otra ventana?",
+        "code": null,
+        "options": ["Para mantener bajo acoplamiento: la coordinacion se delega a un Controlador via senales y slots", "PyQt prohibe mas de un QWidget en memoria", "Las ventanas corren en procesos distintos", "Causa Memory Leak en el GC"],
+        "correct": 0,
+        "explanation": "Acoplamiento directo entre vistas crea dependencias ciclicas. El patron Controlador: las vistas emiten pyqtSignal y el Controlador conecta senales para coordinar, manteniendo el codigo mantenible."
+      },
+      {
+        "id": "q-sim2-18",
+        "type": "multiple-choice",
+        "difficulty": 3,
+        "question": "[Examen 2025-1 P17] Por que un QThread worker usa pyqtSignal para actualizar la GUI y no progress_bar.setValue() directamente?",
+        "code": null,
+        "options": ["Los widgets Qt solo son thread-safe desde el hilo principal; las senales despachan al hilo principal via QueuedConnection", "setValue() es privado en C++", "QThread no tiene acceso a memoria compartida", "setValue() requiere permisos de admin"],
+        "correct": 0,
+        "explanation": "Qt no es reentrante para widgets: modificar un widget desde un hilo secundario produce race conditions y crashes. pyqtSignal detecta hilos distintos y encola el evento en el hilo principal automaticamente."
+      },
+      {
+        "id": "q-sim2-19",
+        "type": "multiple-choice",
+        "difficulty": 2,
+        "question": "[Control 4] Cual es la diferencia critica entre hilo normal y hilo daemon (t.daemon = True)?",
+        "code": null,
+        "options": ["El proceso termina cuando todos los hilos no-daemon acaban, matando daemon sin esperar su conclusion", "Los daemon tienen mayor prioridad CPU", "Los daemon pueden saltarse el GIL", "Los daemon no pueden usar Lock"],
+        "correct": 0,
+        "explanation": "Un hilo daemon es de servicio en segundo plano. Cuando el hilo principal y todos los hilos regulares terminan, Python cierra el proceso abruptamente eliminando todos los daemon."
+      },
+      {
+        "id": "q-sim2-20",
+        "type": "multiple-choice",
+        "difficulty": 2,
+        "question": "[I2 2026-1 Alt 1] Cual es la diferencia entre Concurrencia y Paralelismo en Python con el GIL?",
+        "code": null,
+        "options": ["Concurrencia: multiples tareas progresan intercaladas en un nucleo. Paralelismo: multiples tareas ejecutan SIMULTANEAMENTE en multiples nucleos", "Son sinonimos", "Paralelismo es solo para GPU", "El GIL permite verdadero paralelismo de threads"],
+        "correct": 0,
+        "explanation": "Python threading logra concurrencia (alternancia en un nucleo) pero no paralelismo real para codigo CPU-bound por el GIL. Para paralelismo real se usa multiprocessing o extensiones C que liberan el GIL."
       }
     ]
   },

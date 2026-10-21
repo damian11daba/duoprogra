@@ -1284,17 +1284,50 @@
           btnScaffold.disabled = true;
           if (scaffoldNotice) scaffoldNotice.style.display = 'inline';
 
-          // Determine partial scaffold string to fill into textarea
-          let hintCode = '';
-          const target = (Array.isArray(q.acceptedAnswers) && q.acceptedAnswers[0]) || (typeof q.correct === 'string' ? q.correct : '');
-          if (target.length > 8) {
-            // Give beginning and ending structure with dots or blanks
-            const len = target.length;
-            const startChunk = target.substring(0, Math.max(3, Math.floor(len * 0.35)));
-            const endChunk = target.substring(Math.floor(len * 0.8));
-            hintCode = startChunk + '...' + endChunk;
+          // Build a structural/pseudocode scaffold WITHOUT revealing the exact answer
+          var hintCode = '';
+          var isCode = (q.type === 'write-code');
+
+          // Use the question's own scaffoldHint if provided, otherwise generate a structural template
+          if (q.scaffoldHint) {
+            hintCode = q.scaffoldHint;
+          } else if (isCode) {
+            // Generate a structural template from the answer's shape, not its content
+            var target = (Array.isArray(q.acceptedAnswers) && q.acceptedAnswers[0]) || (typeof q.correct === 'string' ? q.correct : '');
+            if (target.includes('def ')) {
+              // Function definition question
+              var fnMatch = target.match(/def\s+(\w+)\s*\(/);
+              hintCode = fnMatch ? 'def ' + fnMatch[1] + '(...):
+    # Escribe el cuerpo aquí
+    return ...' : 'def mi_funcion(...):
+    # Completa la función
+    return ...';
+            } else if (target.includes('class ')) {
+              hintCode = 'class MiClase:
+    def __init__(self, ...):
+        # Inicializa atributos
+        ...';
+            } else if (target.includes('for ') || target.includes('while ')) {
+              hintCode = '# Usa un ciclo para iterar
+for elemento in ...:  # o while condicion:
+    ...';
+            } else if (target.includes('lambda')) {
+              hintCode = 'lambda argumento: expresion_con(argumento)';
+            } else if (target.includes('map(') || target.includes('filter(')) {
+              hintCode = '# Recuerda: map(funcion, iterable) o filter(funcion, iterable)
+resultado = list(map(lambda x: ..., coleccion))';
+            } else {
+              // Generic code scaffold
+              var lines = target.split('
+').length;
+              hintCode = '# Pista estructural: tu solución tiene ' + lines + ' línea(s)
+# Comienza con: ' + (target[0] || '...') + '...';
+            }
           } else {
-            hintCode = target.substring(0, Math.max(2, Math.floor(target.length / 2))) + '...';
+            // write-answer type: conceptual hint only
+            hintCode = '# Pista: piensa en el concepto de ' + (q.question.length > 30 ? q.question.substring(0, 30) + '...' : q.question);
+            // Clear for text input
+            hintCode = 'Pista: revisa las notas sobre este tema y recuerda los métodos clave.';
           }
 
           if (inputEl) {
@@ -1354,55 +1387,54 @@
   function renderOrderCodeQuestion(q, container) {
     if (!q.options) return;
 
-    // Create the two zones
     container.innerHTML =
       '<div style="margin-bottom:1rem;">' +
-        '<p style="font-weight:600;margin-bottom:0.5rem;color:#777;font-size:0.85rem;">Arrastra las líneas en el orden correcto:</p>' +
-        '<div id="order-answer-area" style="min-height:60px;border:2px dashed #E5E5E5;border-radius:12px;padding:0.5rem;margin-bottom:1rem;display:flex;flex-direction:column;gap:0.5rem;"></div>' +
-        '<p style="font-weight:600;margin-bottom:0.5rem;color:#777;font-size:0.85rem;">Líneas disponibles:</p>' +
+        '<p style="font-weight:600;margin-bottom:0.25rem;color:#A0B4BC;font-size:0.85rem;">👆 Haz clic para mover al área de respuesta (clic nuevamente para devolver):</p>' +
+        '<div id="order-answer-area" style="min-height:70px;border:2px dashed #1CB0F6;border-radius:12px;padding:0.5rem;margin-bottom:1rem;display:flex;flex-direction:column;gap:0.5rem;background:rgba(28,176,246,0.05);"></div>' +
+        '<p style="font-weight:600;margin-bottom:0.25rem;color:#A0B4BC;font-size:0.85rem;">📦 Líneas disponibles:</p>' +
         '<div id="order-source-area" style="display:flex;flex-direction:column;gap:0.5rem;"></div>' +
       '</div>';
 
     const sourceArea = document.getElementById('order-source-area');
     const answerArea = document.getElementById('order-answer-area');
 
-    // Track the user's ordering
+    // Track the user's ordering - array of origIdx values in placement order
     currentSession.orderSelection = [];
 
-    // Create items from the shuffled options
-    const shuffledIndices = shuffle(q.options.map(function (_, i) { return i; }));
+    var shuffledIndices = shuffle(q.options.map(function (_, i) { return i; }));
 
-    shuffledIndices.forEach(function (origIdx) {
-      const item = document.createElement('button');
-      item.className = 'option-btn';
-      item.style.cssText = 'font-family:monospace;text-align:left;white-space:pre;';
-      item.textContent = q.options[origIdx];
-      item.setAttribute('data-orig-index', origIdx);
+    function bindItem(item, origIdx, inAnswer) {
+      // Remove ALL listeners by cloning the node
+      var newItem = item.cloneNode(true);
+      if (item.parentNode) item.parentNode.replaceChild(newItem, item);
 
-      item.addEventListener('click', function () {
-        // Move from source to answer
-        answerArea.appendChild(item);
-        currentSession.orderSelection.push(origIdx);
-        updateOrderCheckBtn();
-
-        // Change click handler to move back
-        item.onclick = function () {
-          sourceArea.appendChild(item);
-          const pos = currentSession.orderSelection.indexOf(origIdx);
+      newItem.addEventListener('click', function () {
+        if (inAnswer) {
+          // Move back to source
+          sourceArea.appendChild(newItem);
+          var pos = currentSession.orderSelection.indexOf(origIdx);
           if (pos !== -1) currentSession.orderSelection.splice(pos, 1);
           updateOrderCheckBtn();
-
-          // Restore original click handler
-          item.onclick = function () {
-            answerArea.appendChild(item);
-            currentSession.orderSelection.push(origIdx);
-            updateOrderCheckBtn();
-            item.onclick = arguments.callee; // will be re-set on next click
-          };
-        };
+          bindItem(newItem, origIdx, false);
+        } else {
+          // Move to answer
+          answerArea.appendChild(newItem);
+          currentSession.orderSelection.push(origIdx);
+          updateOrderCheckBtn();
+          bindItem(newItem, origIdx, true);
+        }
       });
+      return newItem;
+    }
 
+    shuffledIndices.forEach(function (origIdx) {
+      var item = document.createElement('button');
+      item.className = 'option-btn';
+      item.style.cssText = 'font-family:monospace;text-align:left;white-space:pre-wrap;cursor:pointer;';
+      item.textContent = q.options[origIdx];
+      item.setAttribute('data-orig-index', origIdx);
       sourceArea.appendChild(item);
+      bindItem(item, origIdx, false);
     });
   }
 
@@ -2322,63 +2354,32 @@
       return;
     }
 
-    // Module checkboxes
-    const checkboxSection = document.createElement('div');
-    checkboxSection.innerHTML = '<h3 style="margin-bottom:1rem;">Selecciona los módulos:</h3>';
-
+    // Only inject module checkboxes (difficulty and count are now in the HTML, not duplicated here)
     MODULES.forEach(function (mod) {
       const label = document.createElement('label');
-      label.style.cssText = 'display:flex;align-items:center;gap:0.75rem;padding:0.75rem;border-radius:12px;cursor:pointer;margin-bottom:0.5rem;background:#f9f9f9;';
+      label.className = 'practice-checkbox';
+      const accentColor = mod.color || '#58CC02';
+      const icon = mod.icon || '📚';
       label.innerHTML =
-        '<input type="checkbox" class="practice-module-cb" value="' + mod.id + '" checked style="width:20px;height:20px;accent-color:' + (mod.color || '#58CC02') + ';">' +
-        '<span style="font-size:1.5rem;">' + (mod.icon || '📚') + '</span>' +
-        '<span style="font-weight:500;">' + escapeHtml(mod.name) + '</span>';
-      checkboxSection.appendChild(label);
+        '<input type="checkbox" class="practice-module-cb" value="' + mod.id + '" checked style="width:20px;height:20px;flex-shrink:0;accent-color:' + accentColor + ';cursor:pointer;">' +
+        '<span style="font-size:1.4rem;">' + icon + '</span>' +
+        '<span class="practice-checkbox-label" style="color:var(--text-primary);font-weight:600;">' + escapeHtml(mod.name) + '</span>';
+      container.appendChild(label);
     });
 
-    container.appendChild(checkboxSection);
-
-    // Difficulty selector
-    const diffSection = document.createElement('div');
-    diffSection.style.cssText = 'margin-top:1.5rem;';
-    diffSection.innerHTML =
-      '<h3 style="margin-bottom:1rem;">Dificultad:</h3>' +
-      '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;">' +
-        '<label style="padding:0.5rem 1rem;border:2px solid #E5E5E5;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">' +
-          '<input type="radio" name="practice-diff" value="all" checked> Todos' +
-        '</label>' +
-        '<label style="padding:0.5rem 1rem;border:2px solid #E5E5E5;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">' +
-          '<input type="radio" name="practice-diff" value="1"> Fácil' +
-        '</label>' +
-        '<label style="padding:0.5rem 1rem;border:2px solid #E5E5E5;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">' +
-          '<input type="radio" name="practice-diff" value="2"> Medio' +
-        '</label>' +
-        '<label style="padding:0.5rem 1rem;border:2px solid #E5E5E5;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">' +
-          '<input type="radio" name="practice-diff" value="3"> Difícil' +
-        '</label>' +
-      '</div>';
-    container.appendChild(diffSection);
-
-    // Question count selector
-    const countSection = document.createElement('div');
-    countSection.style.cssText = 'margin-top:1.5rem;';
-    countSection.innerHTML =
-      '<h3 style="margin-bottom:1rem;">Cantidad de preguntas:</h3>' +
-      '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;">' +
-        '<label style="padding:0.5rem 1rem;border:2px solid #E5E5E5;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">' +
-          '<input type="radio" name="practice-count" value="5"> 5' +
-        '</label>' +
-        '<label style="padding:0.5rem 1rem;border:2px solid #E5E5E5;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">' +
-          '<input type="radio" name="practice-count" value="10" checked> 10' +
-        '</label>' +
-        '<label style="padding:0.5rem 1rem;border:2px solid #E5E5E5;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">' +
-          '<input type="radio" name="practice-count" value="20"> 20' +
-        '</label>' +
-        '<label style="padding:0.5rem 1rem;border:2px solid #E5E5E5;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:0.5rem;">' +
-          '<input type="radio" name="practice-count" value="0"> Todas' +
-        '</label>' +
-      '</div>';
-    container.appendChild(countSection);
+    // Wire up Select All / Deselect All buttons
+    const selAll = document.getElementById('practice-select-all');
+    const deselAll = document.getElementById('practice-deselect-all');
+    if (selAll) {
+      selAll.addEventListener('click', function () {
+        document.querySelectorAll('.practice-module-cb').forEach(function (cb) { cb.checked = true; });
+      });
+    }
+    if (deselAll) {
+      deselAll.addEventListener('click', function () {
+        document.querySelectorAll('.practice-module-cb').forEach(function (cb) { cb.checked = false; });
+      });
+    }
   }
 
   /**
@@ -2397,12 +2398,12 @@
       return;
     }
 
-    // Get difficulty
-    const diffRadio = document.querySelector('input[name="practice-diff"]:checked');
-    const diffValue = diffRadio ? diffRadio.value : 'all';
+    // Get difficulty (from the HTML radio group named "difficulty")
+    const diffRadio = document.querySelector('input[name="difficulty"]:checked');
+    const diffValue = diffRadio ? diffRadio.value : 'todos';
 
-    // Get question count
-    const countRadio = document.querySelector('input[name="practice-count"]:checked');
+    // Get question count (from the HTML radio group named "question-count")
+    const countRadio = document.querySelector('input[name="question-count"]:checked');
     const countValue = countRadio ? parseInt(countRadio.value, 10) : 10;
 
     // Pool questions
@@ -2413,7 +2414,9 @@
         mod.lessons.forEach(function (lesson) {
           if (lesson.questions) {
             lesson.questions.forEach(function (q) {
-              if (diffValue === 'all' || q.difficulty === parseInt(diffValue, 10)) {
+              var diffMap = { 'facil': 1, 'medio': 2, 'dificil': 3 };
+              var targetDiff = diffMap[diffValue] || null;
+              if (diffValue === 'todos' || diffValue === 'all' || !targetDiff || q.difficulty === targetDiff) {
                 pool.push(q);
               }
             });
@@ -2695,7 +2698,7 @@
   // ==========================================================================
 
   /**
-   * Render the simulacro selection grid.
+   * Render the simulacro selection grid (Official PUC exams tab).
    */
   function renderSimulacroSelect() {
     const grid = el('simulacro-grid');
@@ -2718,7 +2721,7 @@
       let statusHtml = '';
       if (result) {
         statusHtml =
-          '<div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #eee;">' +
+          '<div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.1);">' +
             '<span style="font-weight:600;">' + (result.passed ? '✅ Aprobado' : '❌ Reprobado') + '</span>' +
             '<span style="float:right;font-weight:700;color:' + (result.passed ? '#58CC02' : '#FF4B4B') + ';">' + result.score + '%</span>' +
           '</div>';
@@ -2726,8 +2729,8 @@
 
       card.innerHTML =
         '<h3 style="margin:0 0 0.5rem;">' + escapeHtml(sim.name) + '</h3>' +
-        '<p style="color:#666;margin:0 0 0.5rem;">' + escapeHtml(sim.description || '') + '</p>' +
-        '<p style="color:#888;font-size:0.85rem;margin:0;">⏱️ ' + (sim.timeMinutes || 90) + ' minutos · Mínimo: ' + (sim.passingScore || 60) + '%</p>' +
+        '<p style="color:var(--text-secondary);margin:0 0 0.5rem;">' + escapeHtml(sim.description || '') + '</p>' +
+        '<p style="color:var(--text-muted);font-size:0.85rem;margin:0;">⏱️ ' + (sim.timeMinutes || 90) + ' min · ' + (sim.questions ? sim.questions.length : '?') + ' preguntas · Mínimo: ' + (sim.passingScore || 60) + '%</p>' +
         statusHtml;
 
       card.addEventListener('click', function () {
@@ -2736,6 +2739,119 @@
 
       grid.appendChild(card);
     });
+  }
+
+  /**
+   * Populate the custom simulacro module checkboxes.
+   */
+  function populateSimCustomModules() {
+    var container = el('sim-custom-modules');
+    if (!container || container.childElementCount > 0) return; // Already populated
+
+    MODULES.forEach(function (mod) {
+      var label = document.createElement('label');
+      label.className = 'practice-checkbox';
+      label.innerHTML =
+        '<input type="checkbox" class="sim-custom-module-cb" value="' + mod.id + '" checked style="width:20px;height:20px;flex-shrink:0;accent-color:' + (mod.color || '#FF9600') + ';cursor:pointer;">' +
+        '<span style="font-size:1.4rem;">' + (mod.icon || '📚') + '</span>' +
+        '<span class="practice-checkbox-label" style="color:var(--text-primary);font-weight:600;">' + escapeHtml(mod.name) + '</span>';
+      container.appendChild(label);
+    });
+
+    // Wire up Select All / Deselect All for custom sim
+    var selAll = el('sim-select-all');
+    var deselAll = el('sim-deselect-all');
+    if (selAll) {
+      selAll.addEventListener('click', function () {
+        document.querySelectorAll('.sim-custom-module-cb').forEach(function (cb) { cb.checked = true; });
+      });
+    }
+    if (deselAll) {
+      deselAll.addEventListener('click', function () {
+        document.querySelectorAll('.sim-custom-module-cb').forEach(function (cb) { cb.checked = false; });
+      });
+    }
+  }
+
+  /**
+   * Start a custom simulacro session built from module selections.
+   */
+  function startCustomSimulacro() {
+    var selectedModuleIds = [];
+    document.querySelectorAll('.sim-custom-module-cb:checked').forEach(function (cb) {
+      selectedModuleIds.push(cb.value);
+    });
+
+    if (selectedModuleIds.length === 0) {
+      showModal('Atención', 'Selecciona al menos un módulo para el simulacro.');
+      return;
+    }
+
+    var timeRadio = document.querySelector('input[name="sim-custom-time"]:checked');
+    var timeMinutes = timeRadio ? parseInt(timeRadio.value, 10) : 60;
+
+    var countRadio = document.querySelector('input[name="sim-custom-count"]:checked');
+    var questionCount = countRadio ? parseInt(countRadio.value, 10) : 10;
+
+    // Pool questions from selected modules (all difficulty levels, all types)
+    var pool = [];
+    selectedModuleIds.forEach(function (modId) {
+      var mod = findModule(modId);
+      if (mod && mod.lessons) {
+        mod.lessons.forEach(function (lesson) {
+          if (lesson.questions) {
+            lesson.questions.forEach(function (q) {
+              pool.push(q);
+            });
+          }
+        });
+      }
+    });
+
+    // Also add matching questions from SIMULACROS bank
+    SIMULACROS.forEach(function (sim) {
+      if (sim.questions) {
+        sim.questions.forEach(function (q) {
+          pool.push(q);
+        });
+      }
+    });
+
+    if (pool.length === 0) {
+      showModal('Sin preguntas', 'No se encontraron preguntas para los módulos seleccionados.');
+      return;
+    }
+
+    pool = shuffle(pool);
+    if (questionCount > 0 && questionCount < pool.length) {
+      pool = pool.slice(0, questionCount);
+    }
+
+    // Clear any previous timer
+    if (simulacroTimerInterval) {
+      clearInterval(simulacroTimerInterval);
+      simulacroTimerInterval = null;
+    }
+
+    var customId = 'custom_' + Date.now();
+    currentSession = {
+      type: 'simulacro',
+      simulacroId: customId,
+      simulacroName: 'Simulacro Personalizado (' + selectedModuleIds.length + ' módulos)',
+      passingScore: 60,
+      questions: pool,
+      currentIndex: 0,
+      answers: new Array(pool.length).fill(null),
+      startTime: Date.now(),
+      timeRemaining: timeMinutes * 60,
+      xpEarned: 0
+    };
+
+    showView('view-simulacro');
+    startSimulacroTimer();
+    renderSimulacroQuestion();
+    renderSimulacroQuestionMap();
+    updateNav();
   }
 
   // ==========================================================================
@@ -2851,6 +2967,64 @@
     if (backHome) {
       backHome.addEventListener('click', function () {
         window.location.hash = '#home';
+      });
+    }
+
+    // Home bottom navigation buttons
+    const goSimulacros = el('go-simulacros');
+    if (goSimulacros) {
+      goSimulacros.addEventListener('click', function () {
+        window.location.hash = '#simulacros';
+      });
+    }
+    const goPractice = el('go-practice');
+    if (goPractice) {
+      goPractice.addEventListener('click', function () {
+        window.location.hash = '#practice';
+      });
+    }
+
+    // Navbar quick-access buttons
+    const navSimulacrosBtn = el('nav-simulacros-btn');
+    if (navSimulacrosBtn) {
+      navSimulacrosBtn.addEventListener('click', function () {
+        window.location.hash = '#simulacros';
+      });
+    }
+    const navPracticeBtn = el('nav-practice-btn');
+    if (navPracticeBtn) {
+      navPracticeBtn.addEventListener('click', function () {
+        window.location.hash = '#practice';
+      });
+    }
+
+    // Custom simulacro start button
+    const startCustomSimBtn = el('start-custom-simulacro');
+    if (startCustomSimBtn) {
+      startCustomSimBtn.addEventListener('click', function () {
+        startCustomSimulacro();
+      });
+    }
+
+    // Simulacro tab switcher (Official vs Custom)
+    var simTabOfficial = el('sim-tab-official');
+    var simTabCustom = el('sim-tab-custom');
+    var simOfficialContainer = el('sim-official-container');
+    var simCustomContainer = el('sim-custom-container');
+    if (simTabOfficial && simTabCustom) {
+      simTabOfficial.addEventListener('click', function () {
+        simTabOfficial.classList.add('option-btn--selected');
+        simTabCustom.classList.remove('option-btn--selected');
+        if (simOfficialContainer) simOfficialContainer.classList.remove('hidden');
+        if (simCustomContainer) simCustomContainer.classList.add('hidden');
+      });
+      simTabCustom.addEventListener('click', function () {
+        simTabCustom.classList.add('option-btn--selected');
+        simTabOfficial.classList.remove('option-btn--selected');
+        if (simCustomContainer) simCustomContainer.classList.remove('hidden');
+        if (simOfficialContainer) simOfficialContainer.classList.add('hidden');
+        // Populate module checkboxes for custom simulacro
+        populateSimCustomModules();
       });
     }
 

@@ -14,12 +14,14 @@
 
     <!-- ===== NAVIGATION BAR ===== -->
     <nav id="navbar">
-        <span class="nav-logo">🦉 DuoProgra</span>
+        <span class="nav-logo" style="cursor:pointer;" onclick="window.location.hash='#home'">🦉 DuoProgra</span>
         <div class="nav-right">
             <span id="nav-xp" class="nav-stat">⭐ 0 XP</span>
             <span id="nav-streak" class="nav-stat">🔥 0</span>
             <span id="nav-lives" class="nav-stat">❤️ 5</span>
             <button id="nav-home-btn" class="nav-btn" title="Inicio">🏠</button>
+            <button id="nav-simulacros-btn" class="nav-btn" title="Simulacros PUC">⏰</button>
+            <button id="nav-practice-btn" class="nav-btn" title="Práctica">🎯</button>
             <button id="nav-profile-btn" class="nav-btn" title="Perfil">👤</button>
         </div>
     </nav>
@@ -139,14 +141,20 @@
 
             <div class="practice-header">
                 <h1 class="view-title">🎯 Modo Práctica</h1>
-                <p class="view-subtitle">Personaliza tu sesión de práctica</p>
+                <p class="view-subtitle">Personaliza tu sesión de práctica seleccionando módulos, dificultad y cantidad</p>
             </div>
 
             <!-- Module Selector -->
             <div class="practice-section">
-                <h3 class="practice-section-title">📚 Selecciona Módulos</h3>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+                    <h3 class="practice-section-title" style="margin:0;">📚 Selecciona Módulos</h3>
+                    <div style="display:flex;gap:0.5rem;">
+                        <button type="button" id="practice-select-all" class="option-btn" style="padding:6px 14px;font-size:0.82rem;border-radius:12px;cursor:pointer;background:#2a2b36;color:#E6EDF3;border:1px solid #3d3e52;">Seleccionar todos</button>
+                        <button type="button" id="practice-deselect-all" class="option-btn" style="padding:6px 14px;font-size:0.82rem;border-radius:12px;cursor:pointer;background:#2a2b36;color:#E6EDF3;border:1px solid #3d3e52;">Deseleccionar todos</button>
+                    </div>
+                </div>
                 <div id="practice-modules" class="practice-modules">
-                    <!-- Checkboxes injected by JavaScript -->
+                    <!-- Checkboxes injected by JavaScript with clear white titles -->
                 </div>
             </div>
 
@@ -154,6 +162,11 @@
             <div class="practice-section">
                 <h3 class="practice-section-title">⚡ Dificultad</h3>
                 <div class="practice-difficulty">
+                    <label class="practice-radio">
+                        <input type="radio" name="difficulty" value="todos" checked>
+                        <span class="practice-radio-custom"></span>
+                        <span class="practice-radio-label">Todos</span>
+                    </label>
                     <label class="practice-radio">
                         <input type="radio" name="difficulty" value="facil">
                         <span class="practice-radio-custom"></span>
@@ -168,11 +181,6 @@
                         <input type="radio" name="difficulty" value="dificil">
                         <span class="practice-radio-custom"></span>
                         <span class="practice-radio-label">Difícil</span>
-                    </label>
-                    <label class="practice-radio">
-                        <input type="radio" name="difficulty" value="todos" checked>
-                        <span class="practice-radio-custom"></span>
-                        <span class="practice-radio-label">Todos</span>
                     </label>
                 </div>
             </div>
@@ -211,12 +219,80 @@
             <button class="back-btn" onclick="document.getElementById('nav-home-btn').click()">← Volver</button>
 
             <div class="simulacro-header">
-                <h1 class="view-title">⏰ Simulacros de Prueba</h1>
-                <p class="view-subtitle">Evalúa tus conocimientos con pruebas cronometradas</p>
+                <h1 class="view-title">⏰ Simulacros de Prueba PUC</h1>
+                <p class="view-subtitle">Evalúa tus conocimientos con pruebas cronometradas basadas en evaluaciones oficiales de IIC2233</p>
             </div>
 
-            <div id="simulacro-grid" class="simulacro-grid">
-                <!-- Simulacro cards will be injected by JavaScript -->
+            <!-- Tabs: Oficiales vs Personalizado -->
+            <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;justify-content:center;flex-wrap:wrap;">
+                <button id="sim-tab-official" class="option-btn option-btn--selected" type="button" style="padding:10px 20px;font-weight:700;border-radius:20px;cursor:pointer;">🏛️ Pruebas Oficiales PUC</button>
+                <button id="sim-tab-custom" class="option-btn" type="button" style="padding:10px 20px;font-weight:700;border-radius:20px;cursor:pointer;">🎯 Simulacro Personalizado por Contenido</button>
+            </div>
+
+            <!-- Tab 1: Official PUC Exams -->
+            <div id="sim-official-container">
+                <div id="simulacro-grid" class="simulacro-grid">
+                    <!-- Simulacro cards will be injected by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Tab 2: Custom Simulacro by Content Selection -->
+            <div id="sim-custom-container" class="hidden">
+                <div class="practice-section" style="margin-bottom:1.5rem;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+                        <h3 class="practice-section-title" style="margin:0;">📚 Selecciona los Contenidos para el Examen:</h3>
+                        <div style="display:flex;gap:0.5rem;">
+                            <button type="button" id="sim-select-all" class="option-btn" style="padding:6px 14px;font-size:0.82rem;border-radius:12px;cursor:pointer;background:#2a2b36;color:#E6EDF3;border:1px solid #3d3e52;">Seleccionar todos</button>
+                            <button type="button" id="sim-deselect-all" class="option-btn" style="padding:6px 14px;font-size:0.82rem;border-radius:12px;cursor:pointer;background:#2a2b36;color:#E6EDF3;border:1px solid #3d3e52;">Deseleccionar todos</button>
+                        </div>
+                    </div>
+                    <div id="sim-custom-modules" class="practice-modules">
+                        <!-- Module checkboxes injected by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="practice-section" style="margin-bottom:1.5rem;">
+                    <h3 class="practice-section-title">⏱️ Duración del Simulacro</h3>
+                    <div class="practice-difficulty">
+                        <label class="practice-radio">
+                            <input type="radio" name="sim-custom-time" value="30">
+                            <span class="practice-radio-custom"></span>
+                            <span class="practice-radio-label">30 min (Express)</span>
+                        </label>
+                        <label class="practice-radio">
+                            <input type="radio" name="sim-custom-time" value="60" checked>
+                            <span class="practice-radio-custom"></span>
+                            <span class="practice-radio-label">60 min (Estándar)</span>
+                        </label>
+                        <label class="practice-radio">
+                            <input type="radio" name="sim-custom-time" value="90">
+                            <span class="practice-radio-custom"></span>
+                            <span class="practice-radio-label">90 min (Prueba Completa)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="practice-section" style="margin-bottom:1.5rem;">
+                    <h3 class="practice-section-title">🔢 Cantidad de Preguntas Tipo PUC</h3>
+                    <div class="practice-question-count">
+                        <label class="practice-count-option">
+                            <input type="radio" name="sim-custom-count" value="10" checked>
+                            <span class="practice-count-btn">10 preguntas</span>
+                        </label>
+                        <label class="practice-count-option">
+                            <input type="radio" name="sim-custom-count" value="15">
+                            <span class="practice-count-btn">15 preguntas</span>
+                        </label>
+                        <label class="practice-count-option">
+                            <input type="radio" name="sim-custom-count" value="20">
+                            <span class="practice-count-btn">20 preguntas</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="practice-start-area">
+                    <button id="start-custom-simulacro" class="start-practice-btn" style="background:var(--orange);">🚀 Iniciar Simulacro Personalizado</button>
+                </div>
             </div>
         </section>
 
