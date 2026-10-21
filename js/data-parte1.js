@@ -96,108 +96,8 @@ window.DUOPROGRA_PARTE1 = [
             ],
             correct: 0,
             explanation: '"self" es una referencia a la instancia actual del objeto. Se pasa automáticamente como primer argumento cuando se llama a un método de instancia.'
-          },
-      {
-      "id": "oop-basico-dev-practica",
-      "name": "✍️ Desarrollo: Práctica de OOP",
-      "questions": [
-            {
-                  "id": "q-oop-dev-p1",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "Escribe la línea de código para definir el constructor de una clase Persona que recibe 'nombre' y 'edad':",
-                  "code": "class Persona:\n    # Escribe la firma del constructor aquí\n        self.nombre = nombre\n        self.edad = edad",
-                  "placeholder": "def __init__(self, ...):",
-                  "hints": [
-                        "El método se llama __init__ con doble guión bajo.",
-                        "Recuerda incluir siempre 'self' como primer parámetro.",
-                        "No olvides los dos puntos al final."
-                  ],
-                  "acceptedAnswers": [
-                        "def __init__(self, nombre, edad):",
-                        "def __init__(self, nombre, edad) :"
-                  ],
-                  "explanation": "En Python, los constructores se definen con 'def __init__(self, ...)'. 'self' es obligatorio para referenciar la instancia que se está creando."
-            },
-            {
-                  "id": "q-oop-dev-p2",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "Escribe la instrucción exacta para crear una instancia de la clase 'Auto' con marca 'Toyota' y asignarla a la variable 'mi_auto':",
-                  "code": null,
-                  "placeholder": "mi_auto = ...",
-                  "hints": [
-                        "Se llama a la clase como una función: Clase(argumentos).",
-                        "El string debe ser 'Toyota'."
-                  ],
-                  "acceptedAnswers": [
-                        "mi_auto = Auto('Toyota')",
-                        "mi_auto = Auto(\"Toyota\")",
-                        "mi_auto=Auto('Toyota')",
-                        "mi_auto=Auto(\"Toyota\")"
-                  ],
-                  "explanation": "Para instanciar una clase en Python se utiliza el nombre de la clase seguido de paréntesis con los argumentos necesarios: mi_auto = Auto('Toyota')."
-            },
-            {
-                  "id": "q-oop-dev-p3",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "Escribe el decorador que se coloca sobre un método para convertirlo en un getter de una propiedad:",
-                  "code": "class Circulo:\n    # ¿Qué decorador va aquí?\n    def radio(self):\n        return self._radio",
-                  "placeholder": "@...",
-                  "hints": [
-                        "Empieza con arroba (@).",
-                        "Es una palabra reservada built-in de Python para propiedades."
-                  ],
-                  "acceptedAnswers": [
-                        "@property"
-                  ],
-                  "explanation": "El decorador built-in '@property' permite acceder a un método como si fuera un atributo regular (getter), facilitando el encapsulamiento."
-            }
-      ]
-},
-      {
-      "id": "oop-basico-dev-puc",
-      "name": "🎓 Desarrollo Nivel Prueba PUC: Modelación OOP",
-      "questions": [
-            {
-                  "id": "q-oop-dev-puc1",
-                  "type": "write-code",
-                  "difficulty": 3,
-                  "question": "[IIC2233 P1] Completa la línea del setter para que valide que el saldo sea no negativo antes de asignarlo a self._saldo:",
-                  "code": "class CuentaBancaria:\n    def __init__(self, titular, saldo):\n        self.titular = titular\n        self.saldo = saldo\n\n    @property\n    def saldo(self):\n        return self._saldo\n\n    @saldo.setter\n    def saldo(self, valor):\n        # Asigna el máximo entre 0 y valor a self._saldo\n        _____",
-                  "placeholder": "self._saldo = ...",
-                  "hints": [
-                        "Usa la función max(0, valor) o una expresión ternaria.",
-                        "Recuerda asignar a self._saldo (con guión bajo)."
-                  ],
-                  "acceptedAnswers": [
-                        "self._saldo = max(0, valor)",
-                        "self._saldo = valor if valor >= 0 else 0",
-                        "self._saldo = valor if valor > 0 else 0"
-                  ],
-                  "explanation": "En las pruebas de IIC2233 se exige encapsulamiento estricto: el setter debe proteger el atributo interno (self._saldo) aplicando las reglas de negocio, como impedir saldos negativos mediante max(0, valor)."
-            },
-            {
-                  "id": "q-oop-dev-puc2",
-                  "type": "write-code",
-                  "difficulty": 3,
-                  "question": "[IIC2233 P2] Implementa la condición para que dos instancias de 'Alumno' sean iguales si y solo si tienen el mismo 'rut':",
-                  "code": "class Alumno:\n    def __init__(self, rut, nombre):\n        self.rut = rut\n        self.nombre = nombre\n\n    def __eq__(self, other):\n        if isinstance(other, Alumno):\n            # Escribe la expresión que retorna True si los ruts coinciden\n            return _____\n        return False",
-                  "placeholder": "self.rut == ...",
-                  "hints": [
-                        "Compara el atributo rut de self con el rut de other.",
-                        "Usa el operador de igualdad '=='."
-                  ],
-                  "acceptedAnswers": [
-                        "self.rut == other.rut",
-                        "other.rut == self.rut"
-                  ],
-                  "explanation": "El método especial __eq__ implementa el operador '=='. Siempre se verifica primero que other sea de la clase adecuada con isinstance, y luego se comparan sus identificadores únicos (self.rut == other.rut)."
-            }
-      ]
-}
-    ]
+          }
+        ]
       },
       // ---- Lesson 2: Atributos y Métodos ----
       {
@@ -358,7 +258,116 @@ window.DUOPROGRA_PARTE1 = [
           }
         ]
       }
-    ]
+          ,
+      {
+        id: 'oop-basico-dev-practica',
+        name: '✍️ Desarrollo: Práctica de OOP',
+        questions: [
+      {
+        id: 'q-oop-dev-p1',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Implementa el método __str__ para que al imprimir una instancia de Persona muestre "Nombre: <nombre>, Edad: <edad>". Pista: usa f-string con self.nombre y self.edad.',
+        code: 'class Persona:\n    def __init__(self, nombre, edad):\n        self.nombre = nombre\n        self.edad = edad\n\n    def __str__(self):\n        # Retorna el string de representación\n        _____',
+        placeholder: 'return f"..."',
+        hints: [
+          'Usa return con un f-string.',
+          'Accede a self.nombre y self.edad dentro del f-string.'
+        ],
+        acceptedAnswers: [
+          'return f"Nombre: {self.nombre}, Edad: {self.edad}"',
+          "return 'Nombre: ' + self.nombre + ', Edad: ' + str(self.edad)"
+        ],
+        explanation: '__str__ debe retornar un string. Con f-strings se interpola directamente: f"Nombre: {self.nombre}, Edad: {self.edad}". Este método es llamado automáticamente por print() y str().'
+      },
+      {
+        id: 'q-oop-dev-p2',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa el método incrementar_edad para que aumente en 1 el atributo self.edad cada vez que se llama. Pista: usa el operador +=.',
+        code: 'class Persona:\n    def __init__(self, nombre, edad):\n        self.nombre = nombre\n        self.edad = edad\n\n    def incrementar_edad(self):\n        _____',
+        placeholder: 'self.edad ...',
+        hints: [
+          'Usa += 1 para incrementar.',
+          'Recuerda que debes modificar self.edad, no edad.'
+        ],
+        acceptedAnswers: [
+          'self.edad += 1',
+          'self.edad = self.edad + 1'
+        ],
+        explanation: 'self.edad += 1 es equivalente a self.edad = self.edad + 1. Modifica el atributo de INSTANCIA, no una variable local. Siempre usa "self." para acceder a atributos del objeto.'
+      },
+      {
+        id: 'q-oop-dev-p3',
+        type: 'write-answer',
+        difficulty: 2,
+        question: '¿Qué palabra clave se usa para acceder a los atributos de una instancia dentro de los métodos de una clase en Python? (Responde con una sola palabra)',
+        placeholder: 'Escribe la palabra clave...',
+        hints: [
+          'Es el primer parámetro de todos los métodos de instancia.',
+          'En otros lenguajes se llama "this".'
+        ],
+        acceptedAnswers: ['self'],
+        explanation: '"self" es la convención en Python para referirse a la instancia actual del objeto. No es una palabra reservada del lenguaje, pero es una convención universal. Siempre es el primer parámetro de los métodos de instancia.'
+      }
+        ]
+      },
+      {
+        id: 'oop-basico-dev-puc',
+        name: '🎓 Desarrollo Nivel PUC: Modelación OOP',
+        questions: [
+      {
+        id: 'q-oop-dev-puc1',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P1] Completa el setter para que valide que el saldo sea no negativo antes de asignarlo. Si valor < 0, asigna 0. Pista: usa max() o un if.',
+        code: 'class CuentaBancaria:\n    def __init__(self, titular, saldo):\n        self.titular = titular\n        self.saldo = saldo\n\n    @property\n    def saldo(self):\n        return self._saldo\n\n    @saldo.setter\n    def saldo(self, valor):\n        # Asigna el máximo entre 0 y valor a self._saldo\n        _____',
+        placeholder: 'self._saldo = ...',
+        hints: [
+          'max(0, valor) retorna 0 si valor es negativo, o valor si es positivo.',
+          'Recuerda asignar a self._saldo (con guión bajo).'
+        ],
+        acceptedAnswers: [
+          'self._saldo = max(0, valor)',
+          'self._saldo = valor if valor >= 0 else 0',
+          'self._saldo = valor if valor > 0 else 0',
+          'if valor >= 0:\n            self._saldo = valor\n        else:\n            self._saldo = 0'
+        ],
+        explanation: 'En IIC2233 se exige encapsulamiento estricto: el setter protege _saldo con max(0, valor). El atributo interno usa guión bajo (_saldo) para indicar que es "privado" por convención. Los setters son el lugar correcto para validar datos de entrada.'
+      },
+      {
+        id: 'q-oop-dev-puc2',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P2] Implementa __eq__ para que dos instancias de Alumno sean iguales si y solo si tienen el mismo rut. Pista: compara self.rut con other.rut.',
+        code: 'class Alumno:\n    def __init__(self, rut, nombre):\n        self.rut = rut\n        self.nombre = nombre\n\n    def __eq__(self, other):\n        if isinstance(other, Alumno):\n            # Retorna True si los ruts coinciden\n            return _____\n        return False',
+        placeholder: 'self.rut == ...',
+        hints: [
+          'Compara el atributo rut de self con el rut de other.',
+          'Usa el operador de igualdad ==.'
+        ],
+        acceptedAnswers: [
+          'self.rut == other.rut',
+          'other.rut == self.rut'
+        ],
+        explanation: '__eq__ implementa el operador ==. Siempre verifica primero el tipo con isinstance(other, Alumno) antes de comparar atributos, para evitar AttributeError si se compara con otro tipo. El retorno es booleano (self.rut == other.rut).'
+      },
+      {
+        id: 'q-oop-dev-puc3',
+        type: 'write-answer',
+        difficulty: 3,
+        question: '[IIC2233 Examen] En Python, ¿cuál método especial se llama automáticamente cuando usas len() sobre un objeto de tu clase? (Responde con el nombre del método incluyendo los dobles guiones bajos)',
+        placeholder: '__???__',
+        hints: [
+          'Es uno de los "dunder methods" (double underscore).',
+          'La función builtin len() delega en este método.'
+        ],
+        acceptedAnswers: ['__len__'],
+        explanation: 'len(obj) llama internamente a obj.__len__(). Para que tu clase soporte len(), debes implementar def __len__(self): que debe retornar un entero no negativo. Esto es parte del protocolo de "sequence" en Python.'
+      }
+        ]
+      }
+]
   },
 
   // ============================================================
@@ -440,88 +449,8 @@ window.DUOPROGRA_PARTE1 = [
             options: ['isinstance()', 'type()', 'is_instance()', 'classof()'],
             correct: 0,
             explanation: 'isinstance(obj, Clase) verifica si obj es instancia de Clase o de alguna subclase de Clase. type() retorna el tipo exacto sin considerar herencia.'
-          },
-      {
-      "id": "oop-avanzado-dev-practica",
-      "name": "✍️ Desarrollo: Práctica de Herencia y Polimorfismo",
-      "questions": [
-            {
-                  "id": "q-oop2-dev-p1",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "Escribe la llamada a super() para invocar el constructor de la clase base pasándole 'nombre':",
-                  "code": "class Empleado(Persona):\n    def __init__(self, nombre, sueldo):\n        # Escribe aquí la invocación a la clase base con super()\n        self.sueldo = sueldo",
-                  "placeholder": "super()...",
-                  "hints": [
-                        "Usa super().__init__(...).",
-                        "Pasa el parámetro 'nombre' dentro del paréntesis."
-                  ],
-                  "acceptedAnswers": [
-                        "super().__init__(nombre)",
-                        "super().__init__(nombre=nombre)"
-                  ],
-                  "explanation": "super().__init__(nombre) delega la inicialización del atributo heredado a la clase madre siguiendo el Method Resolution Order (MRO)."
-            },
-            {
-                  "id": "q-oop2-dev-p2",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "¿Qué método dunder debes sobreescribir para definir la representación legible en string de un objeto (usada por print)?",
-                  "code": null,
-                  "placeholder": "__...__",
-                  "hints": [
-                        "Tiene doble guión bajo al inicio y al final.",
-                        "Viene de la palabra 'string'."
-                  ],
-                  "acceptedAnswers": [
-                        "__str__",
-                        "def __str__(self):"
-                  ],
-                  "explanation": "__str__ es el método especial que Python invoca al hacer str(obj) o print(obj), y debe retornar obligatoriamente un objeto de tipo str."
-            }
-      ]
-},
-      {
-      "id": "oop-avanzado-dev-puc",
-      "name": "🎓 Desarrollo Nivel Prueba PUC: Herencia Múltiple y Clases Abstractas",
-      "questions": [
-            {
-                  "id": "q-oop2-dev-puc1",
-                  "type": "write-code",
-                  "difficulty": 3,
-                  "question": "[IIC2233 Examen] Declara la clase abstracta 'Entidad' que hereda de la clase base ABC:",
-                  "code": "from abc import ABC, abstractmethod\n\n# Escribe la declaración de la clase abstracta Entidad\n    @abstractmethod\n    def actuar(self):\n        pass",
-                  "placeholder": "class Entidad(...):",
-                  "hints": [
-                        "Hereda de ABC dentro de los paréntesis.",
-                        "No olvides los dos puntos al final."
-                  ],
-                  "acceptedAnswers": [
-                        "class Entidad(ABC):",
-                        "class Entidad(ABC) :"
-                  ],
-                  "explanation": "Para crear una clase abstracta en Python moderno se hereda directamente de 'ABC' del módulo 'abc'. Esto impide que la clase sea instanciada directamente si contiene métodos con @abstractmethod."
-            },
-            {
-                  "id": "q-oop2-dev-puc2",
-                  "type": "write-code",
-                  "difficulty": 3,
-                  "question": "[IIC2233 I1] Escribe la expresión para obtener la tupla de clases en el orden de resolución de métodos de la clase 'Guerrero':",
-                  "code": null,
-                  "placeholder": "Guerrero._____",
-                  "hints": [
-                        "Es un atributo dunder de clase con 3 letras entre guiones bajos.",
-                        "O bien el método .mro()"
-                  ],
-                  "acceptedAnswers": [
-                        "Guerrero.__mro__",
-                        "Guerrero.mro()"
-                  ],
-                  "explanation": "Guerrero.__mro__ (o Guerrero.mro()) retorna la tupla/lista de clases ordenadas según el algoritmo C3 Linearization que Python utiliza para resolver atributos y llamadas a super()."
-            }
-      ]
-}
-    ]
+          }
+        ]
       },
       // ---- Lesson 2: Polimorfismo ----
       {
@@ -758,7 +687,114 @@ window.DUOPROGRA_PARTE1 = [
           }
         ]
       }
-    ]
+          ,
+      {
+        id: 'oop-avanzado-dev-practica',
+        name: '✍️ Desarrollo: Práctica de Herencia y Polimorfismo',
+        questions: [
+      {
+        id: 'q-oop2-dev-p1',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa el método hablar() en la clase Gato para que retorne "Miau!". La clase hereda de Animal. Pista: usa return con el string correcto.',
+        code: 'class Animal:\n    def hablar(self):\n        return "..."\n\nclass Gato(Animal):\n    def hablar(self):\n        _____',
+        placeholder: 'return ...',
+        hints: [
+          'Solo necesitas un return con el string "Miau!".',
+          'Este es un ejemplo de polimorfismo: misma firma, distinto comportamiento.'
+        ],
+        acceptedAnswers: [
+          'return "Miau!"',
+          "return 'Miau!'"
+        ],
+        explanation: 'Al sobrescribir hablar() en Gato, Python usa esa versión en lugar de la de Animal (polimorfismo). Cuando llamas gato.hablar(), Python busca el método en la clase de la instancia primero (MRO: Method Resolution Order).'
+      },
+      {
+        id: 'q-oop2-dev-p2',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa la llamada a super().__init__ para que EmpleadoBase inicialice nombre desde Persona. Pista: super() accede al constructor del padre.',
+        code: 'class Persona:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass EmpleadoBase(Persona):\n    def __init__(self, nombre, empresa):\n        _____(nombre)  # llama al __init__ de Persona\n        self.empresa = empresa',
+        placeholder: 'super().__init__...',
+        hints: [
+          'Usa super().__init__(nombre) para llamar al constructor padre.',
+          'super() sin argumentos funciona en Python 3.'
+        ],
+        acceptedAnswers: [
+          'super().__init__(nombre)',
+          'Persona.__init__(self, nombre)'
+        ],
+        explanation: 'super().__init__(nombre) delega la inicialización de self.nombre a Persona.__init__. Esto evita duplicar código y es la forma correcta de encadenar constructores en herencia. En Python 3, super() no necesita argumentos.'
+      },
+      {
+        id: 'q-oop2-dev-p3',
+        type: 'write-answer',
+        difficulty: 2,
+        question: '¿Qué función builtin de Python verifica si un objeto es instancia de una clase O de cualquiera de sus subclases? (Responde con el nombre de la función)',
+        placeholder: 'nombre_funcion()',
+        hints: [
+          'Recibe dos argumentos: el objeto y la clase.',
+          'Es diferente a type() que verifica el tipo exacto.'
+        ],
+        acceptedAnswers: ['isinstance', 'isinstance()'],
+        explanation: 'isinstance(obj, Clase) retorna True si obj es instancia de Clase o de cualquier subclase. type(obj) == Clase es más estricto y no considera herencia. En IIC2233 siempre se prefiere isinstance para respetar el polimorfismo.'
+      }
+        ]
+      },
+      {
+        id: 'oop-avanzado-dev-puc',
+        name: '🎓 Desarrollo Nivel PUC: Herencia Avanzada',
+        questions: [
+      {
+        id: 'q-oop2-dev-puc1',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P1] Implementa __len__ en Biblioteca para que retorne la cantidad de libros en self.libros. Pista: usa la función len() sobre la lista.',
+        code: 'class Biblioteca:\n    def __init__(self):\n        self.libros = []\n\n    def agregar(self, libro):\n        self.libros.append(libro)\n\n    def __len__(self):\n        _____',
+        placeholder: 'return ...',
+        hints: [
+          'self.libros es una lista, usa len(self.libros).',
+          '__len__ debe retornar un entero.'
+        ],
+        acceptedAnswers: [
+          'return len(self.libros)',
+          'return len(self.libros) '
+        ],
+        explanation: '__len__ permite usar len() sobre instancias de tu clase. Debe retornar un entero no negativo. Aquí la Biblioteca delega a len(self.libros). Esto es parte del "protocolo de secuencia" de Python y es muy evaluado en IIC2233.'
+      },
+      {
+        id: 'q-oop2-dev-puc2',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P2] Completa __getitem__ para que se pueda acceder a los libros por índice (biblioteca[0]). Pista: indexa self.libros con el índice recibido.',
+        code: 'class Biblioteca:\n    def __init__(self):\n        self.libros = []\n\n    def agregar(self, libro):\n        self.libros.append(libro)\n\n    def __getitem__(self, indice):\n        _____',
+        placeholder: 'return ...',
+        hints: [
+          'self.libros es una lista, puedes indexarla con [].',
+          'Retorna self.libros[indice].'
+        ],
+        acceptedAnswers: [
+          'return self.libros[indice]',
+          'return self.libros[indice] '
+        ],
+        explanation: '__getitem__ habilita la sintaxis obj[indice]. Al implementarlo, tu clase soporta indexación, slicing, e iteración automática. En IIC2233, implementar estos protocolos es fundamental para modelar contenedores de datos.'
+      },
+      {
+        id: 'q-oop2-dev-puc3',
+        type: 'write-answer',
+        difficulty: 3,
+        question: '[IIC2233 Examen] ¿Qué método especial debes implementar para que los objetos de tu clase sean "hashables" (puedan usarse como claves de diccionario o elementos de un set)?',
+        placeholder: '__???__',
+        hints: [
+          'Es un "dunder method" que retorna un número entero.',
+          'Python usa este valor para ubicar el objeto en una tabla hash.'
+        ],
+        acceptedAnswers: ['__hash__'],
+        explanation: '__hash__ debe retornar un entero que actúa como "huella digital" del objeto. Para que un objeto sea hashable, también debe implementar __eq__. Si defines __eq__ sin __hash__, Python automáticamente pone __hash__ = None (haciendo el objeto no hashable). En IIC2233 esto aparece en preguntas de sets y diccionarios.'
+      }
+        ]
+      }
+]
   },
 
   // ============================================================
@@ -840,72 +876,8 @@ window.DUOPROGRA_PARTE1 = [
             options: ['[2, 3, 4]', '(2, 3, 4)', '2, 3, 4', 'Error'],
             correct: 0,
             explanation: 'El operador * en unpacking captura los elementos restantes como una lista. primero=1, medio=[2,3,4], ultimo=5. Nota: medio es una lista, no una tupla.'
-          },
-      {
-      "id": "builtin-dev-practica",
-      "name": "✍️ Desarrollo: Práctica de Colecciones y Args/Kwargs",
-      "questions": [
-            {
-                  "id": "q-builtin-dev-p1",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "Escribe la definición de una namedtuple llamada 'Punto' con los campos 'x' e 'y':",
-                  "code": "from collections import namedtuple\n# Escribe aquí la asignación a la variable Punto\n",
-                  "placeholder": "Punto = namedtuple(...)",
-                  "hints": [
-                        "El primer argumento es el nombre del typename: 'Punto'.",
-                        "El segundo argumento puede ser una lista con los campos ['x', 'y'] o el string 'x y'."
-                  ],
-                  "acceptedAnswers": [
-                        "Punto = namedtuple('Punto', ['x', 'y'])",
-                        "Punto = namedtuple('Punto', ['x', 'y'])",
-                        "Punto = namedtuple('Punto', 'x y')",
-                        "Punto = namedtuple(\"Punto\", [\"x\", \"y\"])",
-                        "Punto = namedtuple(\"Punto\", \"x y\")"
-                  ],
-                  "explanation": "namedtuple('TypeName', ['field1', 'field2']) crea una subclase de tupla accesible por nombre de atributo además de índice."
-            },
-            {
-                  "id": "q-builtin-dev-p2",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "Escribe la función de fábrica que se le pasa a defaultdict para que los valores por defecto sean listas vacías:",
-                  "code": "from collections import defaultdict\nd = defaultdict(_____) ",
-                  "placeholder": "list",
-                  "hints": [
-                        "Pasa la clase/función constructora de listas, sin paréntesis."
-                  ],
-                  "acceptedAnswers": [
-                        "list"
-                  ],
-                  "explanation": "defaultdict(list) llama a list() cada vez que se accede a una clave inexistente, inicializándola con una lista vacía []."
-            }
-      ]
-},
-      {
-      "id": "builtin-dev-puc",
-      "name": "🎓 Desarrollo Nivel Prueba PUC: Manipulación Avanzada de Estructuras",
-      "questions": [
-            {
-                  "id": "q-builtin-dev-puc1",
-                  "type": "write-code",
-                  "difficulty": 3,
-                  "question": "[IIC2233 I1] Escribe la expresión de desempaquetado para pasar un diccionario 'parametros' como keyword arguments a la función procesar():",
-                  "code": "parametros = {'modo': 'rapido', 'intentos': 3}\n# Invoca procesar pasando el diccionario desempaquetado\n_____",
-                  "placeholder": "procesar(...) ",
-                  "hints": [
-                        "Usa el operador de doble asterisco (**).",
-                        "procesar(**parametros)"
-                  ],
-                  "acceptedAnswers": [
-                        "procesar(**parametros)",
-                        "procesar( **parametros )"
-                  ],
-                  "explanation": "El operador '**' desempaqueta un diccionario transformando sus pares clave-valor en argumentos por palabra clave (kwargs) para la función receptora."
-            }
-      ]
-}
-    ]
+          }
+        ]
       },
       // ---- Lesson 2: Sets y Diccionarios ----
       {
@@ -1076,7 +1048,116 @@ window.DUOPROGRA_PARTE1 = [
           }
         ]
       }
-    ]
+          ,
+      {
+        id: 'builtin-dev-practica',
+        name: '✍️ Desarrollo: Práctica de Colecciones y Args/Kwargs',
+        questions: [
+      {
+        id: 'q-builtin-dev-p1',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa la función para que retorne un diccionario con la frecuencia de cada elemento en la lista. Pista: usa dict.get() con valor default 0.',
+        code: 'def contar_frecuencias(lista):\n    frecuencias = {}\n    for elemento in lista:\n        frecuencias[elemento] = _____\n    return frecuencias\n\n# contar_frecuencias([1,2,2,3]) => {1:1, 2:2, 3:1}',
+        placeholder: 'frecuencias.get(...) + 1',
+        hints: [
+          'dict.get(clave, default) retorna default si la clave no existe.',
+          'frecuencias.get(elemento, 0) retorna 0 si elemento no está en el dict.'
+        ],
+        acceptedAnswers: [
+          'frecuencias.get(elemento, 0) + 1',
+          'frecuencias.get(elemento,0) + 1'
+        ],
+        explanation: 'frecuencias.get(elemento, 0) + 1: si el elemento ya existe, suma 1 a su conteo actual; si no existe, empieza desde 0+1=1. Esta es la forma idiomática de contar en Python. También se puede usar collections.Counter, pero entender get() es fundamental.'
+      },
+      {
+        id: 'q-builtin-dev-p2',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa la función para que reciba cualquier número de argumentos posicionales y retorne su suma. Pista: usa *args y la función sum().',
+        code: 'def suma_flexible(_____): \n    return sum(args)\n\n# suma_flexible(1,2,3) => 6\n# suma_flexible(10,20) => 30',
+        placeholder: '*nombre_del_parametro',
+        hints: [
+          'El parámetro debe llamarse "args" para que sum(args) funcione.',
+          'Un parámetro con * captura todos los positionales como tupla.'
+        ],
+        acceptedAnswers: [
+          '*args',
+          '*args '
+        ],
+        explanation: '*args captura todos los argumentos posicionales en una tupla llamada args. sum(args) suma todos los elementos de esa tupla. Esta es la forma estándar de hacer funciones con aridad variable en Python.'
+      },
+      {
+        id: 'q-builtin-dev-p3',
+        type: 'write-answer',
+        difficulty: 2,
+        question: 'En Python, ¿qué estructura de datos es inmutable y se puede usar como clave de un diccionario: lista o tupla? (Responde con una sola palabra)',
+        placeholder: 'lista o tupla',
+        hints: [
+          'Las claves de diccionario deben ser hashables.',
+          'Las estructuras mutables no pueden ser hashables.'
+        ],
+        acceptedAnswers: ['tupla', 'tuple'],
+        explanation: 'Las tuplas son inmutables (no se pueden modificar después de crear), por lo tanto son hashables y pueden ser claves de diccionarios. Las listas son mutables, por eso no son hashables y no pueden ser claves. Esto es un concepto crítico en IIC2233.'
+      }
+        ]
+      },
+      {
+        id: 'builtin-dev-puc',
+        name: '🎓 Desarrollo Nivel PUC: Estructuras Avanzadas',
+        questions: [
+      {
+        id: 'q-builtin-dev-puc1',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P1] Completa la función que agrupa elementos de una lista en un defaultdict de listas según una función clave. Pista: importa defaultdict de collections.',
+        code: 'from collections import defaultdict\n\ndef agrupar_por(lista, funcion_clave):\n    grupos = defaultdict(list)\n    for elemento in lista:\n        clave = funcion_clave(elemento)\n        _____\n    return dict(grupos)\n\n# agrupar_por([1,2,3,4], lambda x: x%2)\n# => {1: [1,3], 0: [2,4]}',
+        placeholder: 'grupos[clave]...',
+        hints: [
+          'defaultdict(list) crea una lista vacía automáticamente si la clave no existe.',
+          'Usa grupos[clave].append(elemento) para agregar.'
+        ],
+        acceptedAnswers: [
+          'grupos[clave].append(elemento)',
+          'grupos[clave].append(elemento) '
+        ],
+        explanation: 'defaultdict(list) inicializa automáticamente con [] cuando accedes a una clave nueva, evitando KeyError. grupos[clave].append(elemento) agrega al grupo correspondiente. Al final se convierte a dict normal. Este patrón es muy común en IIC2233 para agrupar datos.'
+      },
+      {
+        id: 'q-builtin-dev-puc2',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P2] Usando comprehension de diccionario, crea un dict que mapee cada número en rango(1,6) a su cuadrado. Pista: {n: n**2 for n in ...}',
+        code: '# Completa la expresión de comprehension\ncuadrados = _____\n\n# Resultado esperado: {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}',
+        placeholder: '{clave: valor for ... in ...}',
+        hints: [
+          'Usa dict comprehension: {k: v for k in iterable}.',
+          'range(1, 6) genera 1, 2, 3, 4, 5.'
+        ],
+        acceptedAnswers: [
+          '{n: n**2 for n in range(1, 6)}',
+          '{n: n*n for n in range(1, 6)}',
+          '{n: n**2 for n in range(1,6)}',
+          '{i: i**2 for i in range(1, 6)}'
+        ],
+        explanation: 'La dict comprehension {n: n**2 for n in range(1, 6)} crea el diccionario en una sola línea. Es equivalente a un for loop con dict[n] = n**2. Las comprehensions son más concisas, legibles, y en Python suelen ser más eficientes.'
+      },
+      {
+        id: 'q-builtin-dev-puc3',
+        type: 'write-answer',
+        difficulty: 3,
+        question: '[IIC2233 Examen] Si tienes d = {"a": 1, "b": 2} y ejecutas d.items(), ¿qué tipo de objeto retorna? (Responde con el nombre del tipo, ej: list, dict, etc.)',
+        placeholder: 'tipo de objeto...',
+        hints: [
+          'No es una lista, aunque se puede convertir a una.',
+          'Es una "vista" del diccionario que comienza con "dict_".'
+        ],
+        acceptedAnswers: ['dict_items', 'dict items'],
+        explanation: 'd.items() retorna un objeto de tipo dict_items, que es una "vista dinámica" del diccionario. Si el dict cambia, la vista también cambia. Se puede iterar con for y convertir a lista con list(d.items()). Similarmente existen dict_keys y dict_values.'
+      }
+        ]
+      }
+]
   },
 
   // ============================================================
@@ -1163,52 +1244,8 @@ window.DUOPROGRA_PARTE1 = [
             ],
             correct: 0,
             explanation: 'Las listas ligadas permiten insertar y eliminar al inicio en O(1) simplemente cambiando punteros, sin necesidad de mover otros elementos como en un arreglo.'
-          },
-      {
-      "id": "nodales-dev-practica",
-      "name": "✍️ Desarrollo: Práctica de Listas Ligadas y Nodos",
-      "questions": [
-            {
-                  "id": "q-nodal-dev-p1",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "Completa el avance del puntero para recorrer una lista ligada en un bucle while:",
-                  "code": "actual = self.head\nwhile actual is not None:\n    print(actual.valor)\n    # Avanza al siguiente nodo\n    _____",
-                  "placeholder": "actual = ...",
-                  "hints": [
-                        "Asigna a 'actual' su atributo 'siguiente'."
-                  ],
-                  "acceptedAnswers": [
-                        "actual = actual.siguiente",
-                        "actual = actual.next"
-                  ],
-                  "explanation": "Para avanzar en una estructura enlazada, se reasigna la variable del puntero al nodo referenciado por su atributo .siguiente hasta encontrar None."
-            }
-      ]
-},
-      {
-      "id": "nodales-dev-puc",
-      "name": "🎓 Desarrollo Nivel Prueba PUC: Pilas, Colas y Árboles",
-      "questions": [
-            {
-                  "id": "q-nodal-dev-puc1",
-                  "type": "write-code",
-                  "difficulty": 3,
-                  "question": "[IIC2233 I2] En una pila (LIFO) donde self.top es el nodo superior, implementa la línea para desapilar (pop) y actualizar el tope:",
-                  "code": "def pop(self):\n    if self.top is None:\n        raise IndexError('Pila vacía')\n    valor = self.top.valor\n    # Actualiza self.top al siguiente nodo\n    _____\n    return valor",
-                  "placeholder": "self.top = ...",
-                  "hints": [
-                        "El nuevo tope es el nodo siguiente al actual tope."
-                  ],
-                  "acceptedAnswers": [
-                        "self.top = self.top.siguiente",
-                        "self.top = self.top.next"
-                  ],
-                  "explanation": "Desapilar en O(1) consiste en guardar el valor del tope y mover el puntero self.top a self.top.siguiente."
-            }
-      ]
-}
-    ]
+          }
+        ]
       },
       // ---- Lesson 2: Pilas (Stacks) ----
       {
@@ -1451,7 +1488,115 @@ window.DUOPROGRA_PARTE1 = [
           }
         ]
       }
-    ]
+          ,
+      {
+        id: 'nodales-dev-practica',
+        name: '✍️ Desarrollo: Práctica de Listas Ligadas y Nodos',
+        questions: [
+      {
+        id: 'q-nodal-dev-p1',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa el método para agregar un nodo al inicio de una lista ligada. El nuevo nodo debe apuntar al nodo que antes era el primero. Pista: nuevo.siguiente = self.cabeza.',
+        code: 'class Nodo:\n    def __init__(self, valor):\n        self.valor = valor\n        self.siguiente = None\n\nclass ListaLigada:\n    def __init__(self):\n        self.cabeza = None\n\n    def agregar_al_inicio(self, valor):\n        nuevo = Nodo(valor)\n        _____\n        self.cabeza = nuevo',
+        placeholder: 'nuevo.siguiente = ...',
+        hints: [
+          'El nuevo nodo debe "enlazarse" con la cabeza actual antes de reemplazarla.',
+          'nuevo.siguiente = self.cabeza conecta el nuevo con el resto de la lista.'
+        ],
+        acceptedAnswers: [
+          'nuevo.siguiente = self.cabeza',
+          'nuevo.siguiente = self.cabeza '
+        ],
+        explanation: 'Para insertar al inicio: 1) nuevo.siguiente = self.cabeza (el nuevo apunta al anterior primero), 2) self.cabeza = nuevo (actualizamos la cabeza). Este orden importa: si hiciéramos self.cabeza = nuevo primero, perderíamos la referencia a la lista original.'
+      },
+      {
+        id: 'q-nodal-dev-p2',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa el método para recorrer la lista e imprimir cada valor. Usa un while loop que avance con actual = actual.siguiente. Pista: la condición del while verifica que actual no sea None.',
+        code: 'class ListaLigada:\n    def __init__(self):\n        self.cabeza = None\n\n    def imprimir(self):\n        actual = self.cabeza\n        while _____:\n            print(actual.valor)\n            actual = actual.siguiente',
+        placeholder: 'condición del while...',
+        hints: [
+          'El recorrido termina cuando actual llega a None (fin de la lista).',
+          'La condición es: actual is not None o simplemente: actual.'
+        ],
+        acceptedAnswers: [
+          'actual is not None',
+          'actual != None',
+          'actual'
+        ],
+        explanation: 'El recorrido de lista ligada: partimos en self.cabeza y avanzamos con actual = actual.siguiente hasta que actual sea None (el último nodo tiene siguiente = None). La condición "while actual:" es equivalente a "while actual is not None:" y es el estilo Pythónico.'
+      },
+      {
+        id: 'q-nodal-dev-p3',
+        type: 'write-answer',
+        difficulty: 2,
+        question: '¿Cuál es la complejidad temporal (Big-O) de insertar un elemento al INICIO de una lista ligada (sin buscar posición)? Responde en notación Big-O, ej: O(n), O(1), O(log n).',
+        placeholder: 'O(?)',
+        hints: [
+          'No necesitas recorrer la lista, solo ajustar punteros.',
+          'Es una operación de tiempo constante.'
+        ],
+        acceptedAnswers: ['O(1)', 'o(1)'],
+        explanation: 'Insertar al inicio de una lista ligada es O(1): solo necesitas crear el nuevo nodo, hacer nuevo.siguiente = cabeza, y actualizar cabeza. No importa cuántos elementos tenga la lista. En cambio, insertar al final sin puntero de cola es O(n) porque debes recorrer toda la lista.'
+      }
+        ]
+      },
+      {
+        id: 'nodales-dev-puc',
+        name: '🎓 Desarrollo Nivel PUC: Estructuras Nodales',
+        questions: [
+      {
+        id: 'q-nodal-dev-puc1',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P1] Implementa el método largo() que retorna la cantidad de nodos en la lista ligada. Pista: recorre con un contador, similar al patrón de imprimir.',
+        code: 'class ListaLigada:\n    def __init__(self):\n        self.cabeza = None\n\n    def largo(self):\n        contador = 0\n        actual = self.cabeza\n        while actual is not None:\n            _____\n            actual = actual.siguiente\n        return contador',
+        placeholder: 'contador ...',
+        hints: [
+          'Incrementa el contador en cada nodo que visitas.',
+          'Usa contador += 1 dentro del while.'
+        ],
+        acceptedAnswers: [
+          'contador += 1',
+          'contador = contador + 1'
+        ],
+        explanation: 'Para contar nodos: recorremos la lista con un while, incrementando contador en cada nodo. Al salir del while (actual == None), contador tiene el total. Esta es la base de muchos algoritmos sobre listas ligadas evaluados en IIC2233.'
+      },
+      {
+        id: 'q-nodal-dev-puc2',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P2] Completa el método buscar() que retorna el primer nodo cuyo valor sea igual al parámetro buscado, o None si no existe. Pista: compara actual.valor con buscado dentro del while.',
+        code: 'class ListaLigada:\n    def __init__(self):\n        self.cabeza = None\n\n    def buscar(self, buscado):\n        actual = self.cabeza\n        while actual is not None:\n            if _____:\n                return actual\n            actual = actual.siguiente\n        return None',
+        placeholder: 'actual.valor == ...',
+        hints: [
+          'Compara actual.valor con el parámetro buscado.',
+          'Si coinciden, retorna el nodo actual (no solo el valor).'
+        ],
+        acceptedAnswers: [
+          'actual.valor == buscado',
+          'actual.valor == buscado '
+        ],
+        explanation: 'La búsqueda lineal en lista ligada es O(n). Comparamos actual.valor con buscado en cada paso. Si encontramos una coincidencia, retornamos el nodo completo (no solo el valor) para que el llamador pueda acceder a .siguiente si necesita. Si no encontramos, retornamos None al salir del while.'
+      },
+      {
+        id: 'q-nodal-dev-puc3',
+        type: 'write-answer',
+        difficulty: 3,
+        question: '[IIC2233 Examen] En una lista ligada simple, ¿qué apunta el atributo "siguiente" del ÚLTIMO nodo de la lista?',
+        placeholder: 'Responde...',
+        hints: [
+          'No apunta a ningún nodo.',
+          'Es el valor especial de Python para "sin referencia".'
+        ],
+        acceptedAnswers: ['None', 'none', 'null'],
+        explanation: 'El último nodo de una lista ligada tiene siguiente = None, lo que indica el fin de la lista. None en Python es el equivalente a null en otros lenguajes. El patrón "while actual is not None" se basa en esta convención: cuando actual vale None, hemos llegado al final.'
+      }
+        ]
+      }
+]
   },
 
   // ============================================================
@@ -1538,57 +1683,8 @@ window.DUOPROGRA_PARTE1 = [
             ],
             correct: 0,
             explanation: 'finally se ejecuta ANTES de que return entregue el valor. Primera llamada: imprime "Operación terminada", luego retorna 5.0. Segunda: imprime "Operación terminada", luego retorna el error.'
-          },
-      {
-      "id": "excepciones-dev-practica",
-      "name": "✍️ Desarrollo: Práctica de Manejo de Errores",
-      "questions": [
-            {
-                  "id": "q-exc-dev-p1",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "Escribe la sentencia para levantar manualmente una excepción ValueError con el mensaje 'Valor inválido':",
-                  "code": null,
-                  "placeholder": "raise ...",
-                  "hints": [
-                        "Usa la keyword 'raise'.",
-                        "Instancia ValueError('Valor inválido')."
-                  ],
-                  "acceptedAnswers": [
-                        "raise ValueError('Valor inválido')",
-                        "raise ValueError(\"Valor inválido\")",
-                        "raise ValueError('Valor invalido')",
-                        "raise ValueError(\"Valor invalido\")"
-                  ],
-                  "explanation": "En Python, las excepciones se disparan utilizando la sentencia 'raise' seguida de una instancia de la clase de excepción."
-            }
-      ]
-},
-      {
-      "id": "excepciones-dev-puc",
-      "name": "🎓 Desarrollo Nivel Prueba PUC: Excepciones Custom y Bloques Robustos",
-      "questions": [
-            {
-                  "id": "q-exc-dev-puc1",
-                  "type": "write-code",
-                  "difficulty": 3,
-                  "question": "[IIC2233 I2] Define la clase de excepción personalizada 'SaldoInsuficienteError' que hereda de la clase base correspondiente:",
-                  "code": "# Define la clase en una sola línea\n_____",
-                  "placeholder": "class SaldoInsuficienteError(...): pass",
-                  "hints": [
-                        "Toda excepción personalizada debe heredar de 'Exception'.",
-                        "Puedes usar pass en el cuerpo."
-                  ],
-                  "acceptedAnswers": [
-                        "class SaldoInsuficienteError(Exception): pass",
-                        "class SaldoInsuficienteError(Exception):\n    pass",
-                        "class SaldoInsuficienteError(Exception):pass"
-                  ],
-                  "explanation": "En las interrogaciones de IIC2233 es obligatorio que las excepciones propias hereden de 'Exception' (o subclases estándar), nunca de 'BaseException'."
-            }
-      ]
-}
-    ]
+          }
+        ]
       },
       // ---- Lesson 2: Tipos de Excepciones ----
       {
@@ -1752,7 +1848,114 @@ window.DUOPROGRA_PARTE1 = [
           }
         ]
       }
-    ]
+          ,
+      {
+        id: 'excepciones-dev-practica',
+        name: '✍️ Desarrollo: Práctica de Manejo de Errores',
+        questions: [
+      {
+        id: 'q-exc-dev-p1',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa el bloque try/except para capturar ZeroDivisionError y retornar None en ese caso. Pista: usa except ZeroDivisionError.',
+        code: 'def dividir_seguro(a, b):\n    try:\n        return a / b\n    _____:\n        return None\n\n# dividir_seguro(10, 0) => None\n# dividir_seguro(10, 2) => 5.0',
+        placeholder: 'except TipoDeError',
+        hints: [
+          'La clausula se llama "except" seguido del tipo de error.',
+          'El error que ocurre al dividir por cero es ZeroDivisionError.'
+        ],
+        acceptedAnswers: [
+          'except ZeroDivisionError',
+          'except ZeroDivisionError '
+        ],
+        explanation: '"except ZeroDivisionError:" captura específicamente el error de división por cero. Siempre es mejor capturar excepciones específicas en lugar de "except Exception:" genérico, porque esto hace el código más predecible y evita ocultar errores inesperados.'
+      },
+      {
+        id: 'q-exc-dev-p2',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa la línea para lanzar (raise) un ValueError con el mensaje "El precio no puede ser negativo". Pista: usa raise ValueError(...).',
+        code: 'def establecer_precio(precio):\n    if precio < 0:\n        _____\n    return precio\n\n# establecer_precio(-5) => ValueError: El precio no puede ser negativo',
+        placeholder: 'raise ...',
+        hints: [
+          'Usa raise seguido del tipo de excepción con el mensaje como argumento.',
+          'ValueError es la excepción apropiada para valores inválidos.'
+        ],
+        acceptedAnswers: [
+          'raise ValueError("El precio no puede ser negativo")',
+          "raise ValueError('El precio no puede ser negativo')"
+        ],
+        explanation: 'raise ValueError("mensaje") lanza una excepción de tipo ValueError con un mensaje descriptivo. ValueError se usa cuando un argumento tiene el tipo correcto pero un valor inapropiado. El mensaje ayuda al debugging y es parte de las buenas prácticas de IIC2233.'
+      },
+      {
+        id: 'q-exc-dev-p3',
+        type: 'write-answer',
+        difficulty: 2,
+        question: '¿Qué clausula en un bloque try/except/finally se ejecuta SIEMPRE, sin importar si hubo excepción o no? (Responde con el nombre de la clausula)',
+        placeholder: 'nombre de la clausula...',
+        hints: [
+          'Es la clausula "de limpieza" que siempre se ejecuta.',
+          'Se usa para cerrar archivos, conexiones, etc.'
+        ],
+        acceptedAnswers: ['finally', 'finally:'],
+        explanation: 'La clausula "finally" se ejecuta siempre, ya sea que el código del try termine normalmente, o que se lance/capture una excepción. Se usa para "limpieza": cerrar archivos, liberar recursos, cerrar conexiones de red. En IIC2233 es común en preguntas sobre manejo de archivos y recursos.'
+      }
+        ]
+      },
+      {
+        id: 'excepciones-dev-puc',
+        name: '🎓 Desarrollo Nivel PUC: Excepciones Avanzadas',
+        questions: [
+      {
+        id: 'q-exc-dev-puc1',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P1] Crea una excepción personalizada SaldoInsuficienteError que herede de Exception y reciba el monto faltante en su constructor. Completa la clase. Pista: llama a super().__init__ con un mensaje descriptivo.',
+        code: 'class SaldoInsuficienteError(_____): \n    def __init__(self, monto_faltante):\n        self.monto_faltante = monto_faltante\n        super().__init__(f"Saldo insuficiente, faltan ${monto_faltante}")',
+        placeholder: 'clase padre...',
+        hints: [
+          'Las excepciones personalizadas deben heredar de Exception (o una subclase).',
+          'Escribe el nombre de la clase base entre los paréntesis.'
+        ],
+        acceptedAnswers: [
+          'Exception',
+          'Exception '
+        ],
+        explanation: 'Las excepciones personalizadas heredan de Exception (o subclases como ValueError, RuntimeError). Al llamar super().__init__(mensaje), se inicializa el mensaje de la excepción base. self.monto_faltante permite al código que captura la excepción acceder a información extra: except SaldoInsuficienteError as e: print(e.monto_faltante).'
+      },
+      {
+        id: 'q-exc-dev-puc2',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P2] Completa el bloque para capturar ValueError Y TypeError en el mismo except (captura múltiple). Pista: usa una tupla de excepciones.',
+        code: 'def procesar(valor):\n    try:\n        return int(valor) * 2\n    except _____:\n        return -1\n\n# procesar("abc") => -1  (ValueError)\n# procesar([]) => -1    (TypeError)',
+        placeholder: '(Error1, Error2)',
+        hints: [
+          'Puedes capturar múltiples excepciones con una tupla: (E1, E2).',
+          'La sintaxis es: except (TipoA, TipoB):'
+        ],
+        acceptedAnswers: [
+          '(ValueError, TypeError)',
+          '(TypeError, ValueError)'
+        ],
+        explanation: '"except (ValueError, TypeError):" captura ambos tipos de excepción en un solo handler. Es equivalente a tener dos except separados pero más conciso. Esto es útil cuando el manejo es el mismo para ambos errores. No uses "except Exception:" genérico porque captura también errores del sistema.'
+      },
+      {
+        id: 'q-exc-dev-puc3',
+        type: 'write-answer',
+        difficulty: 3,
+        question: '[IIC2233 Examen] Cuando defines una excepción personalizada en Python, ¿de qué clase base MÍNIMA debe heredar para ser una excepción válida que se pueda lanzar con raise?',
+        placeholder: 'NombreDeClase',
+        hints: [
+          'Todas las excepciones en Python son instancias de esta clase o subclases de ella.',
+          'No es "object", es algo más específico.'
+        ],
+        acceptedAnswers: ['Exception', 'BaseException'],
+        explanation: 'En Python, todas las excepciones que se lanzan con raise deben heredar de BaseException. En práctica, SIEMPRE hereda de Exception (subclase de BaseException) porque BaseException incluye excepciones del sistema como SystemExit y KeyboardInterrupt que no deberías interceptar normalmente. La jerarquía es: BaseException → Exception → (tus excepciones).'
+      }
+        ]
+      }
+]
   },
 
   // ============================================================
@@ -1834,54 +2037,8 @@ window.DUOPROGRA_PARTE1 = [
             options: ['iter()', 'next()', 'loop()', 'iterate()'],
             correct: 0,
             explanation: 'iter(obj) llama a obj.__iter__() y retorna un iterador. next(iterador) llama a iterador.__next__() para obtener el siguiente valor.'
-          },
-      {
-      "id": "iter-dev-practica",
-      "name": "✍️ Desarrollo: Práctica de Generadores y yield",
-      "questions": [
-            {
-                  "id": "q-iter-dev-p1",
-                  "type": "write-code",
-                  "difficulty": 2,
-                  "question": "¿Qué palabra clave convierte a una función normal en una función generadora que pausa su ejecución y entrega un valor?",
-                  "code": null,
-                  "placeholder": "...",
-                  "hints": [
-                        "Tiene 5 letras y empieza con y."
-                  ],
-                  "acceptedAnswers": [
-                        "yield"
-                  ],
-                  "explanation": "'yield' produce un valor hacia el consumidor y suspende el estado de ejecución de la función hasta que se solicite el siguiente elemento con next()."
-            }
-      ]
-},
-      {
-      "id": "iter-dev-puc",
-      "name": "🎓 Desarrollo Nivel Prueba PUC: Protocolo de Iteración Personalizado",
-      "questions": [
-            {
-                  "id": "q-iter-dev-puc1",
-                  "type": "write-code",
-                  "difficulty": 3,
-                  "question": "[IIC2233 I1/Examen] ¿Qué excepción debe levantar el método __next__ cuando ya no quedan más elementos que iterar?",
-                  "code": "def __next__(self):\n    if self.indice >= len(self.datos):\n        # Levanta la excepción estándar del protocolo\n        _____",
-                  "placeholder": "raise ...",
-                  "hints": [
-                        "Es StopIteration sin argumentos obligatorios.",
-                        "Usa la sentencia raise."
-                  ],
-                  "acceptedAnswers": [
-                        "raise StopIteration",
-                        "raise StopIteration()",
-                        "raise StopIteration('Fin')",
-                        "raise StopIteration(\"Fin\")"
-                  ],
-                  "explanation": "El protocolo de iteración de Python especifica que __next__ debe señalar el fin de los datos levantando StopIteration, lo que permite a los bucles for terminar de forma limpia."
-            }
-      ]
-}
-    ]
+          }
+        ]
       },
       // ---- Lesson 2: Generadores ----
       {
@@ -2047,6 +2204,123 @@ window.DUOPROGRA_PARTE1 = [
           }
         ]
       }
-    ]
+          ,
+      {
+        id: 'iter-dev-practica',
+        name: '✍️ Desarrollo: Práctica de Generadores y yield',
+        questions: [
+      {
+        id: 'q-iter-dev-p1',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa el generador para que produzca los cuadrados de 0 a n-1 usando yield. Pista: usa yield dentro de un for loop con range(n).',
+        code: 'def cuadrados(n):\n    for i in range(n):\n        _____\n\n# list(cuadrados(4)) => [0, 1, 4, 9]',
+        placeholder: 'yield ...',
+        hints: [
+          'Un generador usa "yield" en lugar de "return" para producir valores.',
+          'yield i**2 produce el cuadrado del número actual.'
+        ],
+        acceptedAnswers: [
+          'yield i**2',
+          'yield i*i',
+          'yield i ** 2'
+        ],
+        explanation: '"yield" convierte la función en un generador. Cada vez que el generador es consultado (con next() o en un for loop), ejecuta hasta el próximo yield y "pausa" ahí. Esto permite iterar de forma lazy (sin crear toda la lista en memoria), lo cual es muy eficiente para secuencias grandes.'
+      },
+      {
+        id: 'q-iter-dev-p2',
+        type: 'write-code',
+        difficulty: 2,
+        question: 'Completa el método __iter__ para que la clase retorne self (el objeto mismo como iterador). Pista: __iter__ siempre retorna el objeto iterador, que en este caso es self.',
+        code: 'class Rango:\n    def __init__(self, inicio, fin):\n        self.inicio = inicio\n        self.fin = fin\n        self.actual = inicio\n\n    def __iter__(self):\n        _____\n\n    def __next__(self):\n        if self.actual >= self.fin:\n            raise StopIteration\n        valor = self.actual\n        self.actual += 1\n        return valor',
+        placeholder: 'return ...',
+        hints: [
+          '__iter__ debe retornar el objeto iterador.',
+          'Como este objeto mismo es el iterador, retorna self.'
+        ],
+        acceptedAnswers: [
+          'return self',
+          'return self '
+        ],
+        explanation: '__iter__ retorna el objeto iterador. Cuando el mismo objeto es tanto "iterable" como "iterador" (patrón más simple), __iter__ simplemente retorna self. __next__ hace el trabajo real: retorna el siguiente valor o lanza StopIteration al terminar. Esto implementa el "protocolo iterador" de Python.'
+      },
+      {
+        id: 'q-iter-dev-p3',
+        type: 'write-answer',
+        difficulty: 2,
+        question: '¿Qué excepción debe lanzar el método __next__ de un iterador cuando ya no hay más elementos? (Responde con el nombre exacto de la excepción)',
+        placeholder: 'NombreDeExcepcion',
+        hints: [
+          'Es una excepción especial que indica "fin de iteración".',
+          'Python la usa internamente en los for loops para saber cuándo parar.'
+        ],
+        acceptedAnswers: ['StopIteration'],
+        explanation: 'StopIteration es la señal estándar de "fin de secuencia" en el protocolo iterador de Python. Cuando un for loop llama a next() sobre un iterador y recibe StopIteration, detiene el loop limpiamente. Nunca uses return None para indicar el fin; siempre usa raise StopIteration.'
+      }
+        ]
+      },
+      {
+        id: 'iter-dev-puc',
+        name: '🎓 Desarrollo Nivel PUC: Iterables e Iteradores',
+        questions: [
+      {
+        id: 'q-iter-dev-puc1',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P1] Implementa un generador fibonacci(n) que produzca los primeros n números de Fibonacci. Completa la línea del yield. Pista: en cada iteración, actualiza a, b = b, a+b y yield el valor actual.',
+        code: 'def fibonacci(n):\n    a, b = 0, 1\n    for _ in range(n):\n        _____\n        a, b = b, a + b\n\n# list(fibonacci(6)) => [0, 1, 1, 2, 3, 5]',
+        placeholder: 'yield ...',
+        hints: [
+          'Yield el valor de "a" (el número de Fibonacci actual).',
+          'Luego la actualización a, b = b, a+b mueve al siguiente par.'
+        ],
+        acceptedAnswers: [
+          'yield a',
+          'yield a '
+        ],
+        explanation: 'El generador Fibonacci es un clásico de IIC2233. "yield a" produce el número actual, luego "a, b = b, a+b" avanza: el nuevo a es el anterior b, y el nuevo b es la suma. Python evalúa el lado derecho completo antes de asignar, así que no necesitas variable temporal. Este patrón es mucho más eficiente que almacenar la secuencia en una lista.'
+      },
+      {
+        id: 'q-iter-dev-puc2',
+        type: 'write-code',
+        difficulty: 3,
+        question: '[IIC2233 P2] Completa la expresión generadora para filtrar los números pares de una lista y calcular su suma. Usa sum() con una expresión generadora. Pista: (x for x in lista if ...).',
+        code: 'def suma_pares(lista):\n    return sum(_____)\n\n# suma_pares([1,2,3,4,5,6]) => 12',
+        placeholder: '(expresión generadora)',
+        hints: [
+          'Una expresión generadora es como una list comprehension pero con paréntesis.',
+          'Filtra con: if x % 2 == 0'
+        ],
+        acceptedAnswers: [
+          'x for x in lista if x % 2 == 0',
+          '(x for x in lista if x % 2 == 0)',
+          'x for x in lista if not x % 2'
+        ],
+        explanation: 'sum(x for x in lista if x % 2 == 0) usa una expresión generadora (sin paréntesis extras porque ya están los de sum()). Filtra solo los pares y los suma lazy: no crea una lista intermedia en memoria. Esto es más eficiente que sum([x for x in lista if x % 2 == 0]) que crea una lista completa.'
+      },
+      {
+        id: 'q-iter-dev-puc3',
+        type: 'write-answer',
+        difficulty: 3,
+        question: '[IIC2233 Examen] ¿Cuál es la diferencia principal entre una list comprehension [x for x in r] y una expresión generadora (x for x in r)? Responde mencionando el concepto de "lazy evaluation" o "evaluación perezosa".',
+        placeholder: 'Explica la diferencia...',
+        hints: [
+          'Una crea todos los valores en memoria de inmediato, la otra los produce uno a uno.',
+          'Piensa en cuál es más eficiente para listas muy grandes.'
+        ],
+        acceptedAnswers: [
+          'lazy',
+          'perezosa',
+          'evaluación perezosa',
+          'lazy evaluation',
+          'genera valores uno a uno',
+          'no crea lista en memoria',
+          'genera bajo demanda'
+        ],
+        explanation: 'La diferencia clave: list comprehension [x for x in r] crea TODA la lista en memoria de inmediato (eager). La expresión generadora (x for x in r) usa "lazy evaluation": genera cada valor SOLO cuando se solicita, sin almacenar todos en memoria. Para millones de elementos, el generador usa O(1) memoria vs O(n) de la lista. En IIC2233 esto es crucial para procesar archivos grandes o streams de datos.'
+      }
+        ]
+      }
+]
   }
 ];
