@@ -275,6 +275,39 @@ window.DUOPROGRA_PARTE2 = [
               "t1.join() "
             ],
             "explanation": "t1.join() bloquea el hilo que lo invoca hasta que t1 termine completamente su trabajo."
+          },
+          {
+            "id": "q-th-dev-p2",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "[AC5 - Atleta] En una subclase de Thread, define la cabecera del método obligatorio donde se programa la lógica de ejecución del hilo.",
+            "code": "from threading import Thread\n\nclass Atleta(Thread):\n    def _____(self):\n        # Código que ejecuta el hilo concurrentemente\n        pass",
+            "placeholder": "run",
+            "hints": ["El método que ejecuta la hebra concurrente es run."],
+            "acceptedAnswers": ["run", "run(self)"],
+            "explanation": "Al heredar de Thread, se sobreescribe el método run(). Luego, al invocar start(), el runtime crea un hilo del sistema que ejecuta run() en paralelo."
+          },
+          {
+            "id": "q-th-dev-p3",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Inicia la ejecución concurrente del hilo corredor invocando el método que arranca el nuevo hilo.",
+            "code": "corredor = Atleta('Usain')\n# Inicia el hilo en segundo plano:\n_____",
+            "placeholder": "corredor.start()",
+            "hints": ["Llama al método start() del objeto corredor."],
+            "acceptedAnswers": ["corredor.start()", "corredor.start() "],
+            "explanation": "corredor.start() solicita al sistema operativo crear el hilo secundario e invocar su método run(). Si llamas a run() directamente, se ejecuta en el hilo principal bloqueándolo."
+          },
+          {
+            "id": "q-th-dev-p4",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "En una cola thread-safe queue.Queue, extrae el siguiente elemento disponible asignándolo a dato.",
+            "code": "from queue import Queue\ncola = Queue()\n# Espera y extrae un elemento de la cola:\ndato = _____",
+            "placeholder": "cola.get()",
+            "hints": ["Usa cola.get()."],
+            "acceptedAnswers": ["cola.get()", "cola.get() "],
+            "explanation": "cola.get() es una operación atómica y bloqueante por defecto que asegura sincronización entre hilos productores y consumidores."
           }
         ]
       },
@@ -299,6 +332,39 @@ window.DUOPROGRA_PARTE2 = [
               "with self.lock :"
             ],
             "explanation": "'with self.lock:' adquiere el cerrojo al entrar y garantiza su liberación incluso ante excepciones en la sección crítica."
+          },
+          {
+            "id": "q-th-dev-puc2",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[AC5 - Eventos] Bloquea la ejecución del hilo corredor hasta que el evento_inicio sea activado por el juez con .set().",
+            "code": "class Corredor(Thread):\n    def __init__(self, evento_inicio):\n        super().__init__()\n        self.evento = evento_inicio\n\n    def run(self):\n        print('A sus marcas...')\n        _____\n        print('¡Corriendo!')",
+            "placeholder": "self.evento.wait()",
+            "hints": ["Llama al método wait() sobre el evento."],
+            "acceptedAnswers": ["self.evento.wait()", "self.evento.wait() "],
+            "explanation": "self.evento.wait() detiene el hilo hasta que el flag interno de la instancia Event cambie a True tras una llamada a set()."
+          },
+          {
+            "id": "q-th-dev-puc3",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[I2 2026-1] Activa el evento de sincronización senal_partida para liberar a todos los hilos que estaban bloqueados en wait().",
+            "code": "senal_partida = Event()\n# Dispara la señal para despertar a todos los corredores:\n_____",
+            "placeholder": "senal_partida.set()",
+            "hints": ["Invoca el método set() sobre senal_partida."],
+            "acceptedAnswers": ["senal_partida.set()", "senal_partida.set() "],
+            "explanation": "Event.set() cambia el estado del flag a True y notifica a todos los hilos esperando en wait() para que reanuden su ejecución."
+          },
+          {
+            "id": "q-th-dev-puc4",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "Marca el hilo worker como demonio (daemon) para permitir que el programa termine automáticamente aunque este hilo siga activo.",
+            "code": "worker = WorkerThread()\n_____ = True\nworker.start()",
+            "placeholder": "worker.daemon",
+            "hints": ["Asigna a la propiedad worker.daemon."],
+            "acceptedAnswers": ["worker.daemon", "worker.daemon "],
+            "explanation": "Los hilos daemon se apagan inmediatamente cuando no quedan hilos normales (no daemon) en ejecución en el programa de Python."
           }
         ]
       }
@@ -530,6 +596,39 @@ window.DUOPROGRA_PARTE2 = [
               "sock.sendall(mensaje_bytes)"
             ],
             "explanation": "sock.send() o sock.sendall() transmiten secuencias de bytes a través de la conexión establecida."
+          },
+          {
+            "id": "q-net-dev-p2",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "[Semana 10] Crea un socket TCP usando IPv4 con las constantes AF_INET y SOCK_STREAM del módulo socket.",
+            "code": "import socket\n\nmi_socket = _____",
+            "placeholder": "socket.socket(socket.AF_INET, socket.SOCK_STREAM)",
+            "hints": ["Instancia socket.socket con AF_INET y SOCK_STREAM."],
+            "acceptedAnswers": ["socket.socket(socket.AF_INET, socket.SOCK_STREAM)", "socket.socket(socket.AF_INET, socket.SOCK_STREAM) "],
+            "explanation": "AF_INET indica direcciones de red IPv4 y SOCK_STREAM define el protocolo confiable orientado a flujo de bytes TCP."
+          },
+          {
+            "id": "q-net-dev-p3",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Envía todos los bytes del mensaje codificado a través del socket cliente usando sendall.",
+            "code": "mensaje_bytes = 'Hola DCC'.encode('utf-8')\n# Envía el mensaje completo por el socket:\n_____",
+            "placeholder": "cliente.sendall(mensaje_bytes)",
+            "hints": ["Llama a cliente.sendall(mensaje_bytes)."],
+            "acceptedAnswers": ["cliente.sendall(mensaje_bytes)", "cliente.sendall(mensaje_bytes) "],
+            "explanation": "sendall() continúa enviando fragmentos en bucle hasta que todo el arreglo de bytes haya sido transmitido por la conexión."
+          },
+          {
+            "id": "q-net-dev-p4",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Decodifica los bytes recibidos datos_bytes a una cadena de texto en codificación UTF-8.",
+            "code": "datos_bytes = sock.recv(1024)\ntexto = _____",
+            "placeholder": "datos_bytes.decode('utf-8')",
+            "hints": ["Llama a .decode('utf-8') sobre los bytes."],
+            "acceptedAnswers": ["datos_bytes.decode('utf-8')", "datos_bytes.decode(\"utf-8\")", "datos_bytes.decode('utf-8') "],
+            "explanation": "Los sockets transmiten exclusivamente bytes crudos. Para recuperarlos como texto legible se utiliza .decode('utf-8')."
           }
         ]
       },
@@ -555,6 +654,39 @@ window.DUOPROGRA_PARTE2 = [
               "servidor.bind(('localhost', 8000))"
             ],
             "explanation": "bind() exige obligatoriamente una TUPLA de dos elementos (host, port) como argumento único: servidor.bind(('127.0.0.1', 8000))."
+          },
+          {
+            "id": "q-net-dev-puc2",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[AC6 / Protocolo IIC2233] Decodifica los primeros 4 bytes recibidos por un socket a un entero que representa el tamaño del payload, usando Big-Endian.",
+            "code": "bytes_largo = sock.recv(4)\nlargo_mensaje = _____",
+            "placeholder": "int.from_bytes(bytes_largo, byteorder='big')",
+            "hints": ["Usa int.from_bytes(bytes_largo, byteorder='big') o 'big'."],
+            "acceptedAnswers": ["int.from_bytes(bytes_largo, byteorder='big')", "int.from_bytes(bytes_largo, byteorder=\"big\")", "int.from_bytes(bytes_largo, 'big')", "int.from_bytes(bytes_largo, \"big\")"],
+            "explanation": "En el protocolo estándar de IIC2233, los primeros 4 bytes contienen un entero sin signo en Big-Endian que indica el tamaño en bytes del mensaje siguiente."
+          },
+          {
+            "id": "q-net-dev-puc3",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "Asocia un socket servidor sock a la interfaz localhost ('127.0.0.1') en el puerto 8000 mediante la tupla correspondiente.",
+            "code": "sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n_____",
+            "placeholder": "sock.bind(('127.0.0.1', 8000))",
+            "hints": ["sock.bind(('127.0.0.1', 8000))"],
+            "acceptedAnswers": ["sock.bind(('127.0.0.1', 8000))", "sock.bind((\"127.0.0.1\", 8000))", "sock.bind(('127.0.0.1', 8000)) "],
+            "explanation": "El método bind() de un socket requiere obligatoriamente una tupla de dos elementos: (host, port)."
+          },
+          {
+            "id": "q-net-dev-puc4",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "En un servidor TCP multicliente, acepta una conexión entrante extrayendo el socket del cliente y su tupla de dirección.",
+            "code": "sock.listen()\n# Espera y acepta al cliente:\n_____ = sock.accept()",
+            "placeholder": "socket_cliente, address",
+            "hints": ["Desempaqueta socket_cliente, address = sock.accept()."],
+            "acceptedAnswers": ["socket_cliente, address", "cliente, direccion", "conn, addr", "client_socket, address"],
+            "explanation": "sock.accept() retorna una tupla (nuevo_socket, (ip, puerto)), donde el nuevo socket es el canal de comunicación exclusivo con ese cliente."
           }
         ]
       }
@@ -766,6 +898,39 @@ window.DUOPROGRA_PARTE2 = [
               "json.dumps(datos) "
             ],
             "explanation": "json.dumps(datos) serializa objetos en memoria a un string con formato JSON."
+          },
+          {
+            "id": "q-ser-dev-p2",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "[AC6] Serializa la lista de respuestas [1, 2, 0, 3] a una cadena JSON usando json.dumps().",
+            "code": "import json\nrespuestas = [1, 2, 0, 3]\njson_data = _____",
+            "placeholder": "json.dumps(respuestas)",
+            "hints": ["Llama a json.dumps(respuestas)."],
+            "acceptedAnswers": ["json.dumps(respuestas)", "json.dumps(respuestas) "],
+            "explanation": "json.dumps() convierte estructuras de Python en su representación de texto JSON estándar."
+          },
+          {
+            "id": "q-ser-dev-p3",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Deserializa una cadena de texto JSON llamada contenido_json de vuelta a un objeto nativo de Python con json.loads().",
+            "code": "import json\nobjeto_python = _____",
+            "placeholder": "json.loads(contenido_json)",
+            "hints": ["Invoca json.loads(contenido_json)."],
+            "acceptedAnswers": ["json.loads(contenido_json)", "json.loads(contenido_json) "],
+            "explanation": "json.loads() (load string) analiza sintácticamente una cadena JSON y construye los diccionarios, listas y valores equivalentes en Python."
+          },
+          {
+            "id": "q-ser-dev-p4",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Convierte un entero largo = 256 a exactamente 4 bytes en orden Big-Endian.",
+            "code": "largo = 256\nbytes_largo = _____",
+            "placeholder": "largo.to_bytes(4, byteorder='big')",
+            "hints": ["Usa largo.to_bytes(4, byteorder='big') o 'big'."],
+            "acceptedAnswers": ["largo.to_bytes(4, byteorder='big')", "largo.to_bytes(4, byteorder=\"big\")", "largo.to_bytes(4, 'big')", "largo.to_bytes(4, \"big\")"],
+            "explanation": "int.to_bytes(n_bytes, byteorder) empaqueta el entero en una secuencia binaria fija para transmisión por red."
           }
         ]
       },
@@ -791,6 +956,39 @@ window.DUOPROGRA_PARTE2 = [
               "largo_mensaje.to_bytes(4, \"big\")"
             ],
             "explanation": "En las pruebas de IIC2233 es estándar anteponer 4 bytes de longitud usando 'largo.to_bytes(4, byteorder=\"big\")'."
+          },
+          {
+            "id": "q-ser-dev-puc2",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "Serializa un objeto instancia_juego a una secuencia de bytes binarios usando el módulo pickle.",
+            "code": "import pickle\n\ndef serializar_objeto(instancia_juego):\n    return _____",
+            "placeholder": "pickle.dumps(instancia_juego)",
+            "hints": ["Llama a pickle.dumps(instancia_juego)."],
+            "acceptedAnswers": ["pickle.dumps(instancia_juego)", "pickle.dumps(instancia_juego) "],
+            "explanation": "pickle.dumps() serializa instancias complejas de clases en una cadena binaria de bytes nativa de Python."
+          },
+          {
+            "id": "q-ser-dev-puc3",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "En la clase Sesion, implementa __getstate__ para retornar una copia de self.__dict__ sin la clave 'socket_conexion'.",
+            "code": "class Sesion:\n    def __init__(self, usuario, socket_conexion):\n        self.usuario = usuario\n        self.socket_conexion = socket_conexion\n\n    def _____(self):\n        estado = self.__dict__.copy()\n        estado.pop('socket_conexion', None)\n        return estado",
+            "placeholder": "__getstate__",
+            "hints": ["El método dunder para personalizar pickle es __getstate__."],
+            "acceptedAnswers": ["__getstate__"],
+            "explanation": "El método dunder __getstate__ define qué datos del objeto serán serializados por pickle, permitiendo omitir referencias no serializables como sockets o cerrojos."
+          },
+          {
+            "id": "q-ser-dev-puc4",
+            "type": "write-answer",
+            "difficulty": 3,
+            "question": "¿Qué método dunder es ejecutado automáticamente por pickle durante la deserialización y puede provocar ejecución remota de código malicioso?",
+            "code": null,
+            "placeholder": "__metodo__",
+            "hints": ["__reduce__ o __reduce_ex__"],
+            "acceptedAnswers": ["__reduce__", "__reduce__", "reduce", "__reduce_ex__"],
+            "explanation": "__reduce__ le indica a pickle qué función o ejecutable llamar para reconstruir el objeto. Un payload malicioso puede llamar a os.system() a través de __reduce__."
           }
         ]
       }
@@ -1000,6 +1198,39 @@ window.DUOPROGRA_PARTE2 = [
               "self.boton.clicked.connect(self.iniciar_juego) "
             ],
             "explanation": "En PyQt la conexión entre señales y slots se realiza con señal.connect(callback), pasando la función sin paréntesis."
+          },
+          {
+            "id": "q-gui-dev-p2",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "[PyQt] Declara una señal a nivel de clase llamada senal_texto que emita un string.",
+            "code": "from PyQt6.QtCore import QObject, pyqtSignal\n\nclass Emisor(QObject):\n    _____ = pyqtSignal(str)",
+            "placeholder": "senal_texto",
+            "hints": ["Escribe el nombre del atributo: senal_texto"],
+            "acceptedAnswers": ["senal_texto", "senal_texto "],
+            "explanation": "Las señales personalizadas en PyQt (pyqtSignal) deben instanciarse siempre como atributos estáticos de clase en una clase derivada de QObject."
+          },
+          {
+            "id": "q-gui-dev-p3",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Emite la señal self.senal_texto enviando el string 'Operación completada'.",
+            "code": "def terminar(self):\n    _____",
+            "placeholder": "self.senal_texto.emit('Operación completada')",
+            "hints": ["Usa self.senal_texto.emit('Operación completada')."],
+            "acceptedAnswers": ["self.senal_texto.emit('Operación completada')", "self.senal_texto.emit(\"Operación completada\")", "self.senal_texto.emit('Operación completada') "],
+            "explanation": "El método .emit() dispara la señal, pasando los argumentos declarados a todos los slots conectados de forma síncrona o encolada."
+          },
+          {
+            "id": "q-gui-dev-p4",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Agrega el widget self.boton al layout vertical layout usando el método correspondiente de PyQt.",
+            "code": "from PyQt6.QtWidgets import QVBoxLayout\nlayout = QVBoxLayout()\n# Agrega el botón al layout vertical:\n_____",
+            "placeholder": "layout.addWidget(self.boton)",
+            "hints": ["Llama a layout.addWidget(self.boton)."],
+            "acceptedAnswers": ["layout.addWidget(self.boton)", "layout.addWidget(self.boton) "],
+            "explanation": "addWidget() posiciona un control gráfico dentro del administrador de disposición visual del contenedor."
           }
         ]
       },
@@ -1024,6 +1255,39 @@ window.DUOPROGRA_PARTE2 = [
               "actualizar_tablero = pyqtSignal(dict) "
             ],
             "explanation": "Las señales personalizadas de PyQt deben definirse como atributos de clase mediante pyqtSignal(tipo_de_dato)."
+          },
+          {
+            "id": "q-gui-dev-puc2",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[PyQt / QThread] Define la clase WorkerNetwork para que herede de QThread e implemente tareas de red sin congelar la interfaz.",
+            "code": "from PyQt6.QtCore import QThread\n\nclass WorkerNetwork(_____):\n    def run(self):\n        # Tarea de red en segundo plano\n        pass",
+            "placeholder": "QThread",
+            "hints": ["Hereda de QThread."],
+            "acceptedAnswers": ["QThread", "QThread "],
+            "explanation": "QThread desacopla la ejecución de tareas pesadas (como sockets o cálculo numérico) del bucle de eventos principal (GUI Event Loop), evitando que la ventana deje de responder."
+          },
+          {
+            "id": "q-gui-dev-puc3",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "Conecta la señal senal_actualizar del worker con el método slot self.actualizar_etiqueta de la ventana principal.",
+            "code": "def conectar_senales(self):\n    _____",
+            "placeholder": "self.worker.senal_actualizar.connect(self.actualizar_etiqueta)",
+            "hints": ["Llama a self.worker.senal_actualizar.connect(self.actualizar_etiqueta)."],
+            "acceptedAnswers": ["self.worker.senal_actualizar.connect(self.actualizar_etiqueta)", "self.worker.senal_actualizar.connect(self.actualizar_etiqueta) "],
+            "explanation": "El mecanismo de señales y slots de PyQt permite la comunicación segura entre hilos secundarios y la interfaz gráfica sin violar la restricción de thread-safety de Qt."
+          },
+          {
+            "id": "q-gui-dev-puc4",
+            "type": "write-answer",
+            "difficulty": 3,
+            "question": "¿Qué llamada bloqueante del objeto QApplication inicia el bucle de eventos (Event Loop) de una aplicación gráfica PyQt?",
+            "code": null,
+            "placeholder": "app.metodo()",
+            "hints": ["app.exec() o app.exec_()"],
+            "acceptedAnswers": ["app.exec()", "app.exec_()", "exec()", "exec_()"],
+            "explanation": "app.exec() arranca el despachador de eventos continuo que procesa clics del ratón, redimensionamientos y señales hasta que la aplicación se cierra."
           }
         ]
       }
@@ -1234,6 +1498,39 @@ window.DUOPROGRA_PARTE2 = [
               "x*potencia(x, n-1)"
             ],
             "explanation": "El caso recursivo reduce el exponente acercándose al caso base n==0: x * potencia(x, n - 1)."
+          },
+          {
+            "id": "q-rec-dev-p2",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Define el caso base de una función recursiva que calcula la longitud de una lista: si la lista está vacía, retorna 0.",
+            "code": "def largo_recursivo(lista):\n    _____\n        return 0\n    return 1 + largo_recursivo(lista[1:])",
+            "placeholder": "if len(lista) == 0:",
+            "hints": ["if len(lista) == 0: o if not lista:"],
+            "acceptedAnswers": ["if len(lista) == 0:", "if not lista:", "if len(lista) == 0 :", "if not lista :"],
+            "explanation": "Todo algoritmo recursivo necesita al menos una condición base que evite llamadas infinitas y retorne un resultado directo."
+          },
+          {
+            "id": "q-rec-dev-p3",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Escribe el paso recursivo de Fibonacci: suma la llamada recursiva de fib(n - 1) más fib(n - 2).",
+            "code": "def fib(n):\n    if n <= 1:\n        return n\n    return _____",
+            "placeholder": "fib(n - 1) + fib(n - 2)",
+            "hints": ["Suma fib(n - 1) + fib(n - 2)."],
+            "acceptedAnswers": ["fib(n - 1) + fib(n - 2)", "fib(n - 2) + fib(n - 1)", "fib(n - 1) + fib(n - 2) "],
+            "explanation": "La definición recursiva de Fibonacci descompone el cálculo del n-ésimo término en la suma de los dos términos inmediatamente anteriores."
+          },
+          {
+            "id": "q-rec-dev-p4",
+            "type": "write-code",
+            "difficulty": 2,
+            "question": "Calcula recursivamente la suma de todos los elementos de una lista sumando el primer elemento lista[0] con la llamada del resto.",
+            "code": "def suma(lista):\n    if not lista:\n        return 0\n    return lista[0] + _____",
+            "placeholder": "suma(lista[1:])",
+            "hints": ["Llama a suma con el subslice lista[1:]."],
+            "acceptedAnswers": ["suma(lista[1:])", "suma(lista[1:]) "],
+            "explanation": "Al rebanar lista[1:], el tamaño del problema disminuye en 1 en cada marco de activación hasta alcanzar la lista vacía."
           }
         ]
       },
@@ -1258,6 +1555,39 @@ window.DUOPROGRA_PARTE2 = [
               "nodo == None"
             ],
             "explanation": "El caso base fundamental en árboles es 'if nodo is None:', retornando False o None al alcanzar ramas vacías."
+          },
+          {
+            "id": "q-rec-dev-puc2",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "[AC7 - Reconstrucción] En un laberinto o grafo, reconstruye la ruta hacia atrás desde la celda actual siguiendo el diccionario de padres celda_padre.",
+            "code": "def reconstruir(celda_padre, fin):\n    ruta = []\n    actual = fin\n    while actual in celda_padre:\n        ruta.append(actual)\n        actual = _____\n    ruta.append(actual)\n    ruta.reverse()\n    return ruta",
+            "placeholder": "celda_padre[actual]",
+            "hints": ["Accede a celda_padre[actual]."],
+            "acceptedAnswers": ["celda_padre[actual]", "celda_padre[actual] "],
+            "explanation": "En AC7, cada nodo almacena la referencia a su predecesor en el diccionario celda_padre, lo que permite reconstruir el camino hacia la raíz."
+          },
+          {
+            "id": "q-rec-dev-puc3",
+            "type": "write-code",
+            "difficulty": 3,
+            "question": "En un decorador de funciones, usa el decorador functools.wraps para preservar el nombre y docstring de la función original decorada.",
+            "code": "from functools import wraps\n\ndef mi_decorador(funcion):\n    _____\n    def wrapper(*args, **kwargs):\n        return funcion(*args, **kwargs)\n    return wrapper",
+            "placeholder": "@wraps(funcion)",
+            "hints": ["Decora con @wraps(funcion)."],
+            "acceptedAnswers": ["@wraps(funcion)", "@wraps(funcion) "],
+            "explanation": "@wraps(funcion) copia automáticamente __name__, __doc__ y las anotaciones de tipos desde la función original hacia el wrapper interno."
+          },
+          {
+            "id": "q-rec-dev-puc4",
+            "type": "write-answer",
+            "difficulty": 3,
+            "question": "¿Cómo se llama la técnica algorítmica recursiva que explora sistemáticamente posibles soluciones descartando caminos que no conducen a la meta (poda de ramas)?",
+            "code": null,
+            "placeholder": "nombre_tecnica",
+            "hints": ["Back...", "Vuelta atrás"],
+            "acceptedAnswers": ["backtracking", "vuelta atras", "vuelta atrás", "back-tracking"],
+            "explanation": "Backtracking explora ramas del árbol de decisiones recursivamente y retrocede (poda) apenas se violan las restricciones del problema."
           }
         ]
       }
@@ -1450,6 +1780,96 @@ window.DUOPROGRA_PARTE2.simulacros = [
         ],
         "correct": 0,
         "explanation": "'|' es la unión de conjuntos; '&' es la intersección; '-' es la diferencia y '^' la diferencia simétrica."
+      },
+      {
+        "id": "q-sim1-hard1",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "¿Cuál es el orden de resolución de métodos (MRO) resultante de esta jerarquía en diamante?",
+        "code": "class O:\n    pass\nclass X(O):\n    pass\nclass Y(O):\n    pass\nclass A(X, Y):\n    pass\nclass B(Y, X):\n    pass\n\ntry:\n    class C(A, B):\n        pass\n    print('Creada')\nexcept TypeError:\n    print('Inconsistencia MRO')",
+        "options": [
+          "Inconsistencia MRO",
+          "Creada",
+          "['C', 'A', 'B', 'X', 'Y', 'O']",
+          "['C', 'A', 'X', 'B', 'Y', 'O']"
+],
+        "correct": 0,
+        "explanation": "A exige el orden X antes que Y, pero B exige Y antes que X. La linealización C3 detecta un ciclo/conflicto en el orden parcial y Python lanza un TypeError al definir la clase C."
+      },
+      {
+        "id": "q-sim1-hard2",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "¿Qué imprime este código sobre atributos de clase vs instancia mutables?",
+        "code": "class Caja:\n    items = []\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nc1 = Caja('A')\nc2 = Caja('B')\nc1.items.append(1)\nCaja.items = [2]\nc2.items.append(3)\nprint(c1.items, c2.items)",
+        "options": [
+          "[2, 3] [2, 3]",
+          "[1] [3]",
+          "[1, 3] [1, 3]",
+          "[1, 2] [2, 3]"
+],
+        "correct": 0,
+        "explanation": "Al hacer 'Caja.items = [2]', el atributo de clase apunta a una nueva lista [2]. Ni c1 ni c2 han creado un atributo de instancia 'items', por lo que c2.items.append(3) muta esa misma lista de clase compartida, imprimiendo [2, 3] para ambos."
+      },
+      {
+        "id": "q-sim1-hard3",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "¿Qué imprime la ejecución de esta función con argumento mutable por defecto?",
+        "code": "def registrar(valor, lista=[]):\n    lista.append(valor)\n    return lista\n\nregistrar(1)\nl2 = registrar(2, [])\nl3 = registrar(3)\nprint(l2, l3)",
+        "options": [
+          "[2] [1, 3]",
+          "[2] [3]",
+          "[1, 2] [1, 2, 3]",
+          "[2] [2, 3]"
+],
+        "correct": 0,
+        "explanation": "El valor por defecto '[]' se evalúa una sola vez cuando se define la función. La primera llamada agrega 1 a la lista compartida. La segunda llamada pasa una lista nueva '[]', por lo que l2 es [2]. La tercera llamada usa nuevamente la lista compartida, resultando en [1, 3]."
+      },
+      {
+        "id": "q-sim1-hard4",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "¿Qué imprime el siguiente desempaquetado avanzado y slicing?",
+        "code": "datos = [10, 20, 30, 40, 50, 60]\nprimero, *intermedios, ultimo = datos\nprint(intermedios[::-2])",
+        "options": [
+          "[50, 30]",
+          "[40, 20]",
+          "[50, 40, 30, 20]",
+          "[40, 30]"
+],
+        "correct": 0,
+        "explanation": "intermedios captura [20, 30, 40, 50]. El slicing [::-2] recorre la lista hacia atrás con paso 2, tomando primero el índice -1 (50) y luego el índice -3 (30), resultando en [50, 30]."
+      },
+      {
+        "id": "q-sim1-hard5",
+        "type": "multiple-choice",
+        "difficulty": 3,
+        "question": "¿Qué ocurre si una subclase hereda de una clase abstracta ABC y no implementa todos los métodos decorados con @abstractmethod?",
+        "code": null,
+        "options": [
+          "Lanza TypeError al intentar instanciar la subclase",
+          "Lanza NotImplementedError al definir la clase",
+          "La clase compila y solo falla si se llama al método abstracto",
+          "Python reemplaza el método con una función que retorna None"
+],
+        "correct": 0,
+        "explanation": "En Python, la verificación de métodos abstractos ocurre en tiempo de instanciación (__new__): si quedan métodos abstractos sin sobreescribir, se levanta inmediatamente un TypeError impidiendo crear el objeto."
+      },
+      {
+        "id": "q-sim1-hard6",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "¿Qué imprime el acceso a este defaultdict anidado?",
+        "code": "from collections import defaultdict\narbol = lambda: defaultdict(arbol)\ndatos = arbol()\ndatos['Chile']['Santiago'] = 7000000\nprint('Valparaiso' in datos['Chile'], 'Concepcion' in datos)",
+        "options": [
+          "False False",
+          "True False",
+          "False True",
+          "KeyError"
+],
+        "correct": 0,
+        "explanation": "El operador 'in' consulta pertenencia de claves en el diccionario sin insertar el valor por defecto, retornando False en ambos casos sin levantar KeyError."
       }
     ]
   },
@@ -1707,6 +2127,96 @@ window.DUOPROGRA_PARTE2.simulacros = [
         "options": ["Concurrencia: multiples tareas progresan intercaladas en un nucleo. Paralelismo: multiples tareas ejecutan SIMULTANEAMENTE en multiples nucleos", "Son sinonimos", "Paralelismo es solo para GPU", "El GIL permite verdadero paralelismo de threads"],
         "correct": 0,
         "explanation": "Python threading logra concurrencia (alternancia en un nucleo) pero no paralelismo real para codigo CPU-bound por el GIL. Para paralelismo real se usa multiprocessing o extensiones C que liberan el GIL."
+      },
+      {
+        "id": "q-sim2-hard1",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "[I2 2026-1] ¿Qué imprime la ejecución de este generador con send() y valor inicial?",
+        "code": "def acumulador():\n    total = 0\n    while True:\n        x = yield total\n        if x is None:\n            total = 0\n        else:\n            total += x\n\ngen = acumulador()\nprint(next(gen), gen.send(5), gen.send(10), gen.send(None))",
+        "options": [
+          "0 5 15 0",
+          "0 5 10 0",
+          "None 5 15 None",
+          "5 15 0 0"
+],
+        "correct": 0,
+        "explanation": "next(gen) ejecuta hasta el primer yield y retorna total=0. gen.send(5) asigna x=5, suma y retorna 5. gen.send(10) suma 10 y retorna 15. gen.send(None) reinicia total a 0 y retorna 0."
+      },
+      {
+        "id": "q-sim2-hard2",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "[Examen 2025-2] ¿Cuál es el orden garantizado de impresión entre estos hilos sincronizados con Event?",
+        "code": "from threading import Thread, Event\ne = Event()\nres = []\n\ndef worker():\n    res.append('W1')\n    e.wait()\n    res.append('W2')\n\nt = Thread(target=worker)\nt.start()\nres.append('M1')\ne.set()\nt.join()\nres.append('M2')\nprint(res[:2] == ['W1', 'M1'] or res[:2] == ['M1', 'W1'], res[-1])",
+        "options": [
+          "True M2",
+          "True W2",
+          "False M2",
+          "Error de concurrencia"
+],
+        "correct": 0,
+        "explanation": "Antes de e.set(), W1 y M1 se ejecutan en orden no determinista concurrente. W2 solo puede ejecutarse tras e.set(). Al hacer t.join(), M2 siempre es el último elemento añadido."
+      },
+      {
+        "id": "q-sim2-hard3",
+        "type": "multiple-choice",
+        "difficulty": 3,
+        "question": "[I2 2026-1 / Examen 2024-2] ¿Qué condición produce un Deadlock (bloqueo mutuo) entre dos hilos H1 y H2?",
+        "code": null,
+        "options": [
+          "H1 adquiere LockA y espera LockB, mientras H2 adquiere LockB y espera LockA",
+          "Ambos hilos intentan escribir simultáneamente en una misma variable sin Lock",
+          "Un hilo daemon sigue ejecutándose después de que el hilo principal finaliza",
+          "Un hilo llama a join() sobre sí mismo dentro del método run()"
+],
+        "correct": 0,
+        "explanation": "La inversión en el orden de adquisición de múltiples recursos de exclusión mutua genera una espera circular donde ninguno puede avanzar ni liberar el cerrojo que posee."
+      },
+      {
+        "id": "q-sim2-hard4",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "[Examen 2025-2] ¿Qué imprime la conversión de endianness en este bytearray?",
+        "code": "valor = 0x12345678\nb_big = valor.to_bytes(4, byteorder='big')\nb_little = valor.to_bytes(4, byteorder='little')\nprint(b_big[0] == 0x12, b_little[0] == 0x78)",
+        "options": [
+          "True True",
+          "True False",
+          "False True",
+          "False False"
+],
+        "correct": 0,
+        "explanation": "En Big-Endian, el byte más significativo (0x12) se ubica en el primer índice [0]. En Little-Endian, el byte menos significativo (0x78) se ubica al principio."
+      },
+      {
+        "id": "q-sim2-hard5",
+        "type": "multiple-choice",
+        "difficulty": 3,
+        "question": "[I2 2026-1] Al recibir un mensaje por socket TCP donde recv(4) indicó que el mensaje mide 5000 bytes, ¿por qué es incorrecto hacer simplemente 'datos = sock.recv(5000)'?",
+        "code": null,
+        "options": [
+          "Porque TCP es un flujo continuo y recv(5000) puede retornar menos de 5000 bytes si el mensaje se fragmentó en la red",
+          "Porque recv(5000) siempre lanza un BufferOverflowError si el mensaje excede 1024 bytes",
+          "Porque los sockets TCP solo pueden recibir en potencias de 2 (2048 o 4096 bytes)",
+          "Porque los bytes recibidos se corrompen si no se leen exactamente de a 1 byte"
+],
+        "correct": 0,
+        "explanation": "TCP no tiene concepto de mensajes delimitados, solo un stream de bytes. La red fragmenta los paquetes, por lo que recv() puede devolver menos bytes de los solicitados; se debe recibir en un bucle acumulador."
+      },
+      {
+        "id": "q-sim2-hard6",
+        "type": "multiple-choice",
+        "difficulty": 3,
+        "question": "[Examen 2024-2] ¿Cuál es la razón principal por la que NUNCA se debe usar pickle para comunicarse con clientes desconocidos a través de sockets en internet?",
+        "code": null,
+        "options": [
+          "Permite ejecución de código arbitrario del lado del receptor mediante el método dunder __reduce__",
+          "Pickle es significativamente más lento que JSON en todas las plataformas",
+          "Pickle solo funciona si ambos extremos tienen exactamente la misma dirección IP",
+          "Pickle genera cadenas de texto en texto plano que no se pueden encriptar"
+],
+        "correct": 0,
+        "explanation": "El protocolo de serialización de pickle puede reconstruir llamadas a funciones del sistema operativo (ej: subprocess o os.system), permitiendo a un atacante ejecutar código remoto en el servidor."
       }
     ]
   },
@@ -1864,6 +2374,66 @@ window.DUOPROGRA_PARTE2.simulacros = [
         ],
         "correct": 0,
         "explanation": "Verdadero. La lista por defecto se evalúa una sola vez al definir la función, por lo que es compartida por todas las invocaciones posteriores si no se suministra argumento."
+      },
+      {
+        "id": "q-sim-ex-hard1",
+        "type": "multiple-choice",
+        "difficulty": 3,
+        "question": "[Examen 2025-2] En una arquitectura PyQt conectada a un servidor mediante Sockets, ¿por qué la recepción de red debe residir en un QThread independiente y notificar a la ventana mediante pyqtSignal?",
+        "code": null,
+        "options": [
+          "Porque las operaciones bloqueantes de socket congelarían el hilo de eventos de la GUI, y Qt exige que solo el hilo principal modifique los widgets",
+          "Porque PyQt no permite importar el módulo socket dentro de la misma clase que hereda de QWidget",
+          "Porque pyqtSignal encripta automáticamente los datos transmitidos a través del socket",
+          "Porque el sistema operativo cierra los sockets si se leen desde un hilo con interfaz visual"
+],
+        "correct": 0,
+        "explanation": "Llamadas bloqueantes como recv() en el hilo principal detienen el redibujado de la interfaz. Además, los widgets de Qt no son thread-safe, por lo que la comunicación desde el hilo secundario hacia la GUI debe realizarse mediante señales."
+      },
+      {
+        "id": "q-sim-ex-hard2",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "[Examen Final Integrador] ¿Qué imprime este protocolo de red que combina serialización JSON y prefijo de largo?",
+        "code": "import json\npayload = {'msg': 'ok'}\nb_json = json.dumps(payload).encode('utf-8')\nheader = len(b_json).to_bytes(4, byteorder='big')\npaquete = header + b_json\n\nlargo_recibido = int.from_bytes(paquete[:4], byteorder='big')\ndatos = json.loads(paquete[4:4 + largo_recibido].decode('utf-8'))\nprint(largo_recibido == len(b_json), datos['msg'])",
+        "options": [
+          "True ok",
+          "True None",
+          "False ok",
+          "Error de decodificación"
+],
+        "correct": 0,
+        "explanation": "El encabezado de 4 bytes codifica exactamente el largo del payload en Big-Endian. Al desempaquetar, paquete[4:4 + largo] extrae el bloque exacto para reconstruir el diccionario con json.loads()."
+      },
+      {
+        "id": "q-sim-ex-hard3",
+        "type": "multiple-choice",
+        "difficulty": 3,
+        "question": "[AC7 / Examen] En un laberinto no ponderado, ¿por qué la búsqueda en amplitud (BFS) garantiza encontrar el camino con la menor cantidad de pasos, a diferencia de la búsqueda en profundidad (DFS)?",
+        "code": null,
+        "options": [
+          "Porque BFS explora los nodos por capas en orden creciente de distancia desde el inicio usando una cola FIFO",
+          "Porque BFS evalúa una función heurística de distancia euclidiana en cada nodo",
+          "Porque DFS siempre entra en ciclos infinitos incluso utilizando un set de visitados",
+          "Porque BFS solo visita nodos que tienen un valor estrictamente mayor que el nodo anterior"
+],
+        "correct": 0,
+        "explanation": "Al usar una cola FIFO, BFS visita todos los nodos a distancia 1, luego todos los de distancia 2, etc., garantizando que la primera vez que se alcanza el destino es a través de una ruta de longitud mínima de aristas."
+      },
+      {
+        "id": "q-sim-ex-hard4",
+        "type": "code-output",
+        "difficulty": 3,
+        "question": "¿Qué imprime este uso de generadores recursivos (yield from) en un árbol binario?",
+        "code": "class Nodo:\n    def __init__(self, val, izq=None, der=None):\n        self.val = val\n        self.izq = izq\n        self.der = der\n\n    def in_order(self):\n        if self.izq:\n            yield from self.izq.in_order()\n        yield self.val\n        if self.der:\n            yield from self.der.in_order()\n\narbol = Nodo(2, Nodo(1), Nodo(3))\nprint(list(arbol.in_order()))",
+        "options": [
+          "[1, 2, 3]",
+          "[2, 1, 3]",
+          "[3, 2, 1]",
+          "[1, 3, 2]"
+],
+        "correct": 0,
+        "explanation": "yield from delega la generación al subárbol izquierdo (produce 1), luego la raíz produce 2, y luego yield from delega al subárbol derecho (produce 3), dando la lista in-order [1, 2, 3]."
       }
     ]
   }

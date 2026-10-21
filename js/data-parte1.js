@@ -309,7 +309,29 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['self'],
         explanation: '"self" es la convención en Python para referirse a la instancia actual del objeto. No es una palabra reservada del lenguaje, pero es una convención universal. Siempre es el primer parámetro de los métodos de instancia.'
-      }
+      },
+          {
+            id: 'q-oop-dev-p4',
+            type: 'write-code',
+            difficulty: 2,
+            question: "[AC1 - Medallista] Completa el constructor de la clase Medallista para guardar nombre, deporte y tipo de medalla como atributos de instancia.",
+            code: "class Medallista:\n    def __init__(self, nombre: str, deporte: str, medalla: str):\n        self.nombre = nombre\n        self.deporte = deporte\n        _____",
+            placeholder: "self.medalla = medalla",
+            hints: ["Asigna el parámetro medalla al atributo self.medalla."],
+            acceptedAnswers: ["self.medalla = medalla", "self.medalla = medalla "],
+            explanation: "En AC1, cada medallista guarda sus atributos específicos como atributos de instancia asignándolos en __init__ a través de self."
+          },
+          {
+            id: 'q-oop-dev-p5',
+            type: 'write-code',
+            difficulty: 2,
+            question: "[AC1 - Pais] En la clase Pais, incrementa el atributo self.puntaje en 3 unidades al registrar una medalla de Plata.",
+            code: "class Pais:\n    def __init__(self, nombre_pais: str):\n        self.nombre_pais = nombre_pais\n        self.puntaje = 0\n        self.platas = 0\n\n    def registrar_plata(self):\n        self.platas += 1\n        _____",
+            placeholder: "self.puntaje += 3",
+            hints: ["Suma 3 a self.puntaje usando +=."],
+            acceptedAnswers: ["self.puntaje += 3", "self.puntaje = self.puntaje + 3"],
+            explanation: "El método de instancia modifica el estado de la entidad Pais actualizando su puntaje acumulado."
+          }
         ]
       },
       {
@@ -364,7 +386,18 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['__len__'],
         explanation: 'len(obj) llama internamente a obj.__len__(). Para que tu clase soporte len(), debes implementar def __len__(self): que debe retornar un entero no negativo. Esto es parte del protocolo de "sequence" en Python.'
-      }
+      },
+          {
+            id: 'q-oop-dev-puc4',
+            type: 'write-code',
+            difficulty: 3,
+            question: "Implementa el método __repr__ para que retorne una cadena con formato Pais(nombre='<nombre_pais>', puntaje=<puntaje>).",
+            code: "class Pais:\n    def __init__(self, nombre_pais: str, puntaje: int = 0):\n        self.nombre_pais = nombre_pais\n        self.puntaje = puntaje\n\n    def __repr__(self):\n        return _____",
+            placeholder: "f\"Pais(nombre='{self.nombre_pais}', puntaje={self.puntaje})\"",
+            hints: ["Usa un f-string respetando las comillas simples en el nombre."],
+            acceptedAnswers: ["f\"Pais(nombre='{self.nombre_pais}', puntaje={self.puntaje})\"", "f'Pais(nombre=\"{self.nombre_pais}\", puntaje={self.puntaje})'", "f\"Pais(nombre='{self.nombre_pais}', puntaje={self.puntaje})\" "],
+            explanation: "__repr__ provee una representación explícita y formal para depuración que ideally replica cómo se instanciaría el objeto."
+          }
         ]
       }
 ]
@@ -738,7 +771,29 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['isinstance', 'isinstance()'],
         explanation: 'isinstance(obj, Clase) retorna True si obj es instancia de Clase o de cualquier subclase. type(obj) == Clase es más estricto y no considera herencia. En IIC2233 siempre se prefiere isinstance para respetar el polimorfismo.'
-      }
+      },
+          {
+            id: 'q-oop-av-dev-p4',
+            type: 'write-code',
+            difficulty: 2,
+            question: "En una subclase, invoca el método saludar() de la clase base usando super() y concatena ' y bienvenidos!'.",
+            code: "class SaludoAmigable(Saludo):\n    def saludar(self):\n        return _____ + ' y bienvenidos!'",
+            placeholder: "super().saludar()",
+            hints: ["Llama a super().saludar()."],
+            acceptedAnswers: ["super().saludar()", "super().saludar() "],
+            explanation: "super() delega la llamada a la siguiente clase en la cadena de resolución de métodos (MRO), reutilizando la lógica base."
+          },
+          {
+            id: 'q-oop-av-dev-p5',
+            type: 'write-code',
+            difficulty: 2,
+            question: "Sobreescribe el método hacer_sonido() en la subclase Gato para que retorne 'Miau'.",
+            code: "class Animal:\n    def hacer_sonido(self):\n        return 'Sonido genérico'\n\nclass Gato(Animal):\n    def hacer_sonido(self):\n        return _____",
+            placeholder: "'Miau'",
+            hints: ["Retorna el string 'Miau'."],
+            acceptedAnswers: ["'Miau'", "\"Miau\""],
+            explanation: "El polimorfismo por sobreescritura (overriding) permite a una subclase proporcionar una implementación específica de un método heredado."
+          }
         ]
       },
       {
@@ -791,7 +846,29 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['__hash__'],
         explanation: '__hash__ debe retornar un entero que actúa como "huella digital" del objeto. Para que un objeto sea hashable, también debe implementar __eq__. Si defines __eq__ sin __hash__, Python automáticamente pone __hash__ = None (haciendo el objeto no hashable). En IIC2233 esto aparece en preguntas de sets y diccionarios.'
-      }
+      },
+          {
+            id: 'q-oop-av-dev-puc3',
+            type: 'write-code',
+            difficulty: 3,
+            question: "[AC3 - Herencia Cooperativa] En una jerarquía con herencia múltiple, delega los argumentos restantes a la siguiente clase en el MRO pasando **kwargs a super().__init__.",
+            code: "class Gen:\n    def __init__(self, rasgo: str, valor: str, **kwargs) -> None:\n        _____\n        self.rasgo = rasgo\n        self.valor = valor",
+            placeholder: "super().__init__(**kwargs)",
+            hints: ["Invoca super().__init__(**kwargs)."],
+            acceptedAnswers: ["super().__init__(**kwargs)", "super().__init__(**kwargs) "],
+            explanation: "En AC3 y en herencia cooperativa en Python, reenviar **kwargs mediante super().__init__(**kwargs) asegura que todas las clases en el grafo C3 reciban sus argumentos esperados."
+          },
+          {
+            id: 'q-oop-av-dev-puc4',
+            type: 'write-code',
+            difficulty: 3,
+            question: "[AC3 - Sobrecarga dunder] Sobrecarga el operador + implementando __add__ para que retorne una nueva tupla (self.valor, other.valor).",
+            code: "class GenDominante:\n    def __init__(self, valor: str):\n        self.valor = valor\n\n    def _____(self, other):\n        return (self.valor, other.valor)",
+            placeholder: "__add__",
+            hints: ["El método mágico para + es __add__."],
+            acceptedAnswers: ["__add__"],
+            explanation: "Implementar __add__ sobrecarga el operador binario +, permitiendo combinar objetos con sintaxis nativa de Python."
+          }
         ]
       }
 ]
@@ -1099,7 +1176,29 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['tupla', 'tuple'],
         explanation: 'Las tuplas son inmutables (no se pueden modificar después de crear), por lo tanto son hashables y pueden ser claves de diccionarios. Las listas son mutables, por eso no son hashables y no pueden ser claves. Esto es un concepto crítico en IIC2233.'
-      }
+      },
+          {
+            id: 'q-builtin-dev-p4',
+            type: 'write-code',
+            difficulty: 2,
+            question: "Usa collections.defaultdict para inicializar un diccionario donde el valor por defecto de cualquier clave sea una lista vacía.",
+            code: "from collections import defaultdict\n\nagrupaciones = _____",
+            placeholder: "defaultdict(list)",
+            hints: ["Pasa list como default_factory a defaultdict."],
+            acceptedAnswers: ["defaultdict(list)", "defaultdict(list) "],
+            explanation: "defaultdict(list) ahorra comprobaciones de existencia de claves, creando automáticamente una lista vacía cuando se indexa una clave inexistente."
+          },
+          {
+            id: 'q-builtin-dev-p5',
+            type: 'write-code',
+            difficulty: 2,
+            question: "Usa Counter para obtener el elemento más repetido y su frecuencia invocando most_common con 1.",
+            code: "from collections import Counter\nconteos = Counter(['a', 'b', 'a', 'c', 'a'])\nmas_frecuente = _____",
+            placeholder: "conteos.most_common(1)",
+            hints: ["Invoca most_common(1)."],
+            acceptedAnswers: ["conteos.most_common(1)", "conteos.most_common(1) "],
+            explanation: "Counter.most_common(n) utiliza una cola de prioridad (heap) interna para devolver eficientemente los n elementos más frecuentes en O(N log k)."
+          }
         ]
       },
       {
@@ -1154,7 +1253,18 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['dict_items', 'dict items'],
         explanation: 'd.items() retorna un objeto de tipo dict_items, que es una "vista dinámica" del diccionario. Si el dict cambia, la vista también cambia. Se puede iterar con for y convertir a lista con list(d.items()). Similarmente existen dict_keys y dict_values.'
-      }
+      },
+          {
+            id: 'q-builtin-dev-puc4',
+            type: 'write-code',
+            difficulty: 3,
+            question: "Reenvía todos los argumentos posicionales y por palabra clave recibidos en la función wrapper hacia funcion_objetivo.",
+            code: "def wrapper(*args, **kwargs):\n    print('Iniciando ejecución...')\n    resultado = funcion_objetivo(_____)\n    return resultado",
+            placeholder: "*args, **kwargs",
+            hints: ["Desempaqueta ambos con *args, **kwargs."],
+            acceptedAnswers: ["*args, **kwargs", "*args, **kwargs "],
+            explanation: "*args desempaqueta tuplas posicionales y **kwargs diccionarios de argumentos nominados, posibilitando delegación y decoradores transparentes."
+          }
         ]
       }
 ]
@@ -1540,7 +1650,29 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['O(1)', 'o(1)'],
         explanation: 'Insertar al inicio de una lista ligada es O(1): solo necesitas crear el nuevo nodo, hacer nuevo.siguiente = cabeza, y actualizar cabeza. No importa cuántos elementos tenga la lista. En cambio, insertar al final sin puntero de cola es O(n) porque debes recorrer toda la lista.'
-      }
+      },
+          {
+            id: 'q-nodales-dev-p4',
+            type: 'write-code',
+            difficulty: 2,
+            question: "Inserta un nuevo nodo al inicio de una lista ligada, asignándolo como la nueva cabeza (self.cabeza).",
+            code: "class ListaLigada:\n    def __init__(self):\n        self.cabeza = None\n\n    def agregar_al_inicio(self, valor):\n        nuevo = Nodo(valor)\n        nuevo.siguiente = self.cabeza\n        _____",
+            placeholder: "self.cabeza = nuevo",
+            hints: ["Actualiza self.cabeza para que apunte al nuevo nodo."],
+            acceptedAnswers: ["self.cabeza = nuevo", "self.cabeza = nuevo "],
+            explanation: "La inserción en la cabeza de una lista enlazada simple toma tiempo constante O(1)."
+          },
+          {
+            id: 'q-nodales-dev-p5',
+            type: 'write-code',
+            difficulty: 2,
+            question: "En una estructura tipo Pila (Stack), implementa el método pop() usando el método pop() de la lista interna self.items.",
+            code: "class Pila:\n    def __init__(self):\n        self.items = []\n\n    def pop(self):\n        if not self.items:\n            return None\n        return _____",
+            placeholder: "self.items.pop()",
+            hints: ["Invoca self.items.pop()."],
+            acceptedAnswers: ["self.items.pop()", "self.items.pop() "],
+            explanation: "Una pila sigue la disciplina LIFO (Last-In, First-Out), desapilando desde el extremo final en tiempo O(1)."
+          }
         ]
       },
       {
@@ -1593,7 +1725,29 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['None', 'none', 'null'],
         explanation: 'El último nodo de una lista ligada tiene siguiente = None, lo que indica el fin de la lista. None en Python es el equivalente a null en otros lenguajes. El patrón "while actual is not None" se basa en esta convención: cuando actual vale None, hemos llegado al final.'
-      }
+      },
+          {
+            id: 'q-nodales-dev-puc3',
+            type: 'write-code',
+            difficulty: 3,
+            question: "[AC5 - Equipo] En una lista ligada con puntero al último elemento, conecta el siguiente del último atleta y actualiza self.ultimo en O(1).",
+            code: "def append(self, atleta):\n    if not self.primero:\n        self.primero = atleta\n        self.ultimo = atleta\n    else:\n        self.ultimo.siguiente = atleta\n        _____",
+            placeholder: "self.ultimo = atleta",
+            hints: ["Actualiza self.ultimo = atleta."],
+            acceptedAnswers: ["self.ultimo = atleta", "self.ultimo = atleta "],
+            explanation: "Mantener una referencia directa al último nodo evita recorrer toda la lista en cada inserción, reduciendo la complejidad de O(n) a O(1)."
+          },
+          {
+            id: 'q-nodales-dev-puc4',
+            type: 'write-code',
+            difficulty: 3,
+            question: "[AC7 - Búsqueda] En un recorrido BFS usando una cola deque([inicio]), extrae el primer elemento del frente en O(1).",
+            code: "from collections import deque\n\ndef bfs(inicio):\n    cola = deque([inicio])\n    while cola:\n        nodo_actual = _____\n        # Explorar vecinos...",
+            placeholder: "cola.popleft()",
+            hints: ["Usa cola.popleft()."],
+            acceptedAnswers: ["cola.popleft()", "cola.popleft() "],
+            explanation: "En deque, popleft() es una operación O(1), indispensable para la eficiencia del algoritmo BFS."
+          }
         ]
       }
 ]
@@ -1899,7 +2053,29 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['finally', 'finally:'],
         explanation: 'La clausula "finally" se ejecuta siempre, ya sea que el código del try termine normalmente, o que se lance/capture una excepción. Se usa para "limpieza": cerrar archivos, liberar recursos, cerrar conexiones de red. En IIC2233 es común en preguntas sobre manejo de archivos y recursos.'
-      }
+      },
+          {
+            id: 'q-exc-dev-p4',
+            type: 'write-code',
+            difficulty: 2,
+            question: "Lanza una excepción ValueError con el mensaje 'Edad debe ser positiva' si edad < 0.",
+            code: "def verificar_edad(edad):\n    if edad < 0:\n        _____",
+            placeholder: "raise ValueError('Edad debe ser positiva')",
+            hints: ["Usa raise ValueError('Edad debe ser positiva')."],
+            acceptedAnswers: ["raise ValueError('Edad debe ser positiva')", "raise ValueError(\"Edad debe ser positiva\")", "raise ValueError('Edad debe ser positiva') "],
+            explanation: "La palabra clave raise interrumpe la ejecución normal y transfiere el control al manejador de excepciones correspondiente."
+          },
+          {
+            id: 'q-exc-dev-p5',
+            type: 'write-code',
+            difficulty: 2,
+            question: "Usa la cláusula finally para asegurar que el archivo self.archivo.close() se cierre siempre, ocurra o no un error.",
+            code: "try:\n    datos = self.archivo.read()\nexcept IOError:\n    print('Error al leer archivo')\n_____:\n    self.archivo.close()",
+            placeholder: "finally",
+            hints: ["El bloque de limpieza garantizado es finally."],
+            acceptedAnswers: ["finally", "finally:"],
+            explanation: "El bloque finally se ejecuta de manera garantizada incluso si ocurren excepciones no capturadas o se ejecutan returns."
+          }
         ]
       },
       {
@@ -1952,7 +2128,18 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['Exception', 'BaseException'],
         explanation: 'En Python, todas las excepciones que se lanzan con raise deben heredar de BaseException. En práctica, SIEMPRE hereda de Exception (subclase de BaseException) porque BaseException incluye excepciones del sistema como SystemExit y KeyboardInterrupt que no deberías interceptar normalmente. La jerarquía es: BaseException → Exception → (tus excepciones).'
-      }
+      },
+          {
+            id: 'q-exc-dev-puc4',
+            type: 'write-code',
+            difficulty: 3,
+            question: "Captura simultáneamente KeyError y TypeError en una sola cláusula except guardando la instancia del error en e.",
+            code: "try:\n    procesar_registro(item)\n_____\n    logger.error(f'Dato inválido: {e}')",
+            placeholder: "except (KeyError, TypeError) as e:",
+            hints: ["Agrupa las excepciones en una tupla: except (KeyError, TypeError) as e:"],
+            acceptedAnswers: ["except (KeyError, TypeError) as e:", "except (TypeError, KeyError) as e:", "except (KeyError, TypeError) as e :", "except (TypeError, KeyError) as e :"],
+            explanation: "Para capturar más de un tipo de excepción en el mismo bloque se deben encerrar sus tipos dentro de una tupla."
+          }
         ]
       }
 ]
@@ -2256,7 +2443,29 @@ window.DUOPROGRA_PARTE1 = [
         ],
         acceptedAnswers: ['StopIteration'],
         explanation: 'StopIteration es la señal estándar de "fin de secuencia" en el protocolo iterador de Python. Cuando un for loop llama a next() sobre un iterador y recibe StopIteration, detiene el loop limpiamente. Nunca uses return None para indicar el fin; siempre usa raise StopIteration.'
-      }
+      },
+          {
+            id: 'q-iter-dev-p4',
+            type: 'write-code',
+            difficulty: 2,
+            question: "Completa la función generadora para que produzca los primeros n números pares usando yield.",
+            code: "def generador_pares(n):\n    for i in range(n):\n        _____",
+            placeholder: "yield i * 2",
+            hints: ["Usa yield i * 2."],
+            acceptedAnswers: ["yield i * 2", "yield 2 * i", "yield i * 2 "],
+            explanation: "La palabra clave yield suspende el estado de ejecución de la función y emite el valor, convirtiendo la función en un generador iterable."
+          },
+          {
+            id: 'q-iter-dev-p5',
+            type: 'write-code',
+            difficulty: 2,
+            question: "Usa filter() con una lambda para quedarte con las palabras de longitud mayor a 3.",
+            code: "palabras = ['sol', 'árbol', 'luz', 'camino']\nlargas = list(_____(lambda p: len(p) > 3, palabras))",
+            placeholder: "filter",
+            hints: ["La función de orden superior para filtrar es filter."],
+            acceptedAnswers: ["filter"],
+            explanation: "filter(predicado, iterable) selecciona únicamente los elementos para los cuales el predicado retorna un valor verdadero."
+          }
         ]
       },
       {
@@ -2318,7 +2527,18 @@ window.DUOPROGRA_PARTE1 = [
           'genera bajo demanda'
         ],
         explanation: 'La diferencia clave: list comprehension [x for x in r] crea TODA la lista en memoria de inmediato (eager). La expresión generadora (x for x in r) usa "lazy evaluation": genera cada valor SOLO cuando se solicita, sin almacenar todos en memoria. Para millones de elementos, el generador usa O(1) memoria vs O(n) de la lista. En IIC2233 esto es crucial para procesar archivos grandes o streams de datos.'
-      }
+      },
+          {
+            id: 'q-iter-dev-puc4',
+            type: 'write-code',
+            difficulty: 3,
+            question: "[I2 2026-1] Envía el string 'REINICIAR' a un generador pausado gen_controlador usando su método send.",
+            code: "gen_controlador = maquina_estados()\nnext(gen_controlador)  # Avanza hasta el primer yield\nrespuesta = _____",
+            placeholder: "gen_controlador.send('REINICIAR')",
+            hints: ["Llama a gen_controlador.send('REINICIAR')."],
+            acceptedAnswers: ["gen_controlador.send('REINICIAR')", "gen_controlador.send(\"REINICIAR\")", "gen_controlador.send('REINICIAR') "],
+            explanation: "generator.send(valor) reanuda el generador inyectándole un valor que se convierte en el resultado de la expresión yield en la que estaba pausado."
+          }
         ]
       }
 ]
