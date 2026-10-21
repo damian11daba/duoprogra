@@ -1297,31 +1297,19 @@
             if (target.includes('def ')) {
               // Function definition question
               var fnMatch = target.match(/def\s+(\w+)\s*\(/);
-              hintCode = fnMatch ? 'def ' + fnMatch[1] + '(...):
-    # Escribe el cuerpo aquí
-    return ...' : 'def mi_funcion(...):
-    # Completa la función
-    return ...';
+              hintCode = fnMatch ? 'def ' + fnMatch[1] + '(...):\n    # Escribe el cuerpo aquí\n    return ...' : 'def mi_funcion(...):\n    # Completa la función\n    return ...';
             } else if (target.includes('class ')) {
-              hintCode = 'class MiClase:
-    def __init__(self, ...):
-        # Inicializa atributos
-        ...';
+              hintCode = 'class MiClase:\n    def __init__(self, ...):\n        # Inicializa atributos\n        ...';
             } else if (target.includes('for ') || target.includes('while ')) {
-              hintCode = '# Usa un ciclo para iterar
-for elemento in ...:  # o while condicion:
-    ...';
+              hintCode = '# Usa un ciclo para iterar\nfor elemento in ...:  # o while condicion:\n    ...';
             } else if (target.includes('lambda')) {
               hintCode = 'lambda argumento: expresion_con(argumento)';
             } else if (target.includes('map(') || target.includes('filter(')) {
-              hintCode = '# Recuerda: map(funcion, iterable) o filter(funcion, iterable)
-resultado = list(map(lambda x: ..., coleccion))';
+              hintCode = '# Recuerda: map(funcion, iterable) o filter(funcion, iterable)\nresultado = list(map(lambda x: ..., coleccion))';
             } else {
               // Generic code scaffold
-              var lines = target.split('
-').length;
-              hintCode = '# Pista estructural: tu solución tiene ' + lines + ' línea(s)
-# Comienza con: ' + (target[0] || '...') + '...';
+              var lines = target.split('\n').length;
+              hintCode = '# Pista estructural: tu solución tiene ' + lines + ' línea(s)\n# Comienza con: ' + (target[0] || '...') + '...';
             }
           } else {
             // write-answer type: conceptual hint only
