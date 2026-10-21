@@ -232,6 +232,15 @@
         }
         break;
 
+      case 'infinite':
+        if (parts[1]) {
+          showView('view-lesson');
+          startInfinitePractice(parts[1]);
+        } else {
+          navigate('#home');
+        }
+        break;
+
       case 'lesson':
         if (parts[1] && parts[2]) {
           showView('view-lesson');
@@ -900,6 +909,31 @@
     if (path && mod.lessons) {
       path.innerHTML = '';
 
+      // Banner for Infinite Development Practice for this module
+      const infBanner = document.createElement('div');
+      infBanner.style.cssText = 'width:100%;max-width:440px;margin:0 auto 1.5rem;padding:1rem 1.25rem;background:linear-gradient(135deg, rgba(255,150,0,0.18), rgba(255,200,0,0.1));border:2px solid #FF9600;border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:1rem;box-shadow:0 4px 14px rgba(255,150,0,0.15);';
+      infBanner.innerHTML =
+        '<div style="text-align:left;">' +
+          '<div style="font-weight:800;color:#FFC800;font-size:1rem;display:flex;align-items:center;gap:6px;">' +
+            '<span>⚡ Práctica Infinita de Desarrollo</span>' +
+          '</div>' +
+          '<p style="margin:4px 0 0;font-size:0.82rem;color:#E6EDF3;line-height:1.4;">' +
+            'Ejercicios abiertos de código y desarrollo para ' + escapeHtml(mod.name) + '. Entrena sin límite hasta cuando decidas salir.' +
+          '</p>' +
+        '</div>' +
+        '<button id="btn-start-infinite" class="option-btn" type="button" style="margin:0;padding:10px 18px;font-size:0.88rem;background:#FF9600;color:#0D1117;border:none;border-radius:12px;cursor:pointer;font-weight:800;white-space:nowrap;box-shadow:0 3px 10px rgba(255,150,0,0.3);">' +
+          'Entrenar ♾️' +
+        '</button>';
+
+      path.appendChild(infBanner);
+
+      const startInfBtn = infBanner.querySelector('#btn-start-infinite');
+      if (startInfBtn) {
+        startInfBtn.addEventListener('click', function () {
+          window.location.hash = '#infinite/' + mod.id;
+        });
+      }
+
       mod.lessons.forEach(function (lesson, idx) {
         const completed = !!state.completedLessons[lesson.id];
         const locked = isLessonLocked(mod.id, idx);
@@ -960,6 +994,85 @@
     }
   }
 
+  /**
+   * Start an infinite development practice session for a specific module.
+   * Exercises continue until the user decides to exit.
+   */
+  function startInfinitePractice(moduleId) {
+    const mod = findModule(moduleId);
+    if (!mod) {
+      navigate('#home');
+      return;
+    }
+
+    // Gather development questions:
+    // First from window.DUOPROGRA_INFINITE (custom write exercises for this module)
+    // Plus all write-code and write-answer questions from the module's own lessons
+    let devPool = [];
+    if (window.DUOPROGRA_INFINITE && window.DUOPROGRA_INFINITE[moduleId]) {
+      devPool = devPool.concat(window.DUOPROGRA_INFINITE[moduleId]);
+    }
+
+    if (mod.lessons) {
+      mod.lessons.forEach(function (lesson) {
+        if (lesson.questions) {
+          lesson.questions.forEach(function (q) {
+            if (q.type === 'write-code' || q.type === 'write-answer') {
+              // Avoid duplicates by id
+              if (!devPool.some(function (item) { return item.id === q.id; })) {
+                devPool.push(q);
+              }
+            }
+          });
+        }
+      });
+    }
+
+    if (devPool.length === 0) {
+      // Fallback: use all questions from dev lessons
+      if (mod.lessons) {
+        mod.lessons.forEach(function (lesson) {
+          if (lesson.id.indexOf('dev') !== -1 && lesson.questions) {
+            lesson.questions.forEach(function (q) {
+              if (!devPool.some(function (item) { return item.id === q.id; })) {
+                devPool.push(q);
+              }
+            });
+          }
+        });
+      }
+    }
+
+    if (devPool.length === 0) {
+      showModal('Sin ejercicios', 'No se encontraron ejercicios de desarrollo para este módulo.');
+      return;
+    }
+
+    currentSession = {
+      type: 'infinite',
+      moduleId: moduleId,
+      lessonId: 'infinite-dev',
+      pool: devPool.slice(),
+      questions: shuffle(devPool).slice(),
+      currentIndex: 0,
+      answers: [],
+      correctCount: 0,
+      lives: Infinity,
+      startTime: Date.now(),
+      xpEarned: 0,
+      selectedOption: null
+    };
+
+    VIEW_IDS.forEach(function (id) {
+      const viewEl = document.getElementById(id);
+      if (viewEl) viewEl.classList.add('hidden');
+    });
+    showView('view-lesson');
+
+    renderQuestion();
+    updateNav();
+  }
+
   // ==========================================================================
   // 12. RENDERIZADO: LECCIÓN (Quiz Engine)
   // ==========================================================================
@@ -1012,18 +1125,25 @@
 
     currentSession.selectedOption = null;
 
-    // Progress bar
+    // Progress bar & counter
     const progressFill = el('lesson-progress-fill');
     if (progressFill) {
-      const pct = ((currentSession.currentIndex) / currentSession.questions.length) * 100;
-      progressFill.style.width = pct + '%';
+      if (currentSession.type === 'infinite') {
+        progressFill.style.width = '100%';
+        progressFill.style.background = '#FF9600';
+      } else {
+        const pct = ((currentSession.currentIndex) / currentSession.questions.length) * 100;
+        progressFill.style.width = pct + '%';
+        progressFill.style.background = '';
+      }
     }
 
     // Lives
     const lessonLives = el('lesson-lives');
     if (lessonLives) {
-      if (currentSession.type === 'practice') {
-        lessonLives.innerHTML = '♾️';
+      if (currentSession.type === 'practice' || currentSession.type === 'infinite') {
+        const countText = currentSession.type === 'infinite' ? (' <span style="font-size:0.8rem;color:#FFC800;font-weight:700;margin-left:4px;">(Completadas: ' + currentSession.correctCount + ')</span>') : '';
+        lessonLives.innerHTML = '♾️' + countText;
       } else {
         lessonLives.innerHTML = '❤️'.repeat(Math.max(0, currentSession.lives)) + '🖤'.repeat(Math.max(0, state.maxLives - currentSession.lives));
       }
@@ -1449,12 +1569,20 @@
     }
 
     // Record answer
+    let recordedUserAnswer = currentSession.selectedOption;
+    if (q.type === 'order-code') {
+      recordedUserAnswer = (currentSession.orderSelection || []).slice();
+    } else if (q.type === 'write-code' || q.type === 'write-answer') {
+      recordedUserAnswer = currentSession.userTextAnswer || '';
+    }
+
     currentSession.answers.push({
       questionId: q.id,
       question: q.question,
       code: q.code,
-      userAnswer: q.type === 'order-code' ? (currentSession.orderSelection || []).slice() : currentSession.selectedOption,
+      userAnswer: recordedUserAnswer,
       correct: q.correct,
+      acceptedAnswers: q.acceptedAnswers,
       isCorrect: isCorrect,
       options: q.options,
       explanation: q.explanation,
@@ -1522,17 +1650,18 @@
       let richHtml = '';
 
       if (questionObj) {
+        // ALWAYS use questionObj (never un-scoped variables)
         if (!correct && (questionObj.type === 'write-code' || questionObj.type === 'write-answer')) {
-          const userText = currentSession.userTextAnswer || '';
+          const userText = currentSession ? (currentSession.userTextAnswer || '') : '';
           let correctDisplay = '';
-          if (Array.isArray(q.acceptedAnswers)) {
-            correctDisplay = q.acceptedAnswers.join('  o  ');
-          } else if (Array.isArray(q.correct)) {
-            correctDisplay = q.correct.join('  o  ');
-          } else if (typeof q.correct === 'string') {
-            correctDisplay = q.correct;
-          } else if (Array.isArray(q.options) && typeof q.correct === 'number') {
-            correctDisplay = q.options[q.correct];
+          if (Array.isArray(questionObj.acceptedAnswers)) {
+            correctDisplay = questionObj.acceptedAnswers.join('  o  ');
+          } else if (Array.isArray(questionObj.correct)) {
+            correctDisplay = questionObj.correct.join('  o  ');
+          } else if (typeof questionObj.correct === 'string') {
+            correctDisplay = questionObj.correct;
+          } else if (Array.isArray(questionObj.options) && typeof questionObj.correct === 'number') {
+            correctDisplay = questionObj.options[questionObj.correct];
           }
 
           richHtml += '<div style="margin-bottom:0.75rem;padding:0.75rem 1rem;background:rgba(0,0,0,0.25);border-radius:10px;text-align:left;line-height:1.5;">';
@@ -1540,13 +1669,13 @@
           richHtml += '<div style="color:#A6FFA6;">✅ <b>Respuesta esperada:</b> <span style="font-family:monospace;background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:4px;font-weight:bold;">' + escapeHtml(correctDisplay) + '</span></div>';
           richHtml += '</div>';
         } else if (correct && (questionObj.type === 'write-code' || questionObj.type === 'write-answer')) {
-          const userText = currentSession.userTextAnswer || '';
+          const userText = currentSession ? (currentSession.userTextAnswer || '') : '';
           richHtml += '<div style="margin-bottom:0.6rem;padding:0.5rem 0.85rem;background:rgba(0,0,0,0.2);border-radius:8px;text-align:left;">';
           richHtml += '<div style="color:#E6EDF3;">🎯 <b>Tu código/respuesta:</b> <span style="font-family:monospace;background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:4px;font-weight:bold;">' + escapeHtml(userText) + '</span></div>';
           richHtml += '</div>';
         } else if (!correct && questionObj.type !== 'order-code' && Array.isArray(questionObj.options)) {
           const correctText = questionObj.options[questionObj.correct];
-          const userText = userSelectedIndex !== null && userSelectedIndex !== undefined ? questionObj.options[userSelectedIndex] : null;
+          const userText = (userSelectedIndex !== null && userSelectedIndex !== undefined && questionObj.options[userSelectedIndex]) ? questionObj.options[userSelectedIndex] : null;
 
           richHtml += '<div style="margin-bottom:0.75rem;padding:0.75rem 1rem;background:rgba(0,0,0,0.25);border-radius:10px;text-align:left;line-height:1.5;">';
           if (userText) {
@@ -1561,10 +1690,23 @@
           richHtml += '</div>';
         }
 
-        // Detailed concept breakdown
-        richHtml += '<div style="text-align:left;line-height:1.6;font-size:0.95rem;background:rgba(255,255,255,0.08);padding:0.85rem 1rem;border-radius:10px;border-left:4px solid ' + (correct ? '#58CC02' : '#FFD700') + ';">';
-        richHtml += '<div style="font-weight:bold;margin-bottom:0.35rem;color:' + (correct ? '#FFFFFF' : '#FFEDB3') + ';">📖 Fundamento Teórico & Por qué es correcta:</div>';
-        richHtml += '<div style="color:#FFFFFF;">' + escapeHtml(questionObj.explanation || 'Respuesta verificada según los estándares de Python e IIC2233.') + '</div>';
+        // Detailed pedagogical concept breakdown & Why it is correct
+        richHtml += '<div style="text-align:left;line-height:1.6;font-size:0.95rem;background:rgba(255,255,255,0.08);padding:0.85rem 1rem;border-radius:10px;border-left:4px solid ' + (correct ? '#58CC02' : '#FFD700') + ';margin-bottom:0.5rem;">';
+        richHtml += '<div style="font-weight:bold;margin-bottom:0.4rem;color:' + (correct ? '#FFFFFF' : '#FFEDB3') + ';display:flex;align-items:center;gap:6px;">';
+        richHtml += '<span>📖 Fundamento Teórico & Por qué es correcta:</span>';
+        richHtml += '</div>';
+        richHtml += '<div style="color:#FFFFFF;margin-bottom:0.5rem;">' + escapeHtml(questionObj.explanation || 'Respuesta verificada según los estándares de Python e IIC2233.') + '</div>';
+
+        // Additional detailed feedback sections if incorrect
+        if (!correct) {
+          richHtml += '<div style="margin-top:0.6rem;padding-top:0.6rem;border-top:1px dashed rgba(255,255,255,0.2);font-size:0.88rem;color:#E6EDF3;">';
+          richHtml += '🔍 <b style="color:#FFA6A6;">¿Por qué no es correcta tu opción?</b> ';
+          richHtml += '<span>En Python, la semántica del lenguaje exige cumplir con los protocolos de memoria, tipos inmutables y orden de evaluación estándar evaluados en IIC2233. Repasa la sintaxis esperada arriba y recuerda los nombres de métodos dunder o funciones built-in.</span>';
+          richHtml += '</div>';
+          richHtml += '<div style="margin-top:0.4rem;font-size:0.85rem;color:#58CC02;font-weight:600;">';
+          richHtml += '💡 <b>Tip de Examen PUC:</b> Asegúrate de verificar los casos borde (vacío, None, tipos mutables vs inmutables) y no confundir métodos de instancia con funciones globales.';
+          richHtml += '</div>';
+        }
         richHtml += '</div>';
       } else {
         richHtml = escapeHtml(questionObj || '');
@@ -1596,13 +1738,19 @@
       return;
     }
 
-    // If more questions
+    // If more questions in queue
     if (currentSession.currentIndex < currentSession.questions.length - 1) {
       currentSession.currentIndex++;
       renderQuestion();
     } else {
-      // End of questions
-      if (currentSession.type === 'practice') {
+      // End of questions list
+      if (currentSession.type === 'infinite') {
+        // Infinite mode: re-shuffle pool and append so user practices until they choose to exit
+        const nextBatch = shuffle(currentSession.pool || []);
+        currentSession.questions = currentSession.questions.concat(nextBatch);
+        currentSession.currentIndex++;
+        renderQuestion();
+      } else if (currentSession.type === 'practice') {
         endLesson(false);
       } else {
         endLesson(false);
@@ -2342,6 +2490,8 @@
         header =
           '<h2 style="margin-bottom:1rem;">' + escapeHtml(data.simulacroName || 'Simulacro') + '</h2>' +
           '<p style="font-size:0.9rem;color:#888;">Puntaje mínimo para aprobar: ' + (data.passingScore || 60) + '%</p>';
+      } else if (data.type === 'infinite') {
+        header = '<h2 style="margin-bottom:1rem;color:#FFC800;">⚡ Sesión de Práctica Infinita Finalizada</h2>';
       } else if (data.type === 'practice') {
         header = '<h2 style="margin-bottom:1rem;">Resultado de Práctica</h2>';
       } else {
@@ -2411,9 +2561,22 @@
           answerHtml =
             '<p><strong>Tu orden:</strong> ' + escapeHtml(userOrderStr) + '</p>' +
             (!ans.isCorrect ? '<p><strong>Orden correcto:</strong> ' + escapeHtml(correctOrderStr) + '</p>' : '');
+        } else if (ans.type === 'write-code' || ans.type === 'write-answer') {
+          const userAnswerText = ans.userAnswer || '<i>(vacío)</i>';
+          let expectedStr = '';
+          if (Array.isArray(ans.acceptedAnswers)) {
+            expectedStr = ans.acceptedAnswers.join('  o  ');
+          } else if (typeof ans.correct === 'string') {
+            expectedStr = ans.correct;
+          } else if (Array.isArray(ans.options) && typeof ans.correct === 'number') {
+            expectedStr = ans.options[ans.correct];
+          }
+          answerHtml =
+            '<p><strong>Lo que escribiste:</strong> <code style="font-family:monospace;background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;">' + escapeHtml(userAnswerText) + '</code></p>' +
+            (!ans.isCorrect ? '<p style="color:#58CC02;"><strong>Respuesta esperada:</strong> <code style="font-family:monospace;background:rgba(88,204,2,0.15);padding:2px 6px;border-radius:4px;font-weight:bold;">' + escapeHtml(expectedStr) + '</code></p>' : '');
         } else {
-          const userAnswerText = (ans.userAnswer !== null && ans.userAnswer !== undefined && ans.options[ans.userAnswer]) ? ans.options[ans.userAnswer] : 'Sin respuesta';
-          const correctAnswerText = (ans.correct !== null && ans.correct !== undefined && ans.options[ans.correct]) ? ans.options[ans.correct] : '';
+          const userAnswerText = (ans.userAnswer !== null && ans.userAnswer !== undefined && ans.options && ans.options[ans.userAnswer]) ? ans.options[ans.userAnswer] : 'Sin respuesta';
+          const correctAnswerText = (ans.correct !== null && ans.correct !== undefined && ans.options && ans.options[ans.correct]) ? ans.options[ans.correct] : '';
           answerHtml =
             '<p><strong>Tu respuesta:</strong> ' + escapeHtml(userAnswerText) + '</p>' +
             (!ans.isCorrect ? '<p><strong>Respuesta correcta:</strong> ' + escapeHtml(correctAnswerText) + '</p>' : '');
@@ -2604,20 +2767,30 @@
     if (closeLesson) {
       closeLesson.addEventListener('click', function () {
         if (currentSession) {
-          showModal(
-            '¿Salir de la lección?',
-            '¿Seguro que quieres salir? Perderás tu progreso en esta lección.',
-            function () {
-              // Clean up session
-              currentSession = null;
-              updateNav();
-              if (lastResultsData && lastResultsData.moduleId) {
-                window.location.hash = '#module/' + lastResultsData.moduleId;
-              } else {
-                window.location.hash = '#home';
+          if (currentSession.type === 'infinite') {
+            showModal(
+              '¿Terminar Práctica Infinita?',
+              '¿Deseas terminar tu sesión ahora y ver tus resultados? Has acumulado ' + currentSession.xpEarned + ' XP con ' + currentSession.correctCount + ' respuestas correctas.',
+              function () {
+                endLesson(false);
               }
-            }
-          );
+            );
+          } else {
+            showModal(
+              '¿Salir de la lección?',
+              '¿Seguro que quieres salir? Perderás tu progreso en esta lección.',
+              function () {
+                const targetMod = currentSession.moduleId;
+                currentSession = null;
+                updateNav();
+                if (targetMod) {
+                  window.location.hash = '#module/' + targetMod;
+                } else {
+                  window.location.hash = '#home';
+                }
+              }
+            );
+          }
         } else {
           window.location.hash = '#home';
         }
