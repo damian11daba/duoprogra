@@ -14,15 +14,16 @@
 
     <!-- ===== NAVIGATION BAR ===== -->
     <nav id="navbar">
-        <span class="nav-logo" style="cursor:pointer;" onclick="window.location.hash='#home'">🦉 DuoProgra</span>
+        <span class="nav-logo" style="cursor:pointer;" onclick="window.location.hash='#home'" title="Inicio DuoProgra">🦉 DuoProgra</span>
         <div class="nav-right">
+            <span id="nav-god-badge" style="display:none;background:linear-gradient(135deg,#FFC800,#FF9600);color:#0D1117;font-weight:900;padding:3px 10px;border-radius:12px;font-size:0.75rem;box-shadow:0 0 10px rgba(255,200,0,0.5);cursor:pointer;" onclick="window.toggleSecretGodMode && window.toggleSecretGodMode()" title="Modo Dios Activado">⚡ MODO DIOS</span>
             <span id="nav-xp" class="nav-stat">⭐ 0 XP</span>
             <span id="nav-streak" class="nav-stat">🔥 0</span>
             <span id="nav-lives" class="nav-stat">❤️ 5</span>
-            <button id="nav-home-btn" class="nav-btn" title="Inicio">🏠</button>
-            <button id="nav-simulacros-btn" class="nav-btn" title="Simulacros PUC">⏰</button>
-            <button id="nav-practice-btn" class="nav-btn" title="Práctica">🎯</button>
-            <button id="nav-profile-btn" class="nav-btn" title="Perfil">👤</button>
+            <button id="nav-home-btn" class="nav-btn" title="Inicio" onclick="window.location.hash='#home'">🏠</button>
+            <button id="nav-simulacros-btn" class="nav-btn" title="Simulacros PUC" onclick="window.location.hash='#simulacros'">⏰</button>
+            <button id="nav-practice-btn" class="nav-btn" title="Práctica" onclick="window.location.hash='#practice'">🎯</button>
+            <button id="nav-profile-btn" class="nav-btn" title="Perfil" onclick="window.location.hash='#profile'">👤</button>
         </div>
     </nav>
 
@@ -80,7 +81,7 @@
 
         <!-- ===== VIEW 2: MODULE DETAIL ===== -->
         <section id="view-module" class="hidden">
-            <button id="back-to-home" class="back-btn">← Volver</button>
+            <button id="back-to-home" class="back-btn" onclick="window.location.hash='#home'">← Volver</button>
 
             <!-- Module Header -->
             <div id="module-header" class="module-header">
@@ -137,7 +138,7 @@
 
         <!-- ===== VIEW 4: PRACTICE MODE ===== -->
         <section id="view-practice" class="hidden">
-            <button class="back-btn" onclick="document.getElementById('nav-home-btn').click()">← Volver</button>
+            <button class="back-btn" onclick="window.location.hash='#home'">← Volver</button>
 
             <div class="practice-header">
                 <h1 class="view-title">🎯 Modo Práctica</h1>
@@ -216,7 +217,7 @@
 
         <!-- ===== VIEW 5: SIMULACRO LIST ===== -->
         <section id="view-simulacro-select" class="hidden">
-            <button class="back-btn" onclick="document.getElementById('nav-home-btn').click()">← Volver</button>
+            <button class="back-btn" onclick="window.location.hash='#home'">← Volver</button>
 
             <div class="simulacro-header">
                 <h1 class="view-title">⏰ Simulacros de Prueba PUC</h1>
@@ -443,9 +444,9 @@
     </div>
 
     <!-- Scripts (loaded at end of body) -->
-    <script src="js/data-parte1.js"></script>
-    <script src="js/data-parte2.js"></script>
-    <script src="js/data-infinite.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/data-parte1.js?v=20261021_godmode"></script>
+    <script src="js/data-parte2.js?v=20261021_godmode"></script>
+    <script src="js/data-infinite.js?v=20261021_godmode"></script>
+    <script src="js/app.js?v=20261021_godmode"></script>
 </body>
 </html>

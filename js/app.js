@@ -756,22 +756,41 @@
     const navXp = el('nav-xp');
     const navStreak = el('nav-streak');
     const navLives = el('nav-lives');
+    const homeXp = el('home-xp');
+    const homeStreak = el('home-streak');
+    const homeLives = el('home-lives');
+    const godBadge = el('nav-god-badge');
 
     if (navXp) navXp.textContent = '⭐ ' + state.xp + ' XP';
-    if (navStreak) navStreak.textContent = '🔥 ' + state.streak;
+    if (homeXp) homeXp.textContent = state.xp;
 
-    if (navLives) {
-      if (infiniteLivesSecret) {
+    if (navStreak) navStreak.textContent = '🔥 ' + state.streak;
+    if (homeStreak) homeStreak.textContent = state.streak;
+
+    if (godBadge) {
+      godBadge.style.display = infiniteLivesSecret ? 'inline-block' : 'none';
+    }
+
+    if (infiniteLivesSecret) {
+      if (navLives) {
         navLives.innerHTML = '❤️ ♾️';
-        navLives.title = 'Modo Secreto Activado';
-      } else if (currentSession && currentSession.type === 'lesson') {
-        const hearts = '❤️'.repeat(Math.max(0, currentSession.lives));
-        const empties = '🖤'.repeat(Math.max(0, state.maxLives - currentSession.lives));
-        navLives.textContent = hearts + empties;
-      } else if (currentSession && currentSession.type === 'practice') {
-        navLives.textContent = '♾️';
-      } else {
-        navLives.textContent = '❤️'.repeat(state.maxLives);
+        navLives.title = 'Modo Dios Activado';
+      }
+      if (homeLives) {
+        homeLives.innerHTML = '♾️ <span style="font-size:0.75rem;color:#FFC800;font-weight:bold;">DIOS</span>';
+      }
+    } else {
+      if (homeLives) homeLives.textContent = state.lives;
+      if (navLives) {
+        if (currentSession && currentSession.type === 'lesson') {
+          const hearts = '❤️'.repeat(Math.max(0, currentSession.lives));
+          const empties = '🖤'.repeat(Math.max(0, state.maxLives - currentSession.lives));
+          navLives.textContent = hearts + empties;
+        } else if (currentSession && currentSession.type === 'practice') {
+          navLives.textContent = '♾️';
+        } else {
+          navLives.textContent = '❤️'.repeat(state.maxLives);
+        }
       }
     }
   }
@@ -3080,6 +3099,9 @@
       }
     }, true);
 
+    window.toggleSecretGodMode = toggleSecretGodMode;
+    window.damian = toggleSecretGodMode;
+
     function toggleSecretGodMode() {
       infiniteLivesSecret = !infiniteLivesSecret;
       try {
@@ -3169,13 +3191,19 @@
   // 18. INICIALIZACIÓN
   // ==========================================================================
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function initApp() {
     loadState();
     checkStreak();
     setupRouter();
     setupEventListeners();
     updateNav();
     navigate(window.location.hash || '#home');
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
 
 })();
